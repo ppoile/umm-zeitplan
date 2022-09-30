@@ -3,7 +3,7 @@
 ### Setup project ###
 
 ```
-git clone https://github.com/ppoile/umm-zeitplan
+git clone --recurse-submodules https://github.com/ppoile/umm-zeitplan
 cd umm-zeitplan
 python3 -m venv venv
 . venv/bin/activate
