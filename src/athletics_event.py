@@ -4,6 +4,7 @@ sys.path.append('../../src')
 import argparse
 from collections import defaultdict
 import datetime
+import math
 import functools
 import logging
 import operator
@@ -103,7 +104,6 @@ class AthleticsEventScheduler(object):
                     together = item.get("together", False)
                     if together:
                         disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], item["name"])
-                    logging.debug("      disziplin: {}".format(disziplinen_name))
                     if disziplinen_name not in self._disziplinen.keys():
                         disziplinen_length = item["length"]
                         if "pause" not in disziplinen_name.lower():
@@ -121,6 +121,18 @@ class AthleticsEventScheduler(object):
                         self._disziplinen[disziplinen_name] = disziplin
                     else:
                         disziplin = self._disziplinen[disziplinen_name]
+                        disziplinen_length = disziplin.length
+                    if together:
+                        num_athletes = 0
+                        for gruppen_name_inner in gruppen_names:
+                            num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
+                    else:
+                        num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
+                    if "pause" not in disziplinen_name.lower():
+                        calculated_disziplinen_length = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes)
+                        logging.debug("      disziplin: {} (disziplin={}, length={}, together={}, athletes={}) => length+pause={}, calculated-length={}".format(disziplinen_name, item["name"], item["length"], together, num_athletes, disziplinen_length, calculated_disziplinen_length))
+                    else:
+                        logging.debug("      disziplin: {} (length={}) => length-pause={}".format(disziplinen_name, item["length"], disziplinen_length))
                     gruppen_disziplinen.append(disziplin)
 
                     resource = item.get("resource", None)
@@ -174,6 +186,33 @@ class AthleticsEventScheduler(object):
                 self._set_wettkampf_duration_objective(first_disziplin, last_disziplin)
                 self._set_maximum_wettkampf_duration_constraint(wettkampf_name, first_disziplin, last_disziplin)
             self._last_disziplin[wettkampf_name] = last_disziplin
+
+    def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes):
+        mapping = {
+            "60m": (6, 180/600),
+            "80m": (6, 180/600),
+            "100m": (6, 180/600),
+            "100mHü": (6, 300/600),
+            "110mHü": (6, 300/600),
+            "200m": (6, 240/600),
+            "400m": (6, 1),
+            "Weit": (12, 3),
+            "Kugel": (12, 2),
+            "Diskus": (12, 3),
+            "Hoch": {
+                "U16W_5K": (12, 5),
+                "U16M_6K": (12, 5),
+                "WOM_7K": (12, 5),
+                "MAN_10K": (12, 5),
+            },
+            "600m": (17, 1),
+            "1000m": (17, 1),
+        }
+        item = mapping[disziplin]
+        if type(item) == dict:
+            item = item[wettkampf]
+        num_serien = ((num_athletes - 1) // item[0]) + 1
+        return math.ceil(num_serien * item[1]) + 1
 
     def _set_default_objective(self, wettkampf_disziplinen_factors, first_disziplin, last_disziplin):
         for disziplin_name, factor in wettkampf_disziplinen_factors.items():
