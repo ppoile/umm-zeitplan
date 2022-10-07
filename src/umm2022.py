@@ -30,7 +30,7 @@ wettkampf_data = {
         "U12W_4K": {
             "disziplinen": [
                 dict(name="60m", together=True, resource="Läufe", length=3),
-                dict(name="Pause_1", length=1),
+                dict(name="Pause_1", length=2),
                 dict(name="Weit", resource="Weit", length=3),
                 dict(name="Pause_2", length=1),
                 dict(name="Kugel", resource="Kugel", length=2),
@@ -70,7 +70,7 @@ wettkampf_data = {
         "U12M_4K": {
             "disziplinen": [
                 dict(name="60m", together=True, resource="Läufe", length=3),
-                dict(name="Pause_1", length=1),
+                dict(name="Pause_1", length=2),
                 dict(name="Weit", resource="Weit", length=3),
                 dict(name="Pause_2", length=1),
                 dict(name="Kugel", resource="Kugel", length=2),
@@ -117,7 +117,7 @@ wettkampf_data = {
         "U14M_5K": {
             "disziplinen": [
                 dict(name="60m", together=True, resource="Läufe", length=3),
-                dict(name="Pause_1", length=1),
+                dict(name="Pause_1", length=2),
                 dict(name="Weit", resource="Weit", length=3),
                 dict(name="Pause_2", length=1),
                 dict(name="Kugel", resource="Kugel", length=2),
@@ -178,7 +178,7 @@ wettkampf_data = {
         "U14W_5K": {
             "disziplinen": [
                 dict(name="60m", together=True, resource="Läufe", length=3),
-                dict(name="Pause_1", length=1),
+                dict(name="Pause_1", length=2),
                 dict(name="Weit", resource="Weit", length=3),
                 dict(name="Pause_2", length=1),
                 dict(name="Kugel", resource="Kugel", length=2),
