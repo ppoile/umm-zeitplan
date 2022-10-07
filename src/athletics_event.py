@@ -148,7 +148,7 @@ class AthleticsEventScheduler(object):
 
                 first_disziplin = gruppen_disziplinen[0]
                 last_disziplin = gruppen_disziplinen[-1]
-                wettkampf_with_pausen = "pause" in gruppen_disziplinen[1]["name"].lower()
+                gruppen_disziplinen_without_pausen = self._get_disziplinen_without_pausen(gruppen_disziplinen)
                 if is_wettkampf_with_strict_sequence:
                     # one after another: 1st, 1st-pause, 2nd, 2nd-pause, 3rd,...
                     current_disziplin = gruppen_disziplinen[0]
@@ -157,7 +157,13 @@ class AthleticsEventScheduler(object):
                         current_disziplin = next_disziplin
                 else:
                     # 1st and last set - rest free
-                    if wettkampf_with_pausen:
+                    wettkampf_with_all_pausen = len(gruppen_disziplinen) == 2 * len(gruppen_disziplinen_without_pausen) - 1
+                    wettkampf_with_first_pause = (len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen) + 1) and "pause" in gruppen_disziplinen[1]["name"].lower()
+                    wettkampf_with_last_pause = (len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen) + 1) and "pause" in gruppen_disziplinen[-2]["name"].lower()
+                    wettkampf_with_first_and_last_pause = (len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen) + 2) and "pause" in gruppen_disziplinen[1]["name"].lower() and "pause" in gruppen_disziplinen[-2]["name"].lower()
+                    wettkampf_with_no_pause = len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen)
+
+                    if wettkampf_with_all_pausen:
                         # make disziplin-pause pairs
                         for disziplin_index in range(len(gruppen_disziplinen[:-1:2])):
                             self._scenario += gruppen_disziplinen[disziplin_index * 2] <= gruppen_disziplinen[disziplin_index * 2 + 1]
@@ -166,15 +172,35 @@ class AthleticsEventScheduler(object):
                             self._scenario += first_pause < disziplin
                         for disziplin in gruppen_disziplinen[1::2]:
                             self._scenario += disziplin < last_disziplin
-                    else:
+                    elif wettkampf_with_last_pause:
+                        # with last pause
+                        first_disziplin = gruppen_disziplinen_without_pausen[0]
+                        for disziplin in gruppen_disziplinen[1:-1]:
+                            self._scenario += first_disziplin < disziplin
+                        last_pause = gruppen_disziplinen[-2]
+                        self._scenario += last_pause <= gruppen_disziplinen[-1]
+                        for disziplin in gruppen_disziplinen[:-2]:
+                            self._scenario += disziplin < last_pause
+                    elif wettkampf_with_first_and_last_pause:
+                        # with first and last pause
+                        first_pause = gruppen_disziplinen[1]
+                        self._scenario += gruppen_disziplinen[0] <= first_pause
+                        for disziplin in gruppen_disziplinen[2:-2]:
+                            self._scenario += first_pause < disziplin
+                        last_pause = gruppen_disziplinen[-2]
+                        self._scenario += last_pause <= gruppen_disziplinen[-1]
+                        for disziplin in gruppen_disziplinen[2:-2]:
+                            self._scenario += disziplin < last_pause
+                    elif wettkampf_with_first_pause:
+                        pass
+                    elif wettkampf_with_no_pause:
+                        # with no pause
                         for disziplin in gruppen_disziplinen[1:]:
                             self._scenario += first_disziplin < disziplin
                         for disziplin in gruppen_disziplinen[:-1]:
                             self._scenario += disziplin < last_disziplin
-
-                gruppen_disziplinen_without_pausen = gruppen_disziplinen
-                if wettkampf_with_pausen:
-                    gruppen_disziplinen_without_pausen = gruppen_disziplinen[::2]
+                    else:
+                        raise ValueError()
                 for disziplin in gruppen_disziplinen_without_pausen[1:]:
                     wettkampf_disziplinen_factors[disziplin['name']] += 1
                 wettkampf_disziplinen_factors[disziplin['name']] += 1
@@ -186,6 +212,13 @@ class AthleticsEventScheduler(object):
                 self._set_wettkampf_duration_objective(first_disziplin, last_disziplin)
                 self._set_maximum_wettkampf_duration_constraint(wettkampf_name, first_disziplin, last_disziplin)
             self._last_disziplin[wettkampf_name] = last_disziplin
+
+    def _get_disziplinen_without_pausen(self, disziplinen):
+        disziplinen_without_pausen = []
+        for disziplin in disziplinen:
+            if "pause" not in disziplin["name"].lower():
+                disziplinen_without_pausen.append(disziplin)
+        return disziplinen_without_pausen
 
     def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes):
         mapping = {
@@ -200,6 +233,8 @@ class AthleticsEventScheduler(object):
             "Kugel": (12, 2),
             "Diskus": (12, 3),
             "Hoch": {
+                "U14W_5K": (12, 3),
+                "U14M_5K": (12, 3),
                 "U16W_5K": (12, 5),
                 "U16M_6K": (12, 5),
                 "WOM_7K": (12, 5),
