@@ -221,7 +221,6 @@ class AthleticsEventScheduler(object):
         return disziplinen_without_pausen
 
     def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, num_anlagen):
-        logging.debug("_get_calculated_disziplinen_length(wettkampf={}, disziplin={}, num_athletes={}, num_anlagen={})...".format(wettkampf, disziplin, num_athletes, num_anlagen))
         mapping = {
             "60m": (6, 3/10),
             "80m": (6, 3/10),
@@ -257,7 +256,6 @@ class AthleticsEventScheduler(object):
         calculated_length_1 = num_serien * item[1]
         calculated_length_2 = calculated_length_1 / num_anlagen
         calculated_length_3 = math.ceil(calculated_length_2)
-        logging.debug("item={!r}, num_serien={}, calculated_length={}".format(item, num_serien, [calculated_length_1, calculated_length_2, calculated_length_3]))
         return calculated_length_3
 
     def _set_default_objective(self, wettkampf_disziplinen_factors, first_disziplin, last_disziplin):
