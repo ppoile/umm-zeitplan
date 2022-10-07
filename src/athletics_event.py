@@ -130,7 +130,7 @@ class AthleticsEventScheduler(object):
                         num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
                     if "pause" not in disziplinen_name.lower():
                         calculated_disziplinen_length = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes)
-                        logging.debug("      disziplin: {} (disziplin={}, length={}, together={}, athletes={}) => length+pause={}, calculated-length={}".format(disziplinen_name, item["name"], item["length"], together, num_athletes, disziplinen_length, calculated_disziplinen_length))
+                        logging.debug("      disziplin: {} (disziplin={}, together={}, athletes={}, length={}) => length+pause={}, calculated-length={}".format(disziplinen_name, item["name"], together, num_athletes, item["length"], disziplinen_length, calculated_disziplinen_length))
                     else:
                         logging.debug("      disziplin: {} (length={}) => length-pause={}".format(disziplinen_name, item["length"], disziplinen_length))
                     gruppen_disziplinen.append(disziplin)
