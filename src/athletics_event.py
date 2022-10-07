@@ -240,8 +240,8 @@ class AthleticsEventScheduler(object):
                 "WOM_7K": (12, 5),
                 "MAN_10K": (12, 5),
             },
-            "600m": (17, 1),
-            "1000m": (17, 1),
+            "600m": (16, 1),
+            "1000m": (16, 1),
         }
         item = mapping[disziplin]
         if type(item) == dict:
