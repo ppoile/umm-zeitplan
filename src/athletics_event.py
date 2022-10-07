@@ -100,17 +100,23 @@ class AthleticsEventScheduler(object):
                 gruppe = self._scenario.Resource(gruppen_name)
                 gruppen_disziplinen = []
                 for item in wettkampf_data[wettkampf_name]["disziplinen"]:
-                    disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, item["name"])
                     together = item.get("together", False)
                     num_anlagen = item.get("use_num_anlagen", 1)
                     if together:
                         disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], item["name"])
+                        num_athletes = 0
+                        for gruppen_name_inner in gruppen_names:
+                            num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
+                    else:
+                        disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, item["name"])
+                        num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
                     if disziplinen_name not in self._disziplinen.keys():
-                        disziplinen_length = item["length"]
+                        disziplinen_length_data = item["length"]
                         if "pause" not in disziplinen_name.lower():
-                            disziplinen_length += 1
+                            disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
+                            disziplinen_length = disziplinen_length_calculated + 1
                         else:
-                            disziplinen_length -= 1
+                            disziplinen_length = disziplinen_length_data - 1
                             if disziplinen_length <= 0:
                                 continue
                         kwargs = {
@@ -123,17 +129,10 @@ class AthleticsEventScheduler(object):
                     else:
                         disziplin = self._disziplinen[disziplinen_name]
                         disziplinen_length = disziplin.length
-                    if together:
-                        num_athletes = 0
-                        for gruppen_name_inner in gruppen_names:
-                            num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
-                    else:
-                        num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
                     if "pause" not in disziplinen_name.lower():
-                        calculated_disziplinen_length = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
-                        logging.debug("      disziplin: {} (disziplin={}, together={}, athletes={}, length={}) => length+pause={}, calculated-length={}".format(disziplinen_name, item["name"], together, num_athletes, item["length"], disziplinen_length, calculated_disziplinen_length))
+                        logging.debug("      disziplin: {} (disziplin={}, together={}, athletes={}, length_data={}, length_calc={}) => length+pause={}".format(disziplinen_name, item["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length))
                     else:
-                        logging.debug("      disziplin: {} (length={}) => length-pause={}".format(disziplinen_name, item["length"], disziplinen_length))
+                        logging.debug("      disziplin: {} (length={}) => length-pause={}".format(disziplinen_name, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length))
                     gruppen_disziplinen.append(disziplin)
 
                     resource = item.get("resource", None)
