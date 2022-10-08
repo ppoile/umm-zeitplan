@@ -108,18 +108,34 @@ def main(solution_file, start_time):
                 logger.debug("worksheet-3: {}/{}: '{}'".format(row_index + 3, 0, get_time(row_index)))
                 worksheet.write(row_index + 3, 0, get_time(row_index), empty_table_cell_format)
         filled_slots = []
-        for task in tasks:
+        for task_index, task in enumerate(tasks):
             logger.debug("task: {}".format(task))
             logger.debug("worksheet-4: {}/{}: '{}'".format(2, column_index + 1, resource))
             worksheet.write(2, column_index + 1, resource, heading_cell_format)
             color = task[2]
+            task_name = task[0][0]
             start_time = task[0][2]
             end_time = task[0][3]
             cell_format = workbook.add_format()
             cell_format.set_pattern(1)
             cell_format.set_border()
             cell_format.set_bg_color(color)
-            for row_index in range(start_time, end_time - 1):
+            fields = task_name.split('_')
+            find_string_begin = '_'.join(fields[:2])
+            find_string_end = fields[-1]
+            correct_end_time = True
+            if resource == 'Läufe':
+                try:
+                    next_task_name = tasks[task_index + 1][0][0]
+                    if next_task_name.startswith(find_string_begin) and next_task_name.endswith(find_string_end):
+                        correct_end_time = False
+                except IndexError:
+                    pass
+
+            if correct_end_time:
+                end_time -= 1
+
+            for row_index in range(start_time, end_time):
                 content = ''
                 if row_index == start_time:
                     content = task[0][0]

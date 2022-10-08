@@ -85,6 +85,8 @@ class AthleticsEventScheduler(object):
         self._teilnehmer_data = teilnehmer_data
         self._maximum_wettkampf_duration = maximum_wettkampf_duration
         self._alternative_objective = alternative_objective
+        keep_groups_separate_disziplinen = []
+
         logging.debug('creating disziplinen...')
         for wettkampf_name in wettkampf_data:
             if wettkampf_name not in teilnehmer_data:
@@ -104,28 +106,49 @@ class AthleticsEventScheduler(object):
                     keep_groups_separate = item.get("keep_groups_separate", False)
                     num_anlagen = item.get("use_num_anlagen", 1)
                     if together:
-                        disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], item["name"])
-                        num_athletes = 0
-                        for gruppen_name_inner in gruppen_names:
-                            num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
+                        if keep_groups_separate:
+                            interval_gruppen_names = self._get_interval_gruppen(wettkampf_name, gruppen_name, gruppen_names, teilnehmer_data, item, num_anlagen)
+                            if len(interval_gruppen_names) == 1:
+                                disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, item["name"])
+                            else:
+                                disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, interval_gruppen_names[0], interval_gruppen_names[-1], item["name"])
+                            num_athletes = 0
+                            for gruppen_name_inner in interval_gruppen_names:
+                                num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
+                        else:
+                            disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], item["name"])
+                            num_athletes = 0
+                            for gruppen_name_inner in gruppen_names:
+                                num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
                     else:
                         disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, item["name"])
                         num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
                     if disziplinen_name not in self._disziplinen.keys():
                         disziplinen_length_data = item["length"]
                         if "pause" not in disziplinen_name.lower():
-                            disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
-                            disziplinen_length = disziplinen_length_calculated + 1
+                            if together and keep_groups_separate:
+                                disziplinen_length_calculated = 1
+                                disziplinen_length = disziplinen_length_calculated
+                                if gruppen_names[-1] in interval_gruppen_names:
+                                    disziplinen_length += 1
+                            else:
+                                disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
+                                disziplinen_length = disziplinen_length_calculated + 1
                         else:
-                            disziplinen_length = disziplinen_length_data - 1
-                            if disziplinen_length <= 0:
-                                continue
+                            disziplinen_length_calculated = None
+                            disziplinen_length = disziplinen_length_data
+                            if not gruppen_disziplinen[-1].keep_groups_separate:
+                              disziplinen_length -= 1
+                              if disziplinen_length <= 0:
+                                    continue
                         kwargs = {
                             "name": disziplinen_name,
                             "length": disziplinen_length,
                             "length_data": disziplinen_length_data,
                             "length_calc": disziplinen_length_calculated,
                             "plot_color": wettkampf_data[wettkampf_name]["plot_color"],
+                            "together": together,
+                            "keep_groups_separate": keep_groups_separate,
                         }
                         disziplin = self._scenario.Task(**kwargs)
                         self._disziplinen[disziplinen_name] = disziplin
@@ -137,16 +160,19 @@ class AthleticsEventScheduler(object):
                     if "pause" not in disziplinen_name.lower():
                         logging.debug("      disziplin: {} (disziplin={}, together={}, athletes={}, length_data={}, length_calc={}) => length+pause={}".format(disziplinen_name, item["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length))
                     else:
-                        logging.debug("      disziplin: {} (length={}) => length-pause={}".format(disziplinen_name, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length))
+                        logging.debug("      disziplin: {} (length_data={}) => length-pause={}".format(disziplinen_name, disziplinen_length_data, disziplinen_length))
                     gruppen_disziplinen.append(disziplin)
 
                     resource = item.get("resource", None)
                     if resource:
-                        if not together or gruppen_name == gruppen_names[0]:
+                        if not together or gruppen_name == gruppen_names[0] or keep_groups_separate and (gruppen_name == interval_gruppen_names[0]):
                             for resource_name in resource.split("&"):
                                 disziplin += self.any_anlage(resource_name)
 
                     disziplin += gruppe
+
+                    if together and keep_groups_separate and disziplin not in keep_groups_separate_disziplinen:
+                        keep_groups_separate_disziplinen.append(disziplin)
 
                     if "pause" in disziplinen_name.lower():
                         self._hide_tasks.append(disziplin)
@@ -210,6 +236,9 @@ class AthleticsEventScheduler(object):
                     wettkampf_disziplinen_factors[disziplin['name']] += 1
                 wettkampf_disziplinen_factors[disziplin['name']] += 1
 
+            for item_index in range(1, len(keep_groups_separate_disziplinen)):
+                self._scenario += keep_groups_separate_disziplinen[item_index - 1] <= keep_groups_separate_disziplinen[item_index]
+
             self._wettkampf_first_last_disziplinen[wettkampf_name] = (first_disziplin, last_disziplin)
             if not self._alternative_objective:
                 self._set_default_objective(wettkampf_disziplinen_factors, first_disziplin, last_disziplin)
@@ -218,6 +247,21 @@ class AthleticsEventScheduler(object):
                 self._set_maximum_wettkampf_duration_constraint(wettkampf_name, first_disziplin, last_disziplin)
             self._last_disziplin[wettkampf_name] = last_disziplin
 
+    def _get_interval_gruppen(self, wettkampf_name, interesting_gruppen_name, gruppen_names, teilnehmer_data, item, num_anlagen):
+        current_interval = 0
+        interval_gruppen = defaultdict(list)
+        accumulated_disziplinen_length = 0
+        for gruppen_name in gruppen_names:
+            num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
+            accumulated_disziplinen_length += self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen, exact=True)
+            if accumulated_disziplinen_length > current_interval + 1:
+                current_interval += 1
+            interval_gruppen[current_interval].append(gruppen_name)
+        for gruppen in interval_gruppen.values():
+            if interesting_gruppen_name in  gruppen:
+                logging.debug("gruppen: {}".format(gruppen))
+                return gruppen
+
     def _get_disziplinen_without_pausen(self, disziplinen):
         disziplinen_without_pausen = []
         for disziplin in disziplinen:
@@ -225,7 +269,7 @@ class AthleticsEventScheduler(object):
                 disziplinen_without_pausen.append(disziplin)
         return disziplinen_without_pausen
 
-    def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, num_anlagen):
+    def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, num_anlagen, exact=False):
         mapping = {
             "60m": (6, 3/10),
             "80m": (6, 3/10),
@@ -258,10 +302,11 @@ class AthleticsEventScheduler(object):
         if type(item) == dict:
             item = item[wettkampf]
         num_serien = ((num_athletes - 1) // item[0]) + 1
-        calculated_length_1 = num_serien * item[1]
-        calculated_length_2 = calculated_length_1 / num_anlagen
-        calculated_length_3 = math.ceil(calculated_length_2)
-        return calculated_length_3
+        calculated_length = num_serien * item[1]
+        calculated_length = calculated_length / num_anlagen
+        if not exact:
+            calculated_length = math.ceil(calculated_length)
+        return calculated_length
 
     def _set_default_objective(self, wettkampf_disziplinen_factors, first_disziplin, last_disziplin):
         for disziplin_name, factor in wettkampf_disziplinen_factors.items():
