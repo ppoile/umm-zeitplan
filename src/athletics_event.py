@@ -101,6 +101,7 @@ class AthleticsEventScheduler(object):
                 gruppen_disziplinen = []
                 for item in wettkampf_data[wettkampf_name]["disziplinen"]:
                     together = item.get("together", False)
+                    keep_groups_separate = item.get("keep_groups_separate", False)
                     num_anlagen = item.get("use_num_anlagen", 1)
                     if together:
                         disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], item["name"])
@@ -122,6 +123,8 @@ class AthleticsEventScheduler(object):
                         kwargs = {
                             "name": disziplinen_name,
                             "length": disziplinen_length,
+                            "length_data": disziplinen_length_data,
+                            "length_calc": disziplinen_length_calculated,
                             "plot_color": wettkampf_data[wettkampf_name]["plot_color"],
                         }
                         disziplin = self._scenario.Task(**kwargs)
@@ -129,6 +132,8 @@ class AthleticsEventScheduler(object):
                     else:
                         disziplin = self._disziplinen[disziplinen_name]
                         disziplinen_length = disziplin.length
+                        disziplinen_length_data = disziplin.length_data
+                        disziplinen_length_calculated = disziplin.length_calc
                     if "pause" not in disziplinen_name.lower():
                         logging.debug("      disziplin: {} (disziplin={}, together={}, athletes={}, length_data={}, length_calc={}) => length+pause={}".format(disziplinen_name, item["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length))
                     else:
