@@ -100,30 +100,30 @@ class AthleticsEventScheduler(object):
                 logging.debug("    gruppe: %s", gruppen_name)
                 gruppe = self._scenario.Resource(gruppen_name)
                 gruppen_disziplinen = []
-                for item in wettkampf_data[wettkampf_name]["disziplinen"]:
-                    together = item.get("together", False)
-                    keep_groups_separate = item.get("keep_groups_separate", False)
-                    num_anlagen = item.get("use_num_anlagen", 1)
+                for disziplinen_data in wettkampf_data[wettkampf_name]["disziplinen"]:
+                    together = disziplinen_data.get("together", False)
+                    keep_groups_separate = disziplinen_data.get("keep_groups_separate", False)
+                    num_anlagen = disziplinen_data.get("use_num_anlagen", 1)
                     if together:
                         if keep_groups_separate:
-                            interval_gruppen_names = self._get_interval_gruppen(wettkampf_name, gruppen_name, gruppen_names, teilnehmer_data, item, num_anlagen)
+                            interval_gruppen_names = self._get_interval_gruppen(wettkampf_name, gruppen_name, gruppen_names, teilnehmer_data, disziplinen_data, num_anlagen)
                             if len(interval_gruppen_names) == 1:
-                                disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, item["name"])
+                                disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, disziplinen_data["name"])
                             else:
-                                disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, interval_gruppen_names[0], interval_gruppen_names[-1], item["name"])
+                                disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, interval_gruppen_names[0], interval_gruppen_names[-1], disziplinen_data["name"])
                             num_athletes = 0
                             for gruppen_name_inner in interval_gruppen_names:
                                 num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
                         else:
-                            disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], item["name"])
+                            disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], disziplinen_data["name"])
                             num_athletes = 0
                             for gruppen_name_inner in gruppen_names:
                                 num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
                     else:
-                        disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, item["name"])
+                        disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, disziplinen_data["name"])
                         num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
                     if disziplinen_name not in self._disziplinen.keys():
-                        disziplinen_length_data = item["length"]
+                        disziplinen_length_data = disziplinen_data["length"]
                         if "pause" not in disziplinen_name.lower():
                             if together and keep_groups_separate:
                                 disziplinen_length_calculated = 1
@@ -131,7 +131,7 @@ class AthleticsEventScheduler(object):
                                 if gruppen_names[-1] in interval_gruppen_names:
                                     disziplinen_length += 1
                             else:
-                                disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
+                                disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=disziplinen_data["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
                                 disziplinen_length = disziplinen_length_calculated + 1
                         else:
                             disziplinen_length_calculated = None
@@ -157,12 +157,12 @@ class AthleticsEventScheduler(object):
                         disziplinen_length_data = disziplin.length_data
                         disziplinen_length_calculated = disziplin.length_calc
                     if "pause" not in disziplinen_name.lower():
-                        logging.debug("      disziplin: %s (disziplin=%s, together=%s, athletes=%u, length_data=%u, length_calc=%u) => length+pause=%u", disziplinen_name, item["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length)
+                        logging.debug("      disziplin: %s (disziplin=%s, together=%s, athletes=%u, length_data=%u, length_calc=%u) => length+pause=%u", disziplinen_name, disziplinen_data["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length)
                     else:
                         logging.debug("      disziplin: %s (length_data=%u) => length-pause=%u", disziplinen_name, disziplinen_length_data, disziplinen_length)
                     gruppen_disziplinen.append(disziplin)
 
-                    resource = item.get("resource", None)
+                    resource = disziplinen_data.get("resource", None)
                     if resource:
                         if not together or gruppen_name == gruppen_names[0] or keep_groups_separate and (gruppen_name == interval_gruppen_names[0]):
                             for resource_name in resource.split("&"):
