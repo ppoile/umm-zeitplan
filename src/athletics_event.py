@@ -64,7 +64,7 @@ class AthleticsEventScheduler(object):
             anlagen_name = descriptor.name
             if descriptor.size > 1:
                 anlagen_name += "{}".format(i + 1)
-            logging.debug("  {}".format(anlagen_name))
+            logging.debug("  %s", anlagen_name)
             anlage = self._scenario.Resource(anlagen_name)
             self._anlagen[anlagen_name] = anlage
 
@@ -89,7 +89,7 @@ class AthleticsEventScheduler(object):
         for wettkampf_name in wettkampf_data:
             if wettkampf_name not in teilnehmer_data:
                 continue
-            logging.debug("  wettkampf: {}".format(wettkampf_name))
+            logging.debug("  wettkampf: %s", wettkampf_name)
             is_wettkampf_with_strict_sequence = wettkampf_data[wettkampf_name].get("is_wettkampf_with_strict_sequence", False)
             if wettkampf_data[wettkampf_name].get("is_last_wettkampf_of_the_day", False):
                 self._last_wettkampf_of_the_day = wettkampf_name
@@ -97,7 +97,7 @@ class AthleticsEventScheduler(object):
             wettkampf_gruppen_first_and_last_disziplinen = []
             wettkampf_disziplinen_factors = defaultdict(int)
             for gruppen_name in gruppen_names:
-                logging.debug("    gruppe: {}".format(gruppen_name))
+                logging.debug("    gruppe: %s", gruppen_name)
                 gruppe = self._scenario.Resource(gruppen_name)
                 gruppen_disziplinen = []
                 for item in wettkampf_data[wettkampf_name]["disziplinen"]:
@@ -157,9 +157,9 @@ class AthleticsEventScheduler(object):
                         disziplinen_length_data = disziplin.length_data
                         disziplinen_length_calculated = disziplin.length_calc
                     if "pause" not in disziplinen_name.lower():
-                        logging.debug("      disziplin: {} (disziplin={}, together={}, athletes={}, length_data={}, length_calc={}) => length+pause={}".format(disziplinen_name, item["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length))
+                        logging.debug("      disziplin: %s (disziplin=%s, together=%s, athletes=%u, length_data=%u, length_calc=%u) => length+pause=%u", disziplinen_name, item["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length)
                     else:
-                        logging.debug("      disziplin: {} (length_data={}) => length-pause={}".format(disziplinen_name, disziplinen_length_data, disziplinen_length))
+                        logging.debug("      disziplin: %s (length_data=%u) => length-pause=%u", disziplinen_name, disziplinen_length_data, disziplinen_length)
                     gruppen_disziplinen.append(disziplin)
 
                     resource = item.get("resource", None)
@@ -208,7 +208,7 @@ class AthleticsEventScheduler(object):
             interval_gruppen[current_interval].append(gruppen_name)
         for gruppen in interval_gruppen.values():
             if interesting_gruppen_name in  gruppen:
-                logging.debug("gruppen: {}".format(gruppen))
+                logging.debug("gruppen: %s", gruppen)
                 return gruppen
 
     def _get_disziplinen_without_pausen(self, disziplinen):
@@ -382,7 +382,7 @@ class AthleticsEventScheduler(object):
             with open(cbc_logfile_name) as cbc_logfile:
                 logging.info(cbc_logfile.read())
         else:
-            logging.info("no {!r} found".format(cbc_logfile_name))
+            logging.info("no '%s' found", cbc_logfile_name)
         if not status:
             raise NoSolutionError()
 
@@ -396,7 +396,7 @@ class AthleticsEventScheduler(object):
         with open(solution_filename, 'r') as solution_file:
             zeitplan_xlsx_writer.main(solution_file, start_time="9:00")
         logging.info(self.get_wettkampf_duration_summary())
-        logging.info("objective_value: {}".format(self._scenario.objective_value()))
+        logging.info("objective_value: %s", self._scenario.objective_value())
 
     def solve_with_ortools(self, time_limit, msg=1):
         logging.debug('solving problem with ortools solver...')
@@ -412,4 +412,4 @@ class AthleticsEventScheduler(object):
         plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename='{}.png'.format(self._name),
                                  fig_size=(100, 5), hide_tasks=self._hide_tasks)
         logging.info(self.get_wettkampf_duration_summary())
-        logging.info("objective_value: {}".format(self._scenario.objective_value()))
+        logging.info("objective_value: %s", self._scenario.objective_value())
