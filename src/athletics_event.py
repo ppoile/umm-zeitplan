@@ -1,3 +1,5 @@
+"""Module providing Athletics Event implementation."""
+
 from collections import defaultdict
 import functools
 import logging
