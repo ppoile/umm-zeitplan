@@ -193,7 +193,7 @@ class AthleticsEventScheduler(object):
                     wettkampf_with_no_pause = len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen)
 
                     if wettkampf_with_all_pausen:
-                        # make disziplin-pause pairs
+                        # with all pausen
                         for disziplin_index in range(len(gruppen_disziplinen[:-1:2])):
                             self._scenario += gruppen_disziplinen[disziplin_index * 2] <= gruppen_disziplinen[disziplin_index * 2 + 1]
                         first_pause = gruppen_disziplinen[1]
