@@ -219,7 +219,14 @@ class AthleticsEventScheduler(object):
                         for disziplin in gruppen_disziplinen[2:-2]:
                             self._scenario += disziplin < last_pause
                     elif wettkampf_with_first_pause:
-                        pass
+                        # with first pause
+                        first_pause = gruppen_disziplinen[1]
+                        self._scenario += gruppen_disziplinen[0] <= first_pause
+                        for disziplin in gruppen_disziplinen[2:-1]:
+                            self._scenario += first_pause < disziplin
+                        last_disziplin = gruppen_disziplinen[-1]
+                        for disziplin in gruppen_disziplinen[2:-1]:
+                            self._scenario += disziplin < last_disziplin
                     elif wettkampf_with_no_pause:
                         # with no pause
                         for disziplin in gruppen_disziplinen[1:]:
