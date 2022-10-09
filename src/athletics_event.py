@@ -1,15 +1,11 @@
-import sys
-sys.path.append('../../src')
-
-import argparse
 from collections import defaultdict
-import datetime
-import math
 import functools
 import logging
+import math
 import operator
 import os
-from pyschedule import Scenario, solvers, plotters, alt
+
+from pyschedule import Scenario, solvers, plotters
 import zeitplan_xlsx_writer
 
 
