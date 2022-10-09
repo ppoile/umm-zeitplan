@@ -94,6 +94,7 @@ class AthleticsEventScheduler(object):
             if wettkampf_data[wettkampf_name].get("is_last_wettkampf_of_the_day", False):
                 self._last_wettkampf_of_the_day = wettkampf_name
             gruppen_names = list(teilnehmer_data[wettkampf_name].keys())
+            wettkampf_gruppen_first_and_last_disziplinen = []
             wettkampf_disziplinen_factors = defaultdict(int)
             for gruppen_name in gruppen_names:
                 logging.debug("    gruppe: {}".format(gruppen_name))
@@ -177,6 +178,7 @@ class AthleticsEventScheduler(object):
 
                 first_disziplin = gruppen_disziplinen[0]
                 last_disziplin = gruppen_disziplinen[-1]
+                wettkampf_gruppen_first_and_last_disziplinen.append((first_disziplin, last_disziplin))
                 gruppen_disziplinen_without_pausen = self._get_disziplinen_without_pausen(gruppen_disziplinen)
                 if is_wettkampf_with_strict_sequence:
                     # one after another: 1st, 1st-pause, 2nd, 2nd-pause, 3rd,...
@@ -244,13 +246,15 @@ class AthleticsEventScheduler(object):
             for item_index in range(1, len(keep_groups_separate_disziplinen)):
                 self._scenario += keep_groups_separate_disziplinen[item_index - 1] <= keep_groups_separate_disziplinen[item_index]
 
-            self._wettkampf_first_last_disziplinen[wettkampf_name] = (first_disziplin, last_disziplin)
+            wettkampf_first_disziplin = wettkampf_gruppen_first_and_last_disziplinen[0][0]
+            wettkampf_last_disziplin = wettkampf_gruppen_first_and_last_disziplinen[-1][-1]
+            self._wettkampf_first_last_disziplinen[wettkampf_name] = (wettkampf_first_disziplin, wettkampf_last_disziplin)
             if not self._alternative_objective:
-                self._set_default_objective(wettkampf_disziplinen_factors, first_disziplin, last_disziplin)
+                self._set_default_objective(wettkampf_disziplinen_factors, wettkampf_first_disziplin, wettkampf_last_disziplin)
             else:
-                self._set_wettkampf_duration_objective(first_disziplin, last_disziplin)
-                self._set_maximum_wettkampf_duration_constraint(wettkampf_name, first_disziplin, last_disziplin)
-            self._last_disziplin[wettkampf_name] = last_disziplin
+                self._set_wettkampf_duration_objective(wettkampf_first_disziplin, wettkampf_last_disziplin)
+                self._set_maximum_wettkampf_duration_constraint(wettkampf_name, wettkampf_first_disziplin, wettkampf_last_disziplin)
+            self._last_disziplin[wettkampf_name] = wettkampf_last_disziplin
 
     def _get_interval_gruppen(self, wettkampf_name, interesting_gruppen_name, gruppen_names, teilnehmer_data, item, num_anlagen):
         current_interval = 0
