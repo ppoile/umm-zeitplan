@@ -149,32 +149,32 @@ class AthleticsEventScheduler(object):
                             "together": together,
                             "keep_groups_separate": keep_groups_separate,
                         }
-                        disziplin = self._scenario.Task(**kwargs)
-                        self._disziplinen[disziplinen_name] = disziplin
+                        disziplinen_task = self._scenario.Task(**kwargs)
+                        self._disziplinen[disziplinen_name] = disziplinen_task
                     else:
-                        disziplin = self._disziplinen[disziplinen_name]
-                        disziplinen_length = disziplin.length
-                        disziplinen_length_data = disziplin.length_data
-                        disziplinen_length_calculated = disziplin.length_calc
+                        disziplinen_task = self._disziplinen[disziplinen_name]
+                        disziplinen_length = disziplinen_task.length
+                        disziplinen_length_data = disziplinen_task.length_data
+                        disziplinen_length_calculated = disziplinen_task.length_calc
                     if "pause" not in disziplinen_name.lower():
                         logging.debug("      disziplin: %s (disziplin=%s, together=%s, athletes=%u, length_data=%u, length_calc=%u) => length+pause=%u", disziplinen_name, disziplinen_data["name"], together, num_athletes, disziplinen_length_data, disziplinen_length_calculated, disziplinen_length)
                     else:
                         logging.debug("      disziplin: %s (length_data=%u) => length-pause=%u", disziplinen_name, disziplinen_length_data, disziplinen_length)
-                    gruppen_disziplinen.append(disziplin)
+                    gruppen_disziplinen.append(disziplinen_task)
 
                     resource = disziplinen_data.get("resource", None)
                     if resource:
                         if not together or gruppen_name == gruppen_names[0] or keep_groups_separate and (gruppen_name == interval_gruppen_names[0]):
                             for resource_name in resource.split("&"):
-                                disziplin += self.any_anlage(resource_name)
+                                disziplinen_task += self.any_anlage(resource_name)
 
-                    disziplin += gruppe
+                    disziplinen_task += gruppe
 
-                    if together and keep_groups_separate and disziplin not in keep_groups_separate_disziplinen:
-                        keep_groups_separate_disziplinen.append(disziplin)
+                    if together and keep_groups_separate and disziplinen_task not in keep_groups_separate_disziplinen:
+                        keep_groups_separate_disziplinen.append(disziplinen_task)
 
                     if "pause" in disziplinen_name.lower():
-                        self._hide_tasks.append(disziplin)
+                        self._hide_tasks.append(disziplinen_task)
 
                 wettkampf_gruppen_first_and_last_disziplinen.append((gruppen_disziplinen[0], gruppen_disziplinen[-1]))
                 self._add_gruppen_disziplinen_dependencies(gruppen_disziplinen, is_wettkampf_with_strict_sequence)
