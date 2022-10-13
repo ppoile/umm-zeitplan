@@ -178,10 +178,7 @@ class AthleticsEventScheduler(object):
 
                 wettkampf_gruppen_first_and_last_disziplinen.append((gruppen_disziplinen[0], gruppen_disziplinen[-1]))
                 self._add_gruppen_disziplinen_dependencies(gruppen_disziplinen, is_wettkampf_with_strict_sequence)
-
-                for disziplin in self._get_disziplinen_without_pausen(gruppen_disziplinen)[1:]:
-                    wettkampf_disziplinen_factors[disziplin['name']] += 1
-                wettkampf_disziplinen_factors[disziplin['name']] += 1
+                self._update_wettampf_disziplinen_factors(gruppen_disziplinen, wettkampf_disziplinen_factors)
 
             for item_index in range(1, len(keep_groups_separate_disziplinen)):
                 self._scenario += keep_groups_separate_disziplinen[item_index - 1] <= keep_groups_separate_disziplinen[item_index]
@@ -320,6 +317,11 @@ class AthleticsEventScheduler(object):
                     self._scenario += disziplin < last_disziplin
             else:
                 raise ValueError()
+
+    def _update_wettampf_disziplinen_factors(self, gruppen_disziplinen, wettkampf_disziplinen_factors):
+        for disziplin in self._get_disziplinen_without_pausen(gruppen_disziplinen)[1:]:
+            wettkampf_disziplinen_factors[disziplin['name']] += 1
+        wettkampf_disziplinen_factors[disziplin['name']] += 1
 
     def _set_default_objective(self, wettkampf_disziplinen_factors, first_disziplin, last_disziplin):
         for disziplin_name, factor in wettkampf_disziplinen_factors.items():
