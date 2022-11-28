@@ -148,7 +148,7 @@ def main(solution_file, start_time):
             if row_index not in filled_slots:
                 logger.debug("worksheet-6: {}/{}: '{}'".format(row_index + 3, column_index + 1, ''))
                 worksheet.write(row_index + 3, column_index + 1, '', empty_table_cell_format)
-    writer.save()
+    writer.close()
 
 
 if __name__ == "__main__":
