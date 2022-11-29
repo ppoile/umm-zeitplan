@@ -114,7 +114,8 @@ def main(solution_file, event_name, event_day, start_time):
         ts_end = ts_start + timedelta(minutes=10*row_index)
         return ts_end.time().strftime("%-H:%M")
 
-    for column_index, resource in enumerate(resources):
+    column_index = 0
+    for resource in resources:
         logger.debug("column_index={}, resource={}".format(column_index, resource))
         tasks = zeitplan.getTasks(resource)
         if resource == "Läufe":
@@ -123,13 +124,14 @@ def main(solution_file, event_name, event_day, start_time):
             logger.debug("worksheet-2: {}/{}: '{}'".format(2, 0, 'Zeit'))
             worksheet.write(2, 0, 'Zeit', heading_cell_format)
             for row_index in range(first_task, last_task + 1):
-                logger.debug("worksheet-3: {}/{}: '{}'".format(row_index + 3, 0, get_time(row_index)))
-                worksheet.write(row_index + 3, 0, get_time(row_index), empty_table_cell_format)
+                logger.debug("worksheet-3: {}/{}: '{}'".format(row_index + 3, column_index, get_time(row_index)))
+                worksheet.write(row_index + 3, column_index, get_time(row_index), empty_table_cell_format)
+            column_index += 1
         filled_slots = []
         for task_index, task in enumerate(tasks):
             logger.debug("task: {}".format(task))
-            logger.debug("worksheet-4: {}/{}: '{}'".format(2, column_index + 1, resource))
-            worksheet.write(2, column_index + 1, resource, heading_cell_format)
+            logger.debug("worksheet-4: {}/{}: '{}'".format(2, column_index, resource))
+            worksheet.write(2, column_index, resource, heading_cell_format)
             color = task[2]
             task_name = task[0][0]
             start_time = task[0][2]
@@ -159,13 +161,15 @@ def main(solution_file, event_name, event_day, start_time):
                     content = task[0][0]
                     if resource != "Läufe":
                         content = content.split('_')[-2]
-                logger.debug("worksheet-5: {}/{}: '{}'".format(row_index + 3, column_index + 1, content))
-                worksheet.write(row_index + 3, column_index + 1, content, cell_format)
+                logger.debug("worksheet-5: {}/{}: '{}' ({})".format(row_index + 3, column_index, content, color))
+                worksheet.write(row_index + 3, column_index, content, cell_format)
                 filled_slots.append(row_index)
-        for row_index in range(first_task, last_task + 1):
-            if row_index not in filled_slots:
-                logger.debug("worksheet-6: {}/{}: '{}'".format(row_index + 3, column_index + 1, ''))
-                worksheet.write(row_index + 3, column_index + 1, '', empty_table_cell_format)
+        if filled_slots:
+            for row_index in range(first_task, last_task + 1):
+                if row_index not in filled_slots:
+                    logger.debug("worksheet-6: {}/{}: '{}'".format(row_index + 3, column_index, ''))
+                    worksheet.write(row_index + 3, column_index, '', empty_table_cell_format)
+            column_index += 1
     writer.close()
 
 
