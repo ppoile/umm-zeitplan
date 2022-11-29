@@ -15,5 +15,7 @@ pip install -r pip-requirements
 ```
 cd src
 python umm2022.py -h
-python umm2022.py saturday --horizon=51 --time-limit=8h -v
+python umm2022.py saturday --horizon=56 -v
+python umm2022.py sunday --horizon=58 -v
+python umm2022.py saturday --horizon=56 -v --ratio-gap=.2
 ```
