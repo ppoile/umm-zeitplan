@@ -11,6 +11,26 @@ from pyschedule import Scenario, solvers, plotters
 import zeitplan_xlsx_writer
 
 
+def setup_logging(verbose, event_name):
+    log_level = logging.INFO
+    if verbose:
+        log_level=logging.DEBUG
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+    fh = logging.FileHandler('{}.log'.format(event_name))
+    fh.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(log_level)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    root_logger.addHandler(ch)
+    root_logger.addHandler(fh)
+    matplotlib_logger = logging.getLogger("matplotlib")
+    matplotlib_logger.setLevel(logging.INFO)
+    zeitplan_logger = logging.getLogger("zeitplan")
+    zeitplan_logger.setLevel(logging.INFO)
+
+
 class NoSolutionError(RuntimeError):
     pass
 

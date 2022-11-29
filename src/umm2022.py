@@ -296,24 +296,6 @@ maximum_wettkampf_duration = {
 }
 
 
-def setup_logging(verbose, event_name):
-    log_level = logging.INFO
-    if verbose:
-        log_level=logging.DEBUG
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler('{}.log'.format(event_name))
-    fh.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler()
-    ch.setLevel(log_level)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    root_logger.addHandler(ch)
-    root_logger.addHandler(fh)
-    matplotlib_logger = logging.getLogger("matplotlib")
-    matplotlib_logger.setLevel(logging.INFO)
-
-
 def main(args):
     start_time = datetime.datetime.now()
     scriptname_without_extension = os.path.splitext(os.path.basename(__file__))[0]
@@ -328,7 +310,7 @@ def main(args):
     os.symlink(output_folder_name, link_path)
     os.chdir(output_folder_path)
 
-    setup_logging(args.verbose, event_name)
+    athletics_event.setup_logging(args.verbose, event_name_short)
 
     logging.debug("arguments: {}".format(args))
     logging.debug('output folder: {!r}'.format(output_folder_name))
