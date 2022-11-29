@@ -28,13 +28,12 @@ class Zeitplan(object):
         "U12M": "yellow",
         "U16W": "pink",
         "U16M": "cyan",
-        "WOM_7K": "green",
-        "MAN_10K": "red",
         # Sunday:
         "U14W": "orange",
         "U14M": "yellow",
         "WOM_5K": "pink",
         "MAN_6K": "cyan",
+        # Saturday & Sunday:
         "WOM_7K": "green",
         "MAN_10K": "red",
     }
