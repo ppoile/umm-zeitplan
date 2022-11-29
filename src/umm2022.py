@@ -364,7 +364,13 @@ def main(args):
 
     try:
         if not args.with_ortools:
-            event.solve(time_limit=time_limit_in_secs, ratio_gap=args.ratio_gap, random_seed=args.random_seed, threads=args.threads)
+            event.solve(
+                time_limit=time_limit_in_secs,
+                ratio_gap=args.ratio_gap,
+                random_seed=args.random_seed,
+                threads=args.threads,
+                event_name='Uster Mehrkampf Meeting',
+                event_day=args.day)
         else:
             event.solve_with_ortools(time_limit=time_limit_in_secs)
     except athletics_event.NoSolutionError as e:

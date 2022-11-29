@@ -383,7 +383,7 @@ class AthleticsEventScheduler(object):
         lines.append(f"cumulated-wettkampf-duration: {wettkampf_duration_sum}")
         return "{}\n{}".format(heading, "\n".join(lines))
 
-    def solve(self, time_limit, ratio_gap=0.0, random_seed=None, threads=None, msg=1):
+    def solve(self, time_limit, event_name, event_day, ratio_gap=0.0, random_seed=None, threads=None, msg=1):
         logging.debug('solving problem with mip solver...')
         status = solvers.mip.solve(self._scenario, time_limit=time_limit, ratio_gap=ratio_gap, random_seed=random_seed, threads=threads, msg=msg)
         cbc_logfile_name = "cbc.log"
@@ -403,7 +403,7 @@ class AthleticsEventScheduler(object):
         plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename='{}.png'.format(self._name),
                                  fig_size=(100, 5), hide_tasks=self._hide_tasks)
         with open(solution_filename, 'r') as solution_file:
-            zeitplan_xlsx_writer.main(solution_file, start_time="9:00")
+            zeitplan_xlsx_writer.main(solution_file, event_name=event_name, event_day=event_day, start_time="9:00")
         logging.info(self.get_wettkampf_duration_summary())
         logging.info("objective_value: %s", self._scenario.objective_value())
 

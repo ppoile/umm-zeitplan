@@ -46,8 +46,9 @@ class Zeitplan(object):
         return self._eventToColorMapping[eventName]
 
 
-def main(solution_file, start_time):
-    logger.debug("main(solution_file={}, start_time={})".format(solution_file, start_time))
+def main(solution_file, event_name, event_day, start_time):
+    logger.debug("main(solution_file={}, event_name={}, event_day={}, start_time={})".format(
+        solution_file, event_name, event_day, start_time))
     contentAsString = solution_file.read()
     #print("content: {!r}".format(contentAsString))
 
@@ -74,13 +75,19 @@ def main(solution_file, start_time):
     path = os.path.join(directory, filename)
     writer = pandas.ExcelWriter(path, engine='xlsxwriter')
     workbook = writer.book
-    worksheet = workbook.add_worksheet()
+    worksheet = workbook.add_worksheet(event_day)
 
     title_cell_format = workbook.add_format()
     title_cell_format.set_font_size(14)
     title_cell_format.set_bold()
-    logger.debug("worksheet-1: {}: '{}'".format('A1', 'Zeitplan Uster Mehrkampf Meeting'))
-    worksheet.write('A1', 'Zeitplan Uster Mehrkampf Meeting', title_cell_format)
+    title_fields = ['Zeitplan']
+    if event_name:
+        title_fields.append(event_name)
+    if event_day:
+        title_fields.append(event_day)
+    title = ' '.join(title_fields)
+    logger.debug("worksheet-1: {}: '{}'".format('A1', title))
+    worksheet.write('A1', title, title_cell_format)
 
     heading_cell_format = workbook.add_format()
     heading_cell_format.set_bold()
@@ -156,7 +163,9 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='generate xlsx zeitplan')
     parser.add_argument('-v', '--verbose', action="store_true", help="be verbose")
-    parser.add_argument('-s', '--start-time', help="start time")
+    parser.add_argument('-e', '--event', help="Event, z.B. 'UMM'")
+    parser.add_argument('-d', '--day', help="Wettkampf-Tag, z.B. 'Samstag'")
+    parser.add_argument('-s', '--start-time', help="start time, z.B. '8:30'")
     parser.add_argument('file', type=argparse.FileType('r'), help='solution-file')
     args = parser.parse_args()
-    main(args.file, args.start_time)
+    main(args.file, args.event, args.day, args.start_time)
