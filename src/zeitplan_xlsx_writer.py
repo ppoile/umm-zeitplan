@@ -6,7 +6,19 @@ import re
 
 
 logger = logging.getLogger('zeitplan')
-logger.setLevel(logging.INFO)
+
+
+def setup_logging(verbose):
+    log_level = logging.INFO
+    if verbose:
+        log_level=logging.DEBUG
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch = logging.StreamHandler()
+    ch.setLevel(log_level)
+    ch.setFormatter(formatter)
+    root_logger.addHandler(ch)
 
 
 class Zeitplan(object):
@@ -168,4 +180,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--start-time', help="start time, z.B. '8:30'")
     parser.add_argument('file', type=argparse.FileType('r'), help='solution-file')
     args = parser.parse_args()
+
+    setup_logging(args.verbose)
+
     main(args.file, args.event, args.day, args.start_time)
