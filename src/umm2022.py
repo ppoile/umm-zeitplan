@@ -6,6 +6,8 @@ import sys
 import athletics_event
 
 
+event_name = 'Uster Mehrkampf Meeting'
+
 anlagen_descriptors = {
     'saturday': [
         ("Läufe",),
@@ -299,9 +301,9 @@ maximum_wettkampf_duration = {
 def main(args):
     start_time = datetime.datetime.now()
     scriptname_without_extension = os.path.splitext(os.path.basename(__file__))[0]
-    event_name = "{}_{}".format(scriptname_without_extension, args.day)
+    event_name_short = "{}_{}".format(scriptname_without_extension, args.day)
     output_folder_name = "{}_{}_{}_{}".format(
-        start_time.isoformat(timespec="seconds"), event_name, args.horizon, args.time_limit)
+        start_time.isoformat(timespec="seconds"), event_name_short, args.horizon, args.time_limit)
     output_folder_path = os.path.join("results", output_folder_name)
     os.makedirs(output_folder_path, exist_ok=True)
     link_path = os.path.join("results", "latest")
@@ -316,7 +318,7 @@ def main(args):
     logging.debug('output folder: {!r}'.format(output_folder_name))
 
     event = athletics_event.AthleticsEventScheduler(
-        name=event_name, duration_in_units=args.horizon)
+        name=event_name_short, duration_in_units=args.horizon)
     event.create_anlagen(anlagen_descriptors[args.day])
     event.create_disziplinen(
         wettkampf_data[args.day],
@@ -327,7 +329,7 @@ def main(args):
         event.set_wettkampf_start_times(wettkampf_start_times[args.day])
     event.ensure_last_wettkampf_of_the_day()
     scenario_as_string = str(event.scenario)
-    scenario_filename = '{}_scenario.txt'.format(event_name)
+    scenario_filename = '{}_scenario.txt'.format(event_name_short)
     with open(scenario_filename, 'w') as f:
         f.write(scenario_as_string)
     if args.print_scenario_and_exit:
@@ -351,7 +353,7 @@ def main(args):
                 ratio_gap=args.ratio_gap,
                 random_seed=args.random_seed,
                 threads=args.threads,
-                event_name='Uster Mehrkampf Meeting',
+                event_name=event_name,
                 event_day=args.day)
         else:
             event.solve_with_ortools(time_limit=time_limit_in_secs)
