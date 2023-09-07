@@ -11,15 +11,15 @@ event_name = 'Uster Mehrkampf Meeting'
 anlagen_descriptors = {
     'saturday': [
         ("Läufe",),
-        ("Weit", 2),
-        ("Kugel", 2),
+        ("Weit", 3),
+        ("Kugel", 3),
         ("Hoch", 2),
         ("Diskus",),
     ],
     'sunday': [
         ("Läufe",),
-        ("Weit", 2),
-        ("Kugel", 2),
+        ("Weit", 3),
+        ("Kugel", 3),
         ("Hoch", 2),
         ("Diskus",),
         ("Speer",),
@@ -102,9 +102,9 @@ wettkampf_data = {
             "disziplinen": [
                 dict(name="100m", together=True, resource="Läufe", length=2),
                 dict(name="Pause_1", length=4),
-                dict(name="Weit", together=True, resource="Weit1&Weit2", use_num_anlagen=2, length=3),  # auf Weit1 und Weit2
+                dict(name="Weit", together=True, resource="Weit1&Weit2&Weit3", use_num_anlagen=2, length=3),  # auf Weit1 und Weit2
                 dict(name="Pause_2", length=3),
-                dict(name="Kugel", resource="Kugel", length=4),
+                dict(name="Kugel", resource="Kugel3", length=4),
                 dict(name="Pause_3", length=3),
                 dict(name="Hoch", together=True, resource="Hoch1&Hoch2", use_num_anlagen=2, length=7),  # auf Hoch1 und Hoch2
                 dict(name="Pause_4", length=4),
@@ -193,7 +193,7 @@ wettkampf_data = {
         },
         "WOM_7K": {
             "disziplinen": [
-                dict(name="Weit", together=True, resource="Weit1&Weit2", use_num_anlagen=2, length=4),  # auf Weit1 und Weit2
+                dict(name="Weit", together=True, resource="Weit1&Weit2&Weit3", use_num_anlagen=2, length=4),  # auf Weit1 und Weit2
                 dict(name="Pause_1", length=3),
                 dict(name="Speer", resource="Speer&Diskus", length=4),
                 dict(name="Pause_2", length=3),
@@ -208,73 +208,74 @@ wettkampf_data = {
 wettkampf_start_times = {
     "saturday": {
         "WOM_7K_Gr1_to_Gr2_100mHü": 9,
-        "MAN_10K_Gr22_to_Gr23_100m": 9,
+        "MAN_10K_Gr23_to_Gr24_100m": 9,
     },
     "sunday": {
         "WOM_7K_Gr1_to_Gr2_Weit": 9,
-        "MAN_10K_Gr22_to_Gr23_110mHü": 9,
+        "MAN_10K_Gr23_to_Gr24_110mHü": 9,
     },
 }
 
 teilnehmer_data = {
     "WOM_7K": {
-        "Gr1": 7,
-        "Gr2": 16,
+        "Gr1": 12,
+        "Gr2": 13,
     },
     "U16W_5K": {
-        "Gr3": 11,
-        "Gr4": 11,
-        "Gr5": 11,
+        "Gr3": 16,
+        "Gr4": 16,
+        "Gr5": 16,
     },
     "U14W_5K": {
-        "Gr6": 12,
-        "Gr7": 12,
-        "Gr8": 12,
-        "Gr9": 12,
-        "Gr10": 12,
-        "Gr11": 12,
-        "Gr12": 12,
+        "Gr6": 13,
+        "Gr7": 13,
+        "Gr8": 13,
+        "Gr9": 13,
+        "Gr10": 13,
+        "Gr11": 13,
+        "Gr12": 13,
+        "Gr13": 13,
     },
     "U12W_4K": {
-        "Gr13": 12,
         "Gr14": 12,
         "Gr15": 12,
         "Gr16": 12,
         "Gr17": 12,
         "Gr18": 12,
+        "Gr19": 12,
     },
     "WOM_5K": {
-        "Gr19": 7,
-        "Gr20": 16,
-        "Gr21": 13,
+        "Gr20": 9,
+        "Gr21": 10,
+        "Gr22": 15,
     },
     "MAN_10K": {
-        "Gr22": 11,
-        "Gr23": 11,
+        "Gr23": 10,
+        "Gr24": 10,
     },
     "U16M_6K": {
-        "Gr24": 13,
         "Gr25": 13,
+        "Gr26": 13,
+        "Gr27": 13,
     },
     "U14M_5K": {
-        "Gr26": 12,
-        "Gr27": 12,
-        "Gr28": 12,
-        "Gr29": 12,
-        "Gr30": 12,
+        "Gr28": 11,
+        "Gr29": 11,
+        "Gr30": 11,
+        "Gr31": 11,
+        "Gr32": 11,
     },
     "U12M_4K": {
-        "Gr31": 12,
-        "Gr32": 12,
-        "Gr33": 12,
-        "Gr34": 12,
-        "Gr35": 12,
+        "Gr33": 11,
+        "Gr34": 11,
+        "Gr35": 11,
+        "Gr36": 11,
+        "Gr37": 11,
     },
     "MAN_6K": {
-        "Gr36": 10,
-        "Gr37": 10,
-        "Gr38": 10,
-        "Gr39": 12,
+        "Gr38": 16,
+        "Gr39": 10,
+        "Gr40": 18,
     },
 }
 

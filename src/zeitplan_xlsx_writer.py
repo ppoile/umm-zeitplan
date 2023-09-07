@@ -75,7 +75,7 @@ def main(solution_file, event_name, event_day, start_time):
         tasks.append((parts[0], parts[1], int(parts[2]), int(parts[3])))
     #print("tasks: {!r}".format(tasks))
 
-    resources = ["Läufe", "Weit1", "Weit2", "Hoch1", "Hoch2", "Kugel1", "Kugel2", "Diskus", "Speer", "Stab"]
+    resources = ["Läufe", "Weit1", "Weit2", "Weit3", "Hoch1", "Hoch2", "Kugel1", "Kugel2", "Kugel3", "Diskus", "Speer", "Stab"]
 
     zeitplan = Zeitplan(tasks, resources)
 
