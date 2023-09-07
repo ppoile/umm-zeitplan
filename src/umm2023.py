@@ -62,7 +62,7 @@ wettkampf_data = {
                 dict(name="Pause_1", length=4),
                 dict(name="Hoch", together=True, resource="Hoch1&Hoch2", use_num_anlagen=2, length=5),
                 dict(name="Pause_2", length=3),
-                dict(name="Kugel", together=True, resource="Kugel1&Kugel2", use_num_anlagen=2, length=3),
+                dict(name="Kugel", resource="Kugel", length=3),
                 dict(name="Pause_3", length=4),
                 dict(name="200m", together=True, resource="Läufe", length=2),
             ],
@@ -104,7 +104,7 @@ wettkampf_data = {
                 dict(name="Pause_1", length=4),
                 dict(name="Weit", together=True, resource="Weit1&Weit2", use_num_anlagen=2, length=3),  # auf Weit1 und Weit2
                 dict(name="Pause_2", length=3),
-                dict(name="Kugel", together=True, resource="Kugel1&Kugel2", length=4),  # nur auf Kugel1
+                dict(name="Kugel", resource="Kugel", length=4),
                 dict(name="Pause_3", length=3),
                 dict(name="Hoch", together=True, resource="Hoch1&Hoch2", use_num_anlagen=2, length=7),  # auf Hoch1 und Hoch2
                 dict(name="Pause_4", length=4),
@@ -136,7 +136,7 @@ wettkampf_data = {
                 dict(name="Pause_1", length=3),
                 dict(name="Weit", resource="Weit", length=3),
                 dict(name="Pause_2", length=3),
-                dict(name="Kugel", resource="Kugel1&Kugel2", length=2),
+                dict(name="Kugel", resource="Kugel", length=2),
                 dict(name="Pause_3", length=3),
                 dict(name="Hoch", resource="Hoch", length=3),
                 dict(name="Pause_4", length=3),
