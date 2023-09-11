@@ -104,13 +104,13 @@ class AthleticsEventScheduler(object):
         self._teilnehmer_data = teilnehmer_data
         self._maximum_wettkampf_duration = maximum_wettkampf_duration
         self._alternative_objective = alternative_objective
-        keep_groups_separate_disziplinen = []
 
         logging.debug('creating disziplinen...')
         for wettkampf_name in wettkampf_data:
             if wettkampf_name not in teilnehmer_data:
                 continue
             logging.debug("  wettkampf: %s", wettkampf_name)
+            keep_groups_separate_disziplinen = []
             is_wettkampf_with_strict_sequence = wettkampf_data[wettkampf_name].get("is_wettkampf_with_strict_sequence", False)
             if wettkampf_data[wettkampf_name].get("is_last_wettkampf_of_the_day", False):
                 self._last_wettkampf_of_the_day = wettkampf_name
