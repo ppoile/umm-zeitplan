@@ -216,6 +216,17 @@ wettkampf_start_times = {
     },
 }
 
+wettkampf_start_sequence = {
+    "saturday": [
+        "U16M_6K_.*_100mHü",
+        "U16W_5K_.*_80m",
+        "U12M_4K_.*_60m",
+        "U12W_4K_.*_60m",
+        "WOM_7K_.*_100mHü",
+        "MAN_10K_.*_100m",
+    ],
+}
+
 teilnehmer_data = {
     "WOM_7K": {
         "Gr1": 12,
@@ -329,6 +340,8 @@ def main(args):
         alternative_objective=args.fast)
     if not args.dont_set_start_time:
         event.set_wettkampf_start_times(wettkampf_start_times[args.day])
+    if args.set_start_sequence:
+        event.set_wettkampf_start_sequence(wettkampf_start_sequence[args.day])
     event.ensure_last_wettkampf_of_the_day()
     scenario_as_string = str(event.scenario)
     scenario_filename = '{}_scenario.txt'.format(event_name_short)
@@ -387,6 +400,7 @@ if __name__ == "__main__":
     help_text = 'threads, e.g. 4 (default: {})'.format(default_arguments["threads"])
     parser.add_argument('--threads', type=int, default=default_arguments["threads"], help=help_text)
     parser.add_argument('--dont-set-start-time', action="store_true", help="don't set start time")
+    parser.add_argument('--set-start-sequence', action="store_true", help="set start sequence")
     help_text = 'horizon, (default: {})'.format(default_arguments["horizon"])
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
     parser.add_argument('--fast', action="store_true")

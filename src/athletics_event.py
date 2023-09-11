@@ -370,6 +370,14 @@ class AthleticsEventScheduler(object):
             disziplin = self.get_disziplin_from_name(disziplinen_name_or_pattern)
             self._scenario += disziplin > start_times
 
+    def set_wettkampf_start_sequence(self, wettkampf_start_sequence):
+        logging.debug('setting wettkampf start sequence...')
+        num_wettkaempfe = len(wettkampf_start_sequence)
+        for i in range(num_wettkaempfe - 1):
+            wettkampf_disziplin_1 = self.get_disziplin_from_name(wettkampf_start_sequence[i])
+            wettkampf_disziplin_2 = self.get_disziplin_from_name(wettkampf_start_sequence[i + 1])
+            self._scenario += wettkampf_disziplin_1 < wettkampf_disziplin_2
+
     def set_objective(self, disziplinen_factors):
         self._scenario.clear_objective()
         for disziplin_name, factor in disziplinen_factors.items():
