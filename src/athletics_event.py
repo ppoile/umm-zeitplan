@@ -226,7 +226,6 @@ class AthleticsEventScheduler(object):
             interval_gruppen[current_interval].append(gruppen_name)
         for gruppen in interval_gruppen.values():
             if interesting_gruppen_name in  gruppen:
-                logging.debug("gruppen: %s", gruppen)
                 return gruppen
 
     def _get_disziplinen_without_pausen(self, disziplinen):
