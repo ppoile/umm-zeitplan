@@ -6,6 +6,7 @@ import logging
 import math
 import operator
 import os
+import re
 
 from pyschedule import Scenario, solvers, plotters
 import zeitplan_xlsx_writer
@@ -356,10 +357,18 @@ class AthleticsEventScheduler(object):
     def _set_maximum_wettkampf_duration_constraint(self, wettkampf_name, first_disziplin, last_disziplin):
         self._scenario += last_disziplin <= first_disziplin + self._maximum_wettkampf_duration[wettkampf_name]
 
+    def get_disziplin_from_name(self, disziplinen_name_or_pattern):
+        for candidate in self._disziplinen.keys():
+            match = re.match(disziplinen_name_or_pattern, candidate)
+            if match is not None:
+                return self._disziplinen[candidate]
+        return self._disziplinen[disziplinen_name_or_pattern]
+
     def set_wettkampf_start_times(self, wettkampf_start_times):
         logging.debug('setting wettkampf start times...')
-        for disziplinen_name, start_times in wettkampf_start_times.items():
-            self._scenario += self._disziplinen[disziplinen_name] > start_times
+        for disziplinen_name_or_pattern, start_times in wettkampf_start_times.items():
+            disziplin = self.get_disziplin_from_name(disziplinen_name_or_pattern)
+            self._scenario += disziplin > start_times
 
     def set_objective(self, disziplinen_factors):
         self._scenario.clear_objective()

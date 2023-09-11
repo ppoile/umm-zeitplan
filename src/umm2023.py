@@ -207,12 +207,12 @@ wettkampf_data = {
 
 wettkampf_start_times = {
     "saturday": {
-        "WOM_7K_Gr1_to_Gr2_100mHü": 9,
-        "MAN_10K_Gr23_to_Gr24_100m": 9,
+        "WOM_7K_.*_100mHü": 9,
+        "MAN_10K_.*_100m": 9,
     },
     "sunday": {
-        "WOM_7K_Gr1_to_Gr2_Weit": 9,
-        "MAN_10K_Gr23_to_Gr24_110mHü": 9,
+        "WOM_7K_.*_Weit": 9,
+        "MAN_10K_.*_110mHü": 9,
     },
 }
 
