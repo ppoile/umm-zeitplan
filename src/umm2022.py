@@ -304,9 +304,10 @@ def main(args):
     event_name_short = "{}_{}".format(scriptname_without_extension, args.day)
     output_folder_name = "{}_{}_{}_{}".format(
         start_time.isoformat(timespec="seconds"), event_name_short, args.horizon, args.time_limit)
-    output_folder_path = os.path.join("results", output_folder_name)
+    results_folder_path = os.path.join(os.path.dirname(__file__), os.pardir, "results")
+    output_folder_path = os.path.join(results_folder_path, output_folder_name)
     os.makedirs(output_folder_path, exist_ok=True)
-    link_path = os.path.join("results", "latest")
+    link_path = os.path.join(results_folder_path, "latest")
     if os.path.lexists(link_path):
         os.remove(link_path)
     os.symlink(output_folder_name, link_path)
