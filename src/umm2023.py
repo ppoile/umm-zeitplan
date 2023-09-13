@@ -316,6 +316,10 @@ def main(args):
     event_name_short = "{}_{}".format(scriptname_without_extension, args.day)
     output_folder_name = "{}_{}_{}_{}".format(
         start_time.isoformat(timespec="seconds"), event_name_short, args.horizon, args.time_limit)
+    if args.ratio_gap != default_arguments["ratio_gap"]:
+        ratio_gap_as_string = str(args.ratio_gap)
+        gap_suffix = ratio_gap_as_string.replace('.', 'g')
+        output_folder_name += "_" + gap_suffix
     results_folder_path = os.path.join(os.path.dirname(__file__), os.pardir, "results")
     output_folder_path = os.path.join(results_folder_path, output_folder_name)
     os.makedirs(output_folder_path, exist_ok=True)
