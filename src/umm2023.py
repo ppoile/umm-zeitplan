@@ -13,7 +13,7 @@ event_data = {
         'sunday': [
             ("Läufe",),
             ("Weit", 3),
-            ("Kugel", 3),
+            ("Kugel", 2),
             ("Hoch", 2),
             ("Diskus",),
             ("Speer",),
@@ -129,7 +129,7 @@ event_data = {
                     dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=3),
-                    dict(name="Kugel", resource="Kugel3", length=2),
+                    dict(name="Kugel", resource="Kugel", length=2),
                     dict(name="Pause_3", length=3),
                     dict(name="Hoch", resource="Hoch", length=3),
                     dict(name="Pause_4", length=3),
