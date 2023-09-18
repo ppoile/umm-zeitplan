@@ -395,6 +395,7 @@ class AthleticsEventScheduler(object):
         for wettkampf_name, last_disziplin in self._last_disziplin.items():
             if wettkampf_name != self._last_wettkampf_of_the_day:
                 self._scenario += last_disziplin < last_disziplin_of_the_day
+        self._scenario += last_disziplin_of_the_day * 10
 
     def getGroups(self, wettkampf_name):
         return list(self._teilnehmer_data[wettkampf_name].keys())
