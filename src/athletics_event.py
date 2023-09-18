@@ -569,7 +569,7 @@ def interactive_main(event_data):
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
     parser.add_argument('--fast', action="store_true")
     parser.add_argument('--with-ortools', action="store_true")
-    valid_wettkampf_days = ['saturday', 'sunday']
+    valid_wettkampf_days = event_data['wettkampf_data'].keys()
     parser.add_argument('day', type=str.lower, choices=valid_wettkampf_days, help='wettkampf day')
     args = parser.parse_args()
 
