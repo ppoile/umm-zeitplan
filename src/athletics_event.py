@@ -242,9 +242,9 @@ class AthleticsEventScheduler(object):
 
     def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, num_anlagen, exact=False):
         mapping = {
-            "60m": (6, 3/10),
-            "80m": (6, 3/10),
-            "100m": (6, 3/10),
+            "60m": (6, 2/10),
+            "80m": (6, 2/10),
+            "100m": (6, 2/10),
             "100mHü": (6, 5/10),
             "110mHü": (6, 5/10),
             "200m": (6, 4/10),
@@ -253,21 +253,21 @@ class AthleticsEventScheduler(object):
             "600m": (16, 1),
             "1000m": (16, 1),
             "1500m": (16, 1),
-            "Diskus": (1, 3/12),
+            "Diskus": (1, 3/15),
             "Hoch": {
-                "U14W_5K": (1, 3/12),
-                "U14M_5K": (1, 3/12),
-                "U16W_5K": (1, 5/12),
-                "U16M_6K": (1, 5/12),
-                "WOM_5K": (1, 3/12),
-                "WOM_7K": (1, 5/12),
-                "MAN_6K": (1, 3/12),
-                "MAN_10K": (1, 5/12),
+                "U14W_5K": (1, 3/15),
+                "U14M_5K": (1, 3/15),
+                "U16W_5K": (1, 5/15),
+                "U16M_6K": (1, 5/15),
+                "WOM_5K": (1, 3/15),
+                "WOM_7K": (1, 5/15),
+                "MAN_6K": (1, 3/15),
+                "MAN_10K": (1, 5/15),
             },
-            "Kugel": (1, 2/12),
-            "Speer": (1, 3/12),
+            "Kugel": (1, 2/15),
+            "Speer": (1, 3/15),
             "Stab": (1, 6/12),
-            "Weit": (1, 3/12),
+            "Weit": (1, 3/15),
         }
         item = mapping[disziplin]
         if type(item) == dict:
