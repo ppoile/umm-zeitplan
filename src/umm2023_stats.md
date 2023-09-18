@@ -2,10 +2,9 @@
 
 ## Round 1 (git: 8b66038173d13b52fff625503dbcc4158d115578)
 
-## Saturday
+### Saturday
 
-### 5min
-### 6h
+#### 6h
 - horizon 56: No solution
 - horizon 57: file:///home/andi/var/umm-zeitplan/results/2023-09-11T23:39:41_umm2023_saturday_57_6h_best/
     Wettkampf-Duration-Summary:
@@ -31,18 +30,45 @@
     cumulated-wettkampf-duration: 172
     objective_value: 2117
 
-### 8h
-- horizon 53:
-- horizon 54:
-- horizon 55:
-- horizon 56:
-- horizon 57:
-- horizon 58:
+#### 8h
+- horizon 53: No solution
+- horizon 54: No solution
+- horizon 55: No solution
+- horizon 56: No solution
+- horizon 57: file:///home/andi/var/umm-zeitplan/results/2023-09-13T21:56:35_umm2023_saturday_57_8h_best/
+    Wettkampf-Duration-Summary:
+        U12W_4K: 26..42 (16)
+        U16W_5K: 13..48 (35)
+        WOM_7K: 9..32 (23)
+        U12M_4K: 0..17 (17)
+        U16M_6K: 5..52 (47)
+        MAN_10K: 22..56 (34)
+    horizon: 57
+    cumulated-wettkampf-duration: 172
+    objective_value: 2117
+
+- horizon 58: file:///home/andi/var/umm-zeitplan/results/2023-09-13T21:56:23_umm2023_saturday_58_8h/
+    Wettkampf-Duration-Summary:
+        U12W_4K: 26..42 (16)
+        U16W_5K: 13..48 (35)
+        WOM_7K: 9..32 (23)
+        U12M_4K: 0..17 (17)
+        U16M_6K: 5..52 (47)
+        MAN_10K: 22..56 (34)
+    horizon: 57
+    cumulated-wettkampf-duration: 172
+    objective_value: 2117
+
+#### 12h
+- horizon 53: No solution
+- horizon 54: No solution
+- horizon 55: No solution
+- horizon 56: No solution
 
 
-## Sunday
+### Sunday
 
-### 10m
+#### 10m
 - horizon 50: file:///home/andi/var/umm-zeitplan/results/2023-09-12T22:24:34_umm2023_sunday_50_10m/ -> no solution
 - horizon 55: file:///home/andi/var/umm-zeitplan/results/2023-09-12T22:24:37_umm2023_sunday_55_10m/ -> no solution
 - horizon 60: file:///home/andi/var/umm-zeitplan/results/2023-09-12T22:24:37_umm2023_sunday_55_10m/ -> no solution
@@ -58,7 +84,7 @@
     cumulated-wettkampf-duration: 229
     objective_value: 3663
 
-### 8h
+#### 8h
 - horizon 60: file:///home/andi/var/umm-zeitplan/results/2023-09-12T22:43:39_umm2023_sunday_60_8h/
     Wettkampf-Duration-Summary:
         U14M_5K: 20..54 (34)
@@ -120,7 +146,7 @@
     cumulated-wettkampf-duration: 184
     objective_value: 2689
 
-### 1h
+#### 1h
 - horizon 55: No solution
 - horizon 56: No solution
 - horizon 57: No solution
@@ -138,7 +164,7 @@
 
 - horizon 59: No solution
 
-### time-limit=8h, ratio-gap=0.5
+#### time-limit=8h, ratio-gap=0.5
 - horizon 55:
 - horizon 56:
 - horizon 57: file:///home/andi/var/umm-zeitplan/results/2023-09-13T19:35:39_umm2023_sunday_57_8h_0g5/
@@ -157,10 +183,75 @@
 - horizon 59:
 - horizon 60:
 
-### time-limit=8h
-- horizon 53:
-- horizon 54:
-- horizon 55:
+#### time-limit=8h
+- horizon 53: No solution
+- horizon 54: No solution
+- horizon 55: No solution
+- horizon 56: No solution
+- horizon 57: file:///home/andi/var/umm-zeitplan/results/2023-09-13T21:51:13_umm2023_sunday_57_8h_best/
+    Wettkampf-Duration-Summary:
+        U14M_5K: 22..47 (25)
+        MAN_6K: 12..52 (40)
+        WOM_5K: 16..43 (27)
+        MAN_10K: 9..56 (47)
+        U14W_5K: 0..30 (30)
+        WOM_7K: 12..38 (26)
+    horizon: 57
+    cumulated-wettkampf-duration: 195
+    objective_value: 2847
+
+- horizon 58: file:///home/andi/var/umm-zeitplan/results/2023-09-13T21:50:58_umm2023_sunday_58_8h/
+    Wettkampf-Duration-Summary:
+        U14M_5K: 23..47 (24)
+        MAN_6K: 4..53 (49)
+        WOM_5K: 0..27 (27)
+        MAN_10K: 20..57 (37)
+        U14W_5K: 10..38 (28)
+        WOM_7K: 9..33 (24)
+    horizon: 58
+    cumulated-wettkampf-duration: 189
+    objective_value: 2838
+
+#### 12h
+- horizon 53: No solution
+- horizon 54: No solution
+
+
+## Round 2 (git: 0891a51587da53e5835508b3c7bfae71ca05ea4d)
+
+### Saturday
+
+#### time-limit=8h
+- horizon 57:
+
+### Sunday
+
+#### time-limit=8h
 - horizon 56:
 - horizon 57:
 - horizon 58:
+
+## Round 3 (git: e5820250131d63a2b02dd78047a5a036b08638c0)
+
+### Saturday
+
+#### time-limit=8h
+- horizon 50: No solution!
+- horizon 51: No solution!
+- horizon 52: file:///home/andi/var/umm-zeitplan/results/2023-09-18T11:02:17_umm2023_saturday_52_8h_best
+- horizon 53: file:///home/andi/var/umm-zeitplan/results/2023-09-18T11:02:10_umm2023_saturday_53_8h
+
+### Sunday
+
+#### time-limit=8h
+- horizon 50: No solution!
+- horizon 51: No solution!
+- horizon 52: file:///home/andi/var/umm-zeitplan/results/2023-09-18T11:03:44_umm2023_sunday_52_8h_best
+- horizon 53: file:///home/andi/var/umm-zeitplan/results/2023-09-18T11:03:38_umm2023_sunday_53_8h
+
+## Round 3 (git: 270c8eec8a31ae41c8a0fa5d3860bab5447fca4a)
+
+### Sunday
+
+#### time-limit=8h
+- horizon 50:
