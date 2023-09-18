@@ -1,12 +1,14 @@
 """Module providing Athletics Event implementation."""
 
 from collections import defaultdict
+import datetime
 import functools
 import logging
 import math
 import operator
 import os
 import re
+import sys
 
 from pyschedule import Scenario, solvers, plotters
 import zeitplan_xlsx_writer
@@ -464,3 +466,111 @@ class AthleticsEventScheduler(object):
                                  fig_size=(100, 5), hide_tasks=self._hide_tasks)
         logging.info(self.get_wettkampf_duration_summary())
         logging.info("objective_value: %s", self._scenario.objective_value())
+
+
+def main(event_data, args):
+    start_time = datetime.datetime.now()
+    scriptname_without_extension = os.path.splitext(os.path.basename(__file__))[0]
+    event_name_short = "{}_{}".format(scriptname_without_extension, args.day)
+    output_folder_name = "{}_{}_{}_{}".format(
+        start_time.isoformat(timespec="seconds"), event_name_short, args.horizon, args.time_limit)
+    if args.ratio_gap != default_arguments["ratio_gap"]:
+        ratio_gap_as_string = str(args.ratio_gap)
+        gap_suffix = ratio_gap_as_string.replace('.', 'g')
+        output_folder_name += "_" + gap_suffix
+    results_folder_path = os.path.join(os.path.dirname(__file__), os.pardir, "results")
+    output_folder_path = os.path.join(results_folder_path, output_folder_name)
+    os.makedirs(output_folder_path, exist_ok=True)
+    link_path = os.path.join(results_folder_path, "latest")
+    if os.path.lexists(link_path):
+        os.remove(link_path)
+    os.symlink(output_folder_name, link_path)
+    os.chdir(output_folder_path)
+
+    setup_logging(args.verbose, event_name_short)
+
+    logging.debug("arguments: {}".format(args))
+    logging.debug('output folder: {!r}'.format(output_folder_name))
+
+    event = AthleticsEventScheduler(
+        name=event_name_short, duration_in_units=args.horizon)
+    event.create_anlagen(event_data['anlagen_descriptors'][args.day])
+    event.create_disziplinen(
+        event_data['wettkampf_data'][args.day],
+        event_data['teilnehmer_data'],
+        maximum_wettkampf_duration=event_data['maximum_wettkampf_duration'][args.day],
+        alternative_objective=args.fast)
+    if not args.dont_set_start_time:
+        event.set_wettkampf_start_times(event_data['wettkampf_start_times'][args.day])
+    if args.set_start_sequence:
+        event.set_wettkampf_start_sequence(event_data['wettkampf_start_sequence'][args.day])
+    event.ensure_last_wettkampf_of_the_day()
+    scenario_as_string = str(event.scenario)
+    scenario_filename = '{}_scenario.txt'.format(event_name_short)
+    with open(scenario_filename, 'w') as f:
+        f.write(scenario_as_string)
+    if args.print_scenario_and_exit:
+        logging.info("scenario: {}".format(scenario_as_string))
+        sys.exit()
+    logging.debug("scenario: {}".format(scenario_as_string))
+
+    if args.time_limit.endswith('s'):
+        time_limit_in_secs = float(args.time_limit[:-1])
+    elif args.time_limit.endswith('m'):
+        time_limit_in_secs = float(args.time_limit[:-1]) * 60
+    elif args.time_limit.endswith('h'):
+        time_limit_in_secs = float(args.time_limit[:-1]) * 3600
+    else:
+        time_limit_in_secs = float(args.time_limit)
+
+    try:
+        if not args.with_ortools:
+            event.solve(
+                time_limit=time_limit_in_secs,
+                ratio_gap=args.ratio_gap,
+                random_seed=args.random_seed,
+                threads=args.threads,
+                event_name=event_data['event_name'],
+                event_day=args.day)
+        else:
+            event.solve_with_ortools(time_limit=time_limit_in_secs)
+    except NoSolutionError as e:
+        logging.error("Exception caught: {}".format(e.__class__.__name__))
+    logging.info('output folder: {!r}'.format(output_folder_name))
+    logging.debug("done")
+
+
+default_arguments = {
+    "time_limit": "10m",
+    "ratio_gap": 0.0,
+    "random_seed": None,
+    "threads": None,
+    "horizon": 54,
+}
+
+
+def interactive_main(event_data):
+    import argparse
+    parser = argparse.ArgumentParser(description='calculate event timetable')
+    parser.add_argument('--print-scenario-and-exit', action="store_true",
+                        help='print scenario and exit')
+    parser.add_argument('-v', '--verbose', action="store_true", help="be verbose")
+    help_text = 'time limit, e.g. 30s, 10m, 1h (default: {})'.format(default_arguments["time_limit"])
+    parser.add_argument('--time-limit', default=default_arguments["time_limit"], help=help_text)
+    help_text = 'ratio gap, e.g. 0.3 (default: {})'.format(default_arguments["ratio_gap"])
+    parser.add_argument('--ratio-gap', type=float, default=default_arguments["ratio_gap"], help=help_text)
+    help_text = 'random seed, e.g. 42 (default: {})'.format(default_arguments["random_seed"])
+    parser.add_argument('--random-seed', type=int, default=default_arguments["random_seed"], help=help_text)
+    help_text = 'threads, e.g. 4 (default: {})'.format(default_arguments["threads"])
+    parser.add_argument('--threads', type=int, default=default_arguments["threads"], help=help_text)
+    parser.add_argument('--dont-set-start-time', action="store_true", help="don't set start time")
+    parser.add_argument('--set-start-sequence', action="store_true", help="set start sequence")
+    help_text = 'horizon, (default: {})'.format(default_arguments["horizon"])
+    parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
+    parser.add_argument('--fast', action="store_true")
+    parser.add_argument('--with-ortools', action="store_true")
+    valid_wettkampf_days = ['saturday', 'sunday']
+    parser.add_argument('day', type=str.lower, choices=valid_wettkampf_days, help='wettkampf day')
+    args = parser.parse_args()
+
+    main(event_data, args)
