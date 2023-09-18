@@ -466,7 +466,7 @@ class AthleticsEventScheduler(object):
 def main(event_data, args):
     start_time = datetime.datetime.now()
     scriptname_without_extension = os.path.splitext(os.path.basename(__file__))[0]
-    event_name_short = "{scriptname_without_extension}_{args.day}"
+    event_name_short = f"{scriptname_without_extension}_{args.day}"
     output_folder_name = f"{start_time.isoformat(timespec='seconds')}_{event_name_short}_{args.horizon}_{args.time_limit}"
     if args.ratio_gap != default_arguments["ratio_gap"]:
         ratio_gap_as_string = str(args.ratio_gap)
