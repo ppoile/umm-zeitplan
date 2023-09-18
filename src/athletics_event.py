@@ -416,12 +416,7 @@ class AthleticsEventScheduler(object):
                 event_first_disziplin = first_disziplin.start_value
             if event_last_disziplin is None or last_disziplin.start_value > event_last_disziplin:
                 event_last_disziplin = last_disziplin.start_value
-            lines.append("  {}: {}..{} ({})".format(
-                wettkampf_name,
-                first_disziplin.start_value,
-                last_disziplin.start_value,
-                last_disziplin.start_value - first_disziplin.start_value,
-            ))
+            lines.append(f"  {wettkampf_name}: {first_disziplin.start_value}..{last_disziplin.start_value} ({last_disziplin.start_value - first_disziplin.start_value})")
             wettkampf_duration_sum += last_disziplin.start_value - first_disziplin.start_value
         lines.append(f"horizon: {event_last_disziplin - event_first_disziplin + 1}")
         lines.append(f"cumulated-wettkampf-duration: {wettkampf_duration_sum}")
@@ -440,7 +435,7 @@ class AthleticsEventScheduler(object):
             raise NoSolutionError()
 
         solution_as_string = str(self._scenario.solution())
-        solution_filename = '{}_solution.txt'.format(self._name)
+        solution_filename = f"{self._name}_solution.txt"
         with open(solution_filename, 'w') as f:
             f.write(solution_as_string)
         logging.info(solution_as_string)
@@ -458,7 +453,7 @@ class AthleticsEventScheduler(object):
             raise NoSolutionError()
 
         solution_as_string = str(self._scenario.solution())
-        solution_filename = '{}_solution.txt'.format(self._name)
+        solution_filename = f"{self._name}_solution.txt"
         with open(solution_filename, 'w') as f:
             f.write(solution_as_string)
         logging.info(solution_as_string)
@@ -471,9 +466,8 @@ class AthleticsEventScheduler(object):
 def main(event_data, args):
     start_time = datetime.datetime.now()
     scriptname_without_extension = os.path.splitext(os.path.basename(__file__))[0]
-    event_name_short = "{}_{}".format(scriptname_without_extension, args.day)
-    output_folder_name = "{}_{}_{}_{}".format(
-        start_time.isoformat(timespec="seconds"), event_name_short, args.horizon, args.time_limit)
+    event_name_short = "{scriptname_without_extension}_{args.day}"
+    output_folder_name = f"{start_time.isoformat(timespec='seconds')}_{event_name_short}_{args.horizon}_{args.time_limit}"
     if args.ratio_gap != default_arguments["ratio_gap"]:
         ratio_gap_as_string = str(args.ratio_gap)
         gap_suffix = ratio_gap_as_string.replace('.', 'g')
@@ -489,8 +483,8 @@ def main(event_data, args):
 
     setup_logging(args.verbose, event_name_short)
 
-    logging.debug("arguments: {}".format(args))
-    logging.debug('output folder: {!r}'.format(output_folder_name))
+    logging.debug("arguments: %s", args)
+    logging.debug("output folder: %r", output_folder_name)
 
     event = AthleticsEventScheduler(
         name=event_name_short, duration_in_units=args.horizon)
@@ -506,13 +500,13 @@ def main(event_data, args):
         event.set_wettkampf_start_sequence(event_data['wettkampf_start_sequence'][args.day])
     event.ensure_last_wettkampf_of_the_day()
     scenario_as_string = str(event.scenario)
-    scenario_filename = '{}_scenario.txt'.format(event_name_short)
+    scenario_filename = f"{event_name_short}_scenario.txt"
     with open(scenario_filename, 'w') as f:
         f.write(scenario_as_string)
     if args.print_scenario_and_exit:
-        logging.info("scenario: {}".format(scenario_as_string))
+        logging.info("scenario: %s", scenario_as_string)
         sys.exit()
-    logging.debug("scenario: {}".format(scenario_as_string))
+    logging.debug("scenario: %s", scenario_as_string)
 
     if args.time_limit.endswith('s'):
         time_limit_in_secs = float(args.time_limit[:-1])
@@ -535,8 +529,8 @@ def main(event_data, args):
         else:
             event.solve_with_ortools(time_limit=time_limit_in_secs)
     except NoSolutionError as e:
-        logging.error("Exception caught: {}".format(e.__class__.__name__))
-    logging.info('output folder: {!r}'.format(output_folder_name))
+        logging.error("Exception caught: %s", e.__class__.__name__)
+    logging.info("output folder: %r", output_folder_name)
     logging.debug("done")
 
 
@@ -555,17 +549,17 @@ def interactive_main(event_data):
     parser.add_argument('--print-scenario-and-exit', action="store_true",
                         help='print scenario and exit')
     parser.add_argument('-v', '--verbose', action="store_true", help="be verbose")
-    help_text = 'time limit, e.g. 30s, 10m, 1h (default: {})'.format(default_arguments["time_limit"])
+    help_text = f'time limit, e.g. 30s, 10m, 1h (default: {default_arguments["time_limit"]})'
     parser.add_argument('--time-limit', default=default_arguments["time_limit"], help=help_text)
-    help_text = 'ratio gap, e.g. 0.3 (default: {})'.format(default_arguments["ratio_gap"])
+    help_text = f'ratio gap, e.g. 0.3 (default: {default_arguments["ratio_gap"]})'
     parser.add_argument('--ratio-gap', type=float, default=default_arguments["ratio_gap"], help=help_text)
-    help_text = 'random seed, e.g. 42 (default: {})'.format(default_arguments["random_seed"])
+    help_text = f'random seed, e.g. 42 (default: {default_arguments["random_seed"]})'
     parser.add_argument('--random-seed', type=int, default=default_arguments["random_seed"], help=help_text)
-    help_text = 'threads, e.g. 4 (default: {})'.format(default_arguments["threads"])
+    help_text = f'threads, e.g. 4 (default: {default_arguments["threads"]})'
     parser.add_argument('--threads', type=int, default=default_arguments["threads"], help=help_text)
     parser.add_argument('--dont-set-start-time', action="store_true", help="don't set start time")
     parser.add_argument('--set-start-sequence', action="store_true", help="set start sequence")
-    help_text = 'horizon, (default: {})'.format(default_arguments["horizon"])
+    help_text = f'horizon, (default: {default_arguments["horizon"]})'
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
     parser.add_argument('--fast', action="store_true")
     parser.add_argument('--with-ortools', action="store_true")
