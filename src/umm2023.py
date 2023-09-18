@@ -212,7 +212,7 @@ wettkampf_start_times = {
     },
     "sunday": {
         "WOM_7K_.*_Weit": 9,
-        "MAN_10K_.*_110mHü": 9,
+        "MAN_10K_.*_110mHü": 18,
     },
 }
 
