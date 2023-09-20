@@ -52,11 +52,11 @@ event_data = {
             "WOM_7K": {
                 "disziplinen": [
                     dict(name="100mHü", together=True, resource="Läufe", length=3),
-                    dict(name="Pause_1", length=3),
+                    dict(name="Pause_1", length=4),
                     dict(name="Hoch", together=True, resource="Hoch1&Hoch2", use_num_anlagen=2, length=5),
-                    dict(name="Pause_2", length=2),
+                    dict(name="Pause_2", length=3),
                     dict(name="Kugel", resource="Kugel", length=3),
-                    dict(name="Pause_3", length=3),
+                    dict(name="Pause_3", length=4),
                     dict(name="200m", together=True, resource="Läufe", length=2),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
@@ -94,13 +94,13 @@ event_data = {
             "MAN_10K": {
                 "disziplinen": [
                     dict(name="100m", together=True, resource="Läufe", length=2),
-                    dict(name="Pause_1", length=3),
+                    dict(name="Pause_1", length=4),
                     dict(name="Weit", together=True, resource="Weit1&Weit2&Weit3", use_num_anlagen=2, length=3),  # auf Weit1 und Weit2
-                    dict(name="Pause_2", length=2),
+                    dict(name="Pause_2", length=3),
                     dict(name="Kugel", resource="Kugel3", length=4),
-                    dict(name="Pause_3", length=2),
+                    dict(name="Pause_3", length=3),
                     dict(name="Hoch", together=True, resource="Hoch1&Hoch2", use_num_anlagen=2, length=7),  # auf Hoch1 und Hoch2
-                    dict(name="Pause_4", length=3),
+                    dict(name="Pause_4", length=4),
                     dict(name="400m", together=True, resource="Läufe", length=3),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
