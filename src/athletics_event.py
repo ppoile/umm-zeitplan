@@ -71,11 +71,6 @@ class AthleticsEventScheduler(object):
     def scenario(self):
         return self._scenario
 
-    def prepare(self, anlagen_descriptors, disziplinen_data, teilnehmer_data, wettkampf_start_times):
-        self.create_anlagen(anlagen_descriptors)
-        self.create_disziplinen(disziplinen_data, teilnehmer_data)
-        self.set_wettkampf_start_times(wettkampf_start_times)
-
     def create_anlagen(self, descriptors):
         logging.debug('creating anlagen...')
         for descriptor in descriptors:
