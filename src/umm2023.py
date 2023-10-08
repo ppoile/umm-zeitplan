@@ -284,24 +284,6 @@ event_data = {
             "Gr40": 18,
         },
     },
-    'maximum_wettkampf_duration': {
-        "saturday": {
-            "U12W_4K": 27,
-            "U16W_5K": 29,
-            "WOM_7K": 26,
-            "U12M_4K": 27,
-            "U16M_6K": 39,
-            "MAN_10K": 33,
-        },
-        "sunday": {
-            "U14W_5K": 31,
-            "WOM_7K": 18,
-            "WOM_5K": 28,
-            "U14M_5K": 26,
-            "MAN_10K": 39,
-            "MAN_6K": 41,
-        },
-    },
 }
 
 

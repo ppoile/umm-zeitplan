@@ -334,9 +334,7 @@ def main(args):
     event.create_anlagen(anlagen_descriptors[args.day])
     event.create_disziplinen(
         wettkampf_data[args.day],
-        teilnehmer_data,
-        maximum_wettkampf_duration=maximum_wettkampf_duration[args.day],
-        alternative_objective=args.fast)
+        teilnehmer_data)
     if not args.dont_set_start_time:
         event.set_wettkampf_start_times(wettkampf_start_times[args.day])
     if args.set_start_sequence:

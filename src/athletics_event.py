@@ -96,11 +96,9 @@ class AthleticsEventScheduler(object):
                 resources.append(anlage)
         return resources
 
-    def create_disziplinen(self, wettkampf_data, teilnehmer_data, maximum_wettkampf_duration=None, alternative_objective=False):
+    def create_disziplinen(self, wettkampf_data, teilnehmer_data):
         self._wettkampf_data = wettkampf_data
         self._teilnehmer_data = teilnehmer_data
-        self._maximum_wettkampf_duration = maximum_wettkampf_duration
-        self._alternative_objective = alternative_objective
 
         logging.debug('creating disziplinen...')
         for wettkampf_name in wettkampf_data:
@@ -209,11 +207,7 @@ class AthleticsEventScheduler(object):
             wettkampf_first_disziplin = wettkampf_gruppen_first_and_last_disziplinen[0][0]
             wettkampf_last_disziplin = wettkampf_gruppen_first_and_last_disziplinen[-1][-1]
             self._wettkampf_first_last_disziplinen[wettkampf_name] = (wettkampf_first_disziplin, wettkampf_last_disziplin)
-            if not self._alternative_objective:
-                self._set_default_objective(wettkampf_disziplinen_factors, wettkampf_first_disziplin, wettkampf_last_disziplin)
-            else:
-                self._set_wettkampf_duration_objective(wettkampf_first_disziplin, wettkampf_last_disziplin)
-                self._set_maximum_wettkampf_duration_constraint(wettkampf_name, wettkampf_first_disziplin, wettkampf_last_disziplin)
+            self._set_default_objective(wettkampf_disziplinen_factors, wettkampf_first_disziplin, wettkampf_last_disziplin)
             self._last_disziplin[wettkampf_name] = wettkampf_last_disziplin
 
     def _get_interval_gruppen(self, wettkampf_name, interesting_gruppen_name, gruppen_names, teilnehmer_data, item, num_anlagen):
@@ -352,12 +346,6 @@ class AthleticsEventScheduler(object):
         factor_sum = sum([factor for factor in wettkampf_disziplinen_factors.values()])
         self._scenario += first_disziplin * -(factor_sum - 1)
 
-    def _set_wettkampf_duration_objective(self, first_disziplin, last_disziplin):
-        self._scenario += last_disziplin - first_disziplin
-
-    def _set_maximum_wettkampf_duration_constraint(self, wettkampf_name, first_disziplin, last_disziplin):
-        self._scenario += last_disziplin <= first_disziplin + self._maximum_wettkampf_duration[wettkampf_name]
-
     def get_disziplin_from_name(self, disziplinen_name_or_pattern):
         for candidate in self._disziplinen.keys():
             match = re.match(disziplinen_name_or_pattern, candidate)
@@ -487,9 +475,7 @@ def main(event_data, args):
     event.create_anlagen(event_data['anlagen_descriptors'][args.day])
     event.create_disziplinen(
         event_data['wettkampf_data'][args.day],
-        event_data['teilnehmer_data'],
-        maximum_wettkampf_duration=event_data['maximum_wettkampf_duration'][args.day],
-        alternative_objective=args.fast)
+        event_data['teilnehmer_data'])
     if not args.dont_set_start_time:
         event.set_wettkampf_start_times(event_data['wettkampf_start_times'][args.day])
     if args.set_start_sequence:
@@ -559,7 +545,6 @@ def interactive_main(event_data, arguments=None):
     parser.add_argument('--set-start-sequence', action="store_true", help="set start sequence")
     help_text = f'horizon, (default: {default_arguments["horizon"]})'
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
-    parser.add_argument('--fast', action="store_true")
     parser.add_argument('--with-ortools', action="store_true")
     valid_wettkampf_days = event_data['wettkampf_data'].keys()
     parser.add_argument('day', type=str.lower, choices=valid_wettkampf_days, help='wettkampf day')
