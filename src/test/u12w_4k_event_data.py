@@ -46,8 +46,3 @@ event_data = {
         },
     },
 }
-
-
-if __name__ == "__main__":
-    import athletics_event
-    athletics_event.interactive_main(event_data)
