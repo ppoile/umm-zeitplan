@@ -8,7 +8,6 @@ import math
 import operator
 import os
 import re
-import sys
 
 from pyschedule import Scenario, solvers, plotters
 import zeitplan_xlsx_writer
