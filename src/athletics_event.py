@@ -543,7 +543,7 @@ default_arguments = {
 }
 
 
-def interactive_main(event_data):
+def interactive_main(event_data, arguments=None):
     import argparse
     parser = argparse.ArgumentParser(description='calculate event timetable')
     parser.add_argument('--print-scenario-and-exit', action="store_true",
@@ -565,6 +565,6 @@ def interactive_main(event_data):
     parser.add_argument('--with-ortools', action="store_true")
     valid_wettkampf_days = event_data['wettkampf_data'].keys()
     parser.add_argument('day', type=str.lower, choices=valid_wettkampf_days, help='wettkampf day')
-    args = parser.parse_args()
+    parsed_arguments = parser.parse_args(arguments)
 
-    main(event_data, args)
+    main(event_data, parsed_arguments)
