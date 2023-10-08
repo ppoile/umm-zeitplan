@@ -207,24 +207,6 @@ event_data = {
             "MAN_10K_.*_110mHü": 18,
         },
     },
-    'wettkampf_start_sequence': {
-        "saturday": [
-            "U16M_6K_.*_100mHü",
-            "U16W_5K_.*_80m",
-            "U12M_4K_.*_60m",
-            "U12W_4K_.*_60m",
-            #"WOM_7K_.*_100mHü",
-            #"MAN_10K_.*_100m",
-        ],
-        "sunday": [
-            "MAN_6K_.*_100m",
-            "U14W_5K_.*_60m",
-            "WOM_5K_.*_100m",
-            "U14M_5K_.*_60m",
-            #"WOM_7K_.*_100mHü",
-            #"MAN_10K_.*_100m",
-        ],
-    },
     'teilnehmer_data': {
         "WOM_7K": {
             "Gr1": 12,

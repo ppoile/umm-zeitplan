@@ -358,14 +358,6 @@ class AthleticsEventScheduler(object):
             disziplin = self.get_disziplin_from_name(disziplinen_name_or_pattern)
             self._scenario += disziplin > start_times
 
-    def set_wettkampf_start_sequence(self, wettkampf_start_sequence):
-        logging.debug('setting wettkampf start sequence...')
-        num_wettkaempfe = len(wettkampf_start_sequence)
-        for i in range(num_wettkaempfe - 1):
-            wettkampf_disziplin_1 = self.get_disziplin_from_name(wettkampf_start_sequence[i])
-            wettkampf_disziplin_2 = self.get_disziplin_from_name(wettkampf_start_sequence[i + 1])
-            self._scenario += wettkampf_disziplin_1 < wettkampf_disziplin_2
-
     def set_objective(self, disziplinen_factors):
         self._scenario.clear_objective()
         for disziplin_name, factor in disziplinen_factors.items():
@@ -477,8 +469,6 @@ def main(event_data, args):
         event_data['teilnehmer_data'])
     if not args.dont_set_start_time:
         event.set_wettkampf_start_times(event_data['wettkampf_start_times'][args.day])
-    if args.set_start_sequence:
-        event.set_wettkampf_start_sequence(event_data['wettkampf_start_sequence'][args.day])
     event.ensure_last_wettkampf_of_the_day()
     scenario_as_string = str(event.scenario)
     scenario_filename = f"{event_name_short}_scenario.txt"
@@ -541,7 +531,6 @@ def interactive_main(event_data, arguments=None):
     help_text = f'threads, e.g. 4 (default: {default_arguments["threads"]})'
     parser.add_argument('--threads', type=int, default=default_arguments["threads"], help=help_text)
     parser.add_argument('--dont-set-start-time', action="store_true", help="don't set start time")
-    parser.add_argument('--set-start-sequence', action="store_true", help="set start sequence")
     help_text = f'horizon, (default: {default_arguments["horizon"]})'
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
     parser.add_argument('--with-ortools', action="store_true")
