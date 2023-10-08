@@ -506,7 +506,7 @@ def main(event_data, args):
         f.write(scenario_as_string)
     if args.print_scenario_and_exit:
         logging.info("scenario: %s", scenario_as_string)
-        sys.exit()
+        return 0
     logging.debug("scenario: %s", scenario_as_string)
 
     if args.time_limit.endswith('s'):
@@ -531,8 +531,10 @@ def main(event_data, args):
             event.solve_with_ortools(time_limit=time_limit_in_secs)
     except NoSolutionError as e:
         logging.error("Exception caught: %s", e.__class__.__name__)
+        return -1
     logging.info("output folder: %r", output_folder_name)
     logging.debug("done")
+    return 0
 
 
 default_arguments = {
@@ -568,4 +570,4 @@ def interactive_main(event_data, arguments=None):
     parser.add_argument('day', type=str.lower, choices=valid_wettkampf_days, help='wettkampf day')
     parsed_arguments = parser.parse_args(arguments)
 
-    main(event_data, parsed_arguments)
+    return main(event_data, parsed_arguments)
