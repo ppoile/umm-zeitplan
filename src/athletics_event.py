@@ -486,6 +486,7 @@ def main(event_data, args):
     logging.debug("arguments: %s", args)
     logging.debug("output folder: %r", output_folder_name)
 
+    global event
     event = AthleticsEventScheduler(
         name=event_name_short, duration_in_units=args.horizon)
     event.create_anlagen(event_data['anlagen_descriptors'][args.day])
