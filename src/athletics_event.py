@@ -454,22 +454,6 @@ class AthleticsEventScheduler():
         logging.info(self.get_wettkampf_duration_summary())
         logging.info("objective_value: %s", self._scenario.objective_value())
 
-    def solve_with_ortools(self, time_limit, msg=1):
-        logging.debug('solving problem with ortools solver...')
-        status = solvers.ortools.solve(self._scenario, time_limit=time_limit, msg=msg)
-        if not status:
-            raise NoSolutionError()
-
-        solution_as_string = str(self._scenario.solution())
-        solution_filename = f"{self._name}_solution.txt"
-        with open(solution_filename, 'w', encoding="utf-8") as f:
-            f.write(solution_as_string)
-        logging.info(solution_as_string)
-        plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename=f"{self._name}.png",
-                                 fig_size=(100, 5), hide_tasks=self._hide_tasks)
-        logging.info(self.get_wettkampf_duration_summary())
-        logging.info("objective_value: %s", self._scenario.objective_value())
-
 
 event = None  # pylint: disable=invalid-name
 
@@ -525,16 +509,13 @@ def main(event_data, args):
         time_limit_in_secs = float(args.time_limit)
 
     try:
-        if not args.with_ortools:
-            event.solve(
-                time_limit=time_limit_in_secs,
-                ratio_gap=args.ratio_gap,
-                random_seed=args.random_seed,
-                threads=args.threads,
-                event_name=event_data['event_name'],
-                event_day=args.day)
-        else:
-            event.solve_with_ortools(time_limit=time_limit_in_secs)
+        event.solve(
+            time_limit=time_limit_in_secs,
+            ratio_gap=args.ratio_gap,
+            random_seed=args.random_seed,
+            threads=args.threads,
+            event_name=event_data['event_name'],
+            event_day=args.day)
     except NoSolutionError as e:
         logging.error("Exception caught: %s", e.__class__.__name__)
         return -1
@@ -568,7 +549,6 @@ def interactive_main(event_data, arguments=None):
     parser.add_argument('--dont-set-start-time', action="store_true", help="don't set start time")
     help_text = f'horizon, (default: {default_arguments["horizon"]})'
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
-    parser.add_argument('--with-ortools', action="store_true")
     valid_wettkampf_days = event_data['wettkampf_data'].keys()
     parser.add_argument('day', type=str.lower, choices=valid_wettkampf_days, help='wettkampf day')
     parsed_arguments = parser.parse_args(arguments)
