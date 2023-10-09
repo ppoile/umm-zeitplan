@@ -1,8 +1,20 @@
 import copy
+import logging
 import unittest
 
 import athletics_event
 from .u12w_4k_event_data import event_data as u12w_4k_event_data
+
+
+def setup_logging():
+    log_level=logging.DEBUG
+    root_logger = logging.getLogger()
+    root_logger.setLevel(log_level)
+    ch = logging.StreamHandler()
+    ch.setLevel(log_level)
+    root_logger.addHandler(ch)
+
+setup_logging()
 
 
 class TestCalculatedDisziplinenLength(unittest.TestCase):
