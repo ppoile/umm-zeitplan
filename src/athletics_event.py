@@ -437,6 +437,9 @@ class AthleticsEventScheduler(object):
         logging.info("objective_value: %s", self._scenario.objective_value())
 
 
+event = None
+
+
 def main(event_data, args):
     start_time = datetime.datetime.now()
     scriptname_without_extension = os.path.splitext(os.path.basename(__file__))[0]
