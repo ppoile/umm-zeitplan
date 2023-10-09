@@ -1,5 +1,6 @@
 """Module providing Athletics Event implementation."""
 
+import argparse
 from collections import defaultdict
 import datetime
 import functools
@@ -13,13 +14,16 @@ from pyschedule import Scenario, solvers, plotters
 import zeitplan_xlsx_writer
 
 
+# pylint: disable=missing-function-docstring,missing-class-docstring,line-too-long
+
+
 def setup_logging(verbose, event_name):
     log_level = logging.INFO
     if verbose:
         log_level=logging.DEBUG
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler('{}.log'.format(event_name))
+    fh = logging.FileHandler(f'{event_name}.log')
     fh.setLevel(logging.DEBUG)
     ch = logging.StreamHandler()
     ch.setLevel(log_level)
@@ -41,7 +45,7 @@ class NoSolutionError(RuntimeError):
     pass
 
 
-class AnlagenDescriptor(object):
+class AnlagenDescriptor():
     def __init__(self, name, size=1):
         self._name = name
         self._size = size
@@ -55,7 +59,7 @@ class AnlagenDescriptor(object):
         return self._size
 
 
-class AthleticsEventScheduler(object):
+class AthleticsEventScheduler():
     def __init__(self, name, duration_in_units):
         self._name = name
         self._duration_in_units = duration_in_units
@@ -65,6 +69,8 @@ class AthleticsEventScheduler(object):
         self._wettkampf_first_last_disziplinen = {}
         self._last_wettkampf_of_the_day = None
         self._hide_tasks = []
+        self._wettkampf_data = None
+        self._teilnehmer_data = None
         self.create_scenario()
 
     def create_scenario(self):
@@ -108,10 +114,9 @@ class AthleticsEventScheduler(object):
         return self._disziplinen
 
     def create_disziplinen(self, wettkampf_data, teilnehmer_data):
+        logging.debug('creating disziplinen...')
         self._wettkampf_data = wettkampf_data
         self._teilnehmer_data = teilnehmer_data
-
-        logging.debug('creating disziplinen...')
         for wettkampf_name in wettkampf_data:
             if wettkampf_name not in teilnehmer_data:
                 continue
@@ -137,21 +142,21 @@ class AthleticsEventScheduler(object):
                         if keep_groups_separate:
                             interval_gruppen_names = self._get_interval_gruppen(wettkampf_name, gruppen_name, gruppen_names, teilnehmer_data, disziplinen_data, num_anlagen)
                             if len(interval_gruppen_names) == 1:
-                                disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, disziplinen_data["name"])
+                                disziplinen_name = f"{wettkampf_name}_{gruppen_name}_{disziplinen_data['name']}"
                             else:
-                                disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, interval_gruppen_names[0], interval_gruppen_names[-1], disziplinen_data["name"])
+                                disziplinen_name = f"{wettkampf_name}_{interval_gruppen_names[0]}_to_{interval_gruppen_names[-1]}_{disziplinen_data['name']}"
                             num_athletes = 0
                             for gruppen_name_inner in interval_gruppen_names:
                                 num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
                         else:
-                            disziplinen_name = "{}_{}_to_{}_{}".format(wettkampf_name, gruppen_names[0], gruppen_names[-1], disziplinen_data["name"])
+                            disziplinen_name = f"{wettkampf_name}_{gruppen_names[0]}_to_{gruppen_names[-1]}_{disziplinen_data['name']}"
                             num_athletes = 0
                             for gruppen_name_inner in gruppen_names:
                                 num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
                     else:
-                        disziplinen_name = "{}_{}_{}".format(wettkampf_name, gruppen_name, disziplinen_data["name"])
+                        disziplinen_name = f"{wettkampf_name}_{gruppen_name}_{disziplinen_data['name']}"
                         num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
-                    if disziplinen_name not in self._disziplinen.keys():
+                    if disziplinen_name not in self._disziplinen.keys():  # pylint: disable=consider-iterating-dictionary
                         disziplinen_length_data = disziplinen_data["length"]
                         if "pause" not in disziplinen_name.lower():
                             if together and keep_groups_separate:
@@ -180,8 +185,8 @@ class AthleticsEventScheduler(object):
                             disziplinen_length_calculated = None
                             disziplinen_length = disziplinen_length_data
                             if not gruppen_disziplinen[-1].keep_groups_separate:
-                              disziplinen_length -= 1
-                              if disziplinen_length <= 0:
+                                disziplinen_length -= 1
+                                if disziplinen_length <= 0:
                                     continue
                         kwargs = {
                             "name": disziplinen_name,
@@ -375,10 +380,10 @@ class AthleticsEventScheduler(object):
         self._scenario += first_disziplin * -(factor_sum - 1)
 
     def get_disziplin_from_name(self, disziplinen_name_or_pattern):
-        for candidate in self._disziplinen.keys():
+        for candidate, disziplin in self._disziplinen.items():
             match = re.match(disziplinen_name_or_pattern, candidate)
             if match is not None:
-                return self._disziplinen[candidate]
+                return disziplin
         return self._disziplinen[disziplinen_name_or_pattern]
 
     def set_wettkampf_start_times(self, wettkampf_start_times):
@@ -402,10 +407,10 @@ class AthleticsEventScheduler(object):
                 self._scenario += last_disziplin < last_disziplin_of_the_day
         self._scenario += last_disziplin_of_the_day * 10
 
-    def getGroups(self, wettkampf_name):
+    def get_groups(self, wettkampf_name):
         return list(self._teilnehmer_data[wettkampf_name].keys())
 
-    def getDisziplinen(self, wettkampf_name):
+    def get_disziplinen(self, wettkampf_name):
         return list(self._wettkampf_data[wettkampf_name]["disziplinen"])
 
     def get_wettkampf_duration_summary(self):
@@ -430,7 +435,7 @@ class AthleticsEventScheduler(object):
         status = solvers.mip.solve(self._scenario, time_limit=time_limit, ratio_gap=ratio_gap, random_seed=random_seed, threads=threads, msg=msg)
         cbc_logfile_name = "cbc.log"
         if os.path.exists(cbc_logfile_name):
-            with open(cbc_logfile_name) as cbc_logfile:
+            with open(cbc_logfile_name, encoding="utf-8") as cbc_logfile:
                 logging.info(cbc_logfile.read())
         else:
             logging.info("no '%s' found", cbc_logfile_name)
@@ -439,12 +444,12 @@ class AthleticsEventScheduler(object):
 
         solution_as_string = str(self._scenario.solution())
         solution_filename = f"{self._name}_solution.txt"
-        with open(solution_filename, 'w') as f:
+        with open(solution_filename, 'w', encoding="utf-8") as f:
             f.write(solution_as_string)
         logging.info(solution_as_string)
-        plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename='{}.png'.format(self._name),
+        plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename=f"{self._name}.png",
                                  fig_size=(100, 5), hide_tasks=self._hide_tasks)
-        with open(solution_filename, 'r') as solution_file:
+        with open(solution_filename, 'r', encoding="utf-8") as solution_file:
             zeitplan_xlsx_writer.main(solution_file, event_name=event_name, event_day=event_day.title(), start_time="9:00")
         logging.info(self.get_wettkampf_duration_summary())
         logging.info("objective_value: %s", self._scenario.objective_value())
@@ -457,16 +462,16 @@ class AthleticsEventScheduler(object):
 
         solution_as_string = str(self._scenario.solution())
         solution_filename = f"{self._name}_solution.txt"
-        with open(solution_filename, 'w') as f:
+        with open(solution_filename, 'w', encoding="utf-8") as f:
             f.write(solution_as_string)
         logging.info(solution_as_string)
-        plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename='{}.png'.format(self._name),
+        plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename=f"{self._name}.png",
                                  fig_size=(100, 5), hide_tasks=self._hide_tasks)
         logging.info(self.get_wettkampf_duration_summary())
         logging.info("objective_value: %s", self._scenario.objective_value())
 
 
-event = None
+event = None  # pylint: disable=invalid-name
 
 
 def main(event_data, args):
@@ -491,7 +496,7 @@ def main(event_data, args):
     logging.debug("arguments: %s", args)
     logging.debug("output folder: %r", output_folder_name)
 
-    global event
+    global event  # pylint: disable=global-statement
     event = AthleticsEventScheduler(
         name=event_name_short, duration_in_units=args.horizon)
     event.create_anlagen(event_data['anlagen_descriptors'][args.day])
@@ -503,7 +508,7 @@ def main(event_data, args):
     event.ensure_last_wettkampf_of_the_day()
     scenario_as_string = str(event.scenario)
     scenario_filename = f"{event_name_short}_scenario.txt"
-    with open(scenario_filename, 'w') as f:
+    with open(scenario_filename, 'w', encoding="utf-8") as f:
         f.write(scenario_as_string)
     if args.print_scenario_and_exit:
         logging.info("scenario: %s", scenario_as_string)
@@ -548,7 +553,6 @@ default_arguments = {
 
 
 def interactive_main(event_data, arguments=None):
-    import argparse
     parser = argparse.ArgumentParser(description='calculate event timetable')
     parser.add_argument('--print-scenario-and-exit', action="store_true",
                         help='print scenario and exit')
