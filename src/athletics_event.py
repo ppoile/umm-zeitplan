@@ -70,6 +70,10 @@ class AthleticsEventScheduler(object):
     def scenario(self):
         return self._scenario
 
+    @property
+    def anlagen(self):
+        return self._anlagen
+
     def create_anlagen(self, descriptors):
         logging.debug('creating anlagen...')
         for descriptor in descriptors:
@@ -94,6 +98,10 @@ class AthleticsEventScheduler(object):
             if anlagen_name.startswith(pattern):
                 resources.append(anlage)
         return resources
+
+    @property
+    def disziplinen(self):
+        return self._disziplinen
 
     def create_disziplinen(self, wettkampf_data, teilnehmer_data):
         self._wettkampf_data = wettkampf_data
