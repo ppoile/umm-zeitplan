@@ -84,7 +84,7 @@ event_data = {
                     dict(name="Pause_3", length=2),
                     dict(name="Hoch", resource="Hoch", length=5),
                     dict(name="Pause_4", length=2),
-                    dict(name="Diskus", together=True, resource="Diskus", length=5),
+                    dict(name="Diskus", resource="Diskus", length=5),
                     dict(name="Pause_5", length=3),
                     dict(name="1000m", together=True, resource="Läufe", length=2),
                 ],
