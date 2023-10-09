@@ -288,7 +288,7 @@ class AthleticsEventScheduler(object):
             "Weit": (1, 3/15),
         }
         item = mapping[disziplin]
-        if type(item) == dict:
+        if isinstance(item, dict):
             item = item[wettkampf]
         num_serien = ((num_athletes - 1) // item[0]) + 1
         calculated_length = num_serien * item[1]
