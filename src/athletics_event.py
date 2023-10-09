@@ -123,6 +123,7 @@ class AthleticsEventScheduler(object):
             gruppen_names = list(teilnehmer_data[wettkampf_name].keys())
             wettkampf_gruppen_first_and_last_disziplinen = []
             wettkampf_disziplinen_factors = defaultdict(int)
+            offset = 0
             for gruppen_name in gruppen_names:
                 logging.debug("    gruppe: %s", gruppen_name)
                 gruppe = self._scenario.Resource(gruppen_name)
@@ -154,10 +155,20 @@ class AthleticsEventScheduler(object):
                         disziplinen_length_data = disziplinen_data["length"]
                         if "pause" not in disziplinen_name.lower():
                             if together and keep_groups_separate:
-                                disziplinen_length_calculated = 1
-                                disziplinen_length = disziplinen_length_calculated
+                                disziplinen_length_calculated = 0
+                                for gruppen_name_inner in interval_gruppen_names:
+                                    disziplinen_length_calculated += self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=disziplinen_data["name"], num_athletes=teilnehmer_data[wettkampf_name][gruppen_name_inner], num_anlagen=num_anlagen, exact=True)
+                                logging.debug("offset: %s", offset)
+                                slot_begin = math.ceil(offset)
+                                logging.debug("slot_begin: %s", slot_begin)
+                                logging.debug("disziplinen_length_calculated: %s", disziplinen_length_calculated)
+                                offset = offset - slot_begin + disziplinen_length_calculated
+                                logging.debug("offset(new): %s", offset)
+                                disziplinen_length = math.ceil(round(offset, 3))
+                                logging.debug("disziplinen_length: %s", disziplinen_length)
                                 if gruppen_names[-1] in interval_gruppen_names:
                                     disziplinen_length += 1
+                                    logging.debug("disziplinen_length: %s", disziplinen_length)
                             else:
                                 disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=disziplinen_data["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
                                 if force_length:
@@ -222,17 +233,21 @@ class AthleticsEventScheduler(object):
             self._last_disziplin[wettkampf_name] = wettkampf_last_disziplin
 
     def _get_interval_gruppen(self, wettkampf_name, interesting_gruppen_name, gruppen_names, teilnehmer_data, item, num_anlagen):
+        logging.debug("      _get_interval_gruppen(wettkampf=%s, interesting=%s, gruppen=%s)...", wettkampf_name, interesting_gruppen_name, gruppen_names)
         current_interval = 0
         interval_gruppen = defaultdict(list)
         accumulated_disziplinen_length = 0
         for gruppen_name in gruppen_names:
             num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
-            accumulated_disziplinen_length += self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen, exact=True)
-            if accumulated_disziplinen_length > current_interval + 1:
-                current_interval += 1
+            disziplinen_length = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen, exact=True)
+            accumulated_disziplinen_length += disziplinen_length
+            logging.debug("accumulated_disziplinen_length: %s", accumulated_disziplinen_length)
+            if round(accumulated_disziplinen_length, 3) > current_interval + 1:
+                current_interval += math.floor(round(accumulated_disziplinen_length, 3))
             interval_gruppen[current_interval].append(gruppen_name)
         for gruppen in interval_gruppen.values():
-            if interesting_gruppen_name in  gruppen:
+            if interesting_gruppen_name in gruppen:
+                logging.debug("      _get_interval_gruppen(wettkampf=%s, interesting=%s, gruppen=%s) => %s", wettkampf_name, interesting_gruppen_name, gruppen_names, gruppen)
                 return gruppen
         raise SomethingWentWrong("in _get_interval_gruppen()")
 
@@ -280,6 +295,7 @@ class AthleticsEventScheduler(object):
         calculated_length = calculated_length / num_anlagen
         if not exact:
             calculated_length = math.ceil(calculated_length)
+        logging.debug("      _get_calculated_disziplinen_length(wettkampf=%s, disziplin=%s, num_athletes=%s, num_anlagen=%s, exact=%s) => %s", wettkampf, disziplin, num_athletes, num_anlagen, exact, calculated_length)
         return calculated_length
 
     def _add_gruppen_disziplinen_dependencies(self, gruppen_disziplinen, is_wettkampf_with_strict_sequence):
