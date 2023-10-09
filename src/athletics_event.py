@@ -33,6 +33,10 @@ def setup_logging(verbose, event_name):
     zeitplan_logger.setLevel(logging.INFO)
 
 
+class SomethingWentWrong(RuntimeError):
+    pass
+
+
 class NoSolutionError(RuntimeError):
     pass
 
@@ -230,6 +234,7 @@ class AthleticsEventScheduler(object):
         for gruppen in interval_gruppen.values():
             if interesting_gruppen_name in  gruppen:
                 return gruppen
+        raise SomethingWentWrong("in _get_interval_gruppen()")
 
     def _get_disziplinen_without_pausen(self, disziplinen):
         disziplinen_without_pausen = []
