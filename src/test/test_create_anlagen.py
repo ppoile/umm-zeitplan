@@ -12,4 +12,4 @@ class TestCreateAnlagen(unittest.TestCase):
     def test_create_anlagen(self):
         self.event.create_anlagen(u12w_4k_event_data['anlagen_descriptors'][self.argument_day])
         expected_anlagen = ['Läufe', 'Weit1', 'Weit2', 'Weit3', 'Kugel1', 'Kugel2', 'Hoch1', 'Hoch2', 'Diskus']
-        self.assertListEqual(expected_anlagen, list(self.event._anlagen.keys()))
+        self.assertListEqual(expected_anlagen, list(self.event.anlagen.keys()))
