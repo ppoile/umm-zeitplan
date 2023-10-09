@@ -1,7 +1,8 @@
 """Assemble event data for your event and call interactive_main()"""
 
 event_data = {
-    'event_name': 'Uster Mehrkampf Meeting',
+    'event_name': 'Uster Mehrkampf Meeting 2023',
+    'event_name_short': 'umm2023',
     'anlagen_descriptors': {
         'saturday': [
             ("Läufe",),

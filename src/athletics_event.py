@@ -471,9 +471,8 @@ event = None
 
 def main(event_data, args):
     start_time = datetime.datetime.now()
-    scriptname_without_extension = os.path.splitext(os.path.basename(__file__))[0]
-    event_name_short = f"{scriptname_without_extension}_{args.day}"
-    output_folder_name = f"{start_time.isoformat(timespec='seconds')}_{event_name_short}_{args.horizon}_{args.time_limit}"
+    event_name_short = event_data['event_name_short']
+    output_folder_name = f"{start_time.isoformat(timespec='seconds')}_{event_name_short}_{args.day}_{args.horizon}_{args.time_limit}"
     if args.ratio_gap != default_arguments["ratio_gap"]:
         ratio_gap_as_string = str(args.ratio_gap)
         gap_suffix = ratio_gap_as_string.replace('.', 'g')
