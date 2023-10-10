@@ -1,3 +1,3 @@
 [submodule "pyschedule"]
 	path = submodules/pyschedule
-	url = https://github.com/ppoile/pyschedule
+	url = git@github.com:ppoile/pyschedule.git
