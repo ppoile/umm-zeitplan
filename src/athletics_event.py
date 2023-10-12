@@ -513,14 +513,7 @@ def main(event_data, args):
         return 0
     logging.debug("scenario: %s", scenario_as_string)
 
-    if args.time_limit.endswith('s'):
-        time_limit_in_secs = float(args.time_limit[:-1])
-    elif args.time_limit.endswith('m'):
-        time_limit_in_secs = float(args.time_limit[:-1]) * 60
-    elif args.time_limit.endswith('h'):
-        time_limit_in_secs = float(args.time_limit[:-1]) * 3600
-    else:
-        time_limit_in_secs = float(args.time_limit)
+    time_limit_in_secs = get_time_limit_in_secs_from_argument_string(args.time_limit)
 
     try:
         event.solve(
@@ -536,6 +529,18 @@ def main(event_data, args):
     logging.info("output folder: %r", output_folder_name)
     logging.debug("done")
     return 0
+
+
+def get_time_limit_in_secs_from_argument_string(time_limit_as_string):
+    if time_limit_as_string.endswith('s'):
+        time_limit_in_secs = float(time_limit_as_string[:-1])
+    elif time_limit_as_string.endswith('m'):
+        time_limit_in_secs = float(time_limit_as_string[:-1]) * 60
+    elif time_limit_as_string.endswith('h'):
+        time_limit_in_secs = float(time_limit_as_string[:-1]) * 3600
+    else:
+        time_limit_in_secs = float(time_limit_as_string)
+    return time_limit_in_secs
 
 
 default_arguments = {
