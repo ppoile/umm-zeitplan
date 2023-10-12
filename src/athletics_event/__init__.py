@@ -524,7 +524,7 @@ def interactive_main(event_data, arguments=None):
     parser = argparse.ArgumentParser(description='calculate event timetable')
     parser.add_argument('--print-scenario-and-exit', action="store_true",
                         help='print scenario and exit')
-    parser.add_argument('-v', '--verbose', action="store_true", help="be verbose")
+    parser.add_argument('-s', '--silent', action="store_false", dest='verbose', help="be silent")
     help_text = f'time limit, e.g. 30s, 10m, 1h (default: {default_arguments["time_limit"]})'
     parser.add_argument('--time-limit', default=default_arguments["time_limit"], help=help_text)
     help_text = f'ratio gap, e.g. 0.3 (default: {default_arguments["ratio_gap"]})'

@@ -15,10 +15,10 @@ pip install -r pip-requirements
 ```
 cd src
 python umm2022.py -h
-python umm2022.py saturday --horizon=56 -v
-python umm2022.py sunday --horizon=58 -v
-python umm2022.py saturday --horizon=56 -v --ratio-gap=.2
+python umm2022.py saturday --horizon=56
+python umm2022.py sunday --horizon=58
+python umm2022.py saturday --horizon=56 --ratio-gap=.2
 
-python umm2023.py saturday --horizon=55 -v
-python umm2023.py sunday --horizon=52 -v
+python umm2023.py saturday --horizon=55
+python umm2023.py sunday --horizon=52
 ```
