@@ -63,16 +63,16 @@ class AthleticsEventScheduler():
     def __init__(self, event_data, day, horizon):
         self._event_data = event_data
         self._day = day
-        self._short_name = event_data['event_name_short']
         self._horizon = horizon
+        self._short_name = event_data['event_name_short']
         self._anlagen = {}
+        self._wettkampf_data = self._event_data['wettkampf_data'][self.day]
+        self._teilnehmer_data = self._event_data['teilnehmer_data']
         self._last_disziplin = {}
         self._disziplinen = {}
         self._wettkampf_first_last_disziplinen = {}
         self._last_wettkampf_of_the_day = None
         self._hide_tasks = []
-        self._wettkampf_data = None
-        self._teilnehmer_data = None
         self.create_scenario()
 
     def create_scenario(self):
@@ -129,19 +129,15 @@ class AthleticsEventScheduler():
 
     def create_disziplinen(self):
         logging.debug('creating disziplinen...')
-        wettkampf_data = self._event_data['wettkampf_data'][self.day]
-        teilnehmer_data = self._event_data['teilnehmer_data']
-        self._wettkampf_data = wettkampf_data
-        self._teilnehmer_data = teilnehmer_data
-        for wettkampf_name in wettkampf_data:
-            if wettkampf_name not in teilnehmer_data:
+        for wettkampf_name in self._wettkampf_data:
+            if wettkampf_name not in self._teilnehmer_data:
                 continue
             logging.debug("  wettkampf: %s", wettkampf_name)
             keep_groups_separate_disziplinen = []
-            is_wettkampf_with_strict_sequence = wettkampf_data[wettkampf_name].get("is_wettkampf_with_strict_sequence", False)
-            if wettkampf_data[wettkampf_name].get("is_last_wettkampf_of_the_day", False):
+            is_wettkampf_with_strict_sequence = self._wettkampf_data[wettkampf_name].get("is_wettkampf_with_strict_sequence", False)
+            if self._wettkampf_data[wettkampf_name].get("is_last_wettkampf_of_the_day", False):
                 self._last_wettkampf_of_the_day = wettkampf_name
-            gruppen_names = list(teilnehmer_data[wettkampf_name].keys())
+            gruppen_names = list(self._teilnehmer_data[wettkampf_name].keys())
             wettkampf_gruppen_first_and_last_disziplinen = []
             wettkampf_disziplinen_factors = defaultdict(int)
             offset = 0
@@ -149,36 +145,36 @@ class AthleticsEventScheduler():
                 logging.debug("    gruppe: %s", gruppen_name)
                 gruppe = self._scenario.Resource(gruppen_name)
                 gruppen_disziplinen = []
-                for disziplinen_data in wettkampf_data[wettkampf_name]["disziplinen"]:
+                for disziplinen_data in self._wettkampf_data[wettkampf_name]["disziplinen"]:
                     together = disziplinen_data.get("together", False)
                     force_length = disziplinen_data.get("force_length", False)
                     keep_groups_separate = disziplinen_data.get("keep_groups_separate", False)
                     num_anlagen = disziplinen_data.get("use_num_anlagen", 1)
                     if together:
                         if keep_groups_separate:
-                            interval_gruppen_names = self._get_interval_gruppen(wettkampf_name, gruppen_name, gruppen_names, teilnehmer_data, disziplinen_data, num_anlagen)
+                            interval_gruppen_names = self._get_interval_gruppen(wettkampf_name, gruppen_name, gruppen_names, self._teilnehmer_data, disziplinen_data, num_anlagen)
                             if len(interval_gruppen_names) == 1:
                                 disziplinen_name = f"{wettkampf_name}_{gruppen_name}_{disziplinen_data['name']}"
                             else:
                                 disziplinen_name = f"{wettkampf_name}_{interval_gruppen_names[0]}_to_{interval_gruppen_names[-1]}_{disziplinen_data['name']}"
                             num_athletes = 0
                             for gruppen_name_inner in interval_gruppen_names:
-                                num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
+                                num_athletes += self._teilnehmer_data[wettkampf_name][gruppen_name_inner]
                         else:
                             disziplinen_name = f"{wettkampf_name}_{gruppen_names[0]}_to_{gruppen_names[-1]}_{disziplinen_data['name']}"
                             num_athletes = 0
                             for gruppen_name_inner in gruppen_names:
-                                num_athletes += teilnehmer_data[wettkampf_name][gruppen_name_inner]
+                                num_athletes += self._teilnehmer_data[wettkampf_name][gruppen_name_inner]
                     else:
                         disziplinen_name = f"{wettkampf_name}_{gruppen_name}_{disziplinen_data['name']}"
-                        num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
+                        num_athletes = self._teilnehmer_data[wettkampf_name][gruppen_name]
                     if disziplinen_name not in self._disziplinen.keys():  # pylint: disable=consider-iterating-dictionary
                         disziplinen_length_data = disziplinen_data["length"]
                         if "pause" not in disziplinen_name.lower():
                             if together and keep_groups_separate:
                                 disziplinen_length_calculated = 0
                                 for gruppen_name_inner in interval_gruppen_names:
-                                    disziplinen_length_calculated += self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=disziplinen_data["name"], num_athletes=teilnehmer_data[wettkampf_name][gruppen_name_inner], num_anlagen=num_anlagen, exact=True)
+                                    disziplinen_length_calculated += self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=disziplinen_data["name"], num_athletes=self._teilnehmer_data[wettkampf_name][gruppen_name_inner], num_anlagen=num_anlagen, exact=True)
                                 logging.debug("offset: %s", offset)
                                 slot_begin = math.ceil(offset)
                                 logging.debug("slot_begin: %s", slot_begin)
@@ -209,7 +205,7 @@ class AthleticsEventScheduler():
                             "length": disziplinen_length,
                             "length_data": disziplinen_length_data,
                             "length_calc": disziplinen_length_calculated,
-                            "plot_color": wettkampf_data[wettkampf_name]["plot_color"],
+                            "plot_color": self._wettkampf_data[wettkampf_name]["plot_color"],
                             "together": together,
                             "keep_groups_separate": keep_groups_separate,
                         }
