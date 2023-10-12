@@ -113,7 +113,7 @@ class AthleticsEventScheduler():
             anlage = self._scenario.Resource(anlagen_name)
             self._anlagen[anlagen_name] = anlage
 
-    def any_anlage(self, pattern):
+    def _any_anlage(self, pattern):
         return functools.reduce(lambda a, b: operator.or_(a, b), self._get_all_anlagen(pattern))
 
     def _get_all_anlagen(self, pattern):
@@ -226,7 +226,7 @@ class AthleticsEventScheduler():
                     if resource:
                         if not together or gruppen_name == gruppen_names[0] or keep_groups_separate and (gruppen_name == interval_gruppen_names[0]):
                             for resource_name in resource.split("&"):
-                                disziplinen_task += self.any_anlage(resource_name)
+                                disziplinen_task += self._any_anlage(resource_name)
 
                     disziplinen_task += gruppe
 
