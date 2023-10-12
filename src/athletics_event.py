@@ -107,7 +107,7 @@ class AthleticsEventScheduler():
         for i in range(descriptor.size):
             anlagen_name = descriptor.name
             if descriptor.size > 1:
-                anlagen_name += "{}".format(i + 1)
+                anlagen_name += f"{i + 1}"
             logging.debug("  %s", anlagen_name)
             anlage = self._scenario.Resource(anlagen_name)
             self._anlagen[anlagen_name] = anlage
