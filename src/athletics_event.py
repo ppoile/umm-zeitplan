@@ -403,11 +403,6 @@ class AthleticsEventScheduler():
             disziplin = self.get_disziplin_from_name(disziplinen_name_or_pattern)
             self._scenario += disziplin > start_times
 
-    def set_objective(self, disziplinen_factors):
-        self._scenario.clear_objective()
-        for disziplin_name, factor in disziplinen_factors.items():
-            self._scenario += self._disziplinen[disziplin_name] * factor
-
     def ensure_last_wettkampf_of_the_day(self):
         if self._last_wettkampf_of_the_day is None:
             return
@@ -417,12 +412,6 @@ class AthleticsEventScheduler():
             if wettkampf_name != self._last_wettkampf_of_the_day:
                 self._scenario += last_disziplin < last_disziplin_of_the_day
         self._scenario += last_disziplin_of_the_day * 10
-
-    def get_groups(self, wettkampf_name):
-        return list(self._teilnehmer_data[wettkampf_name].keys())
-
-    def get_disziplinen(self, wettkampf_name):
-        return list(self._wettkampf_data[wettkampf_name]["disziplinen"])
 
     def get_wettkampf_duration_summary(self):
         heading = "Wettkampf-Duration-Summary:"
