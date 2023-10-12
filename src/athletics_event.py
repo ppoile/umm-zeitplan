@@ -127,8 +127,10 @@ class AthleticsEventScheduler():
     def disziplinen(self):
         return self._disziplinen
 
-    def create_disziplinen(self, wettkampf_data, teilnehmer_data):
+    def create_disziplinen(self):
         logging.debug('creating disziplinen...')
+        wettkampf_data = self._event_data['wettkampf_data'][self.day]
+        teilnehmer_data = self._event_data['teilnehmer_data']
         self._wettkampf_data = wettkampf_data
         self._teilnehmer_data = teilnehmer_data
         for wettkampf_name in wettkampf_data:
@@ -498,9 +500,7 @@ def main(event_data, args):
     event = AthleticsEventScheduler(
         event_data=event_data, day=args.day, horizon=args.horizon)
     event.create_anlagen()
-    event.create_disziplinen(
-        event_data['wettkampf_data'][args.day],
-        event_data['teilnehmer_data'])
+    event.create_disziplinen()
     if not args.dont_set_start_time:
         event.set_wettkampf_start_times(event_data['wettkampf_start_times'][args.day])
     event.ensure_last_wettkampf_of_the_day()
