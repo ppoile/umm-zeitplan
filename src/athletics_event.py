@@ -64,7 +64,6 @@ class AthleticsEventScheduler():
         self._event_data = event_data
         self._day = day
         self._horizon = horizon
-        self._short_name = event_data['event_name_short']
         self._anlagen = {}
         self._wettkampf_data = self._event_data['wettkampf_data'][self.day]
         self._teilnehmer_data = self._event_data['teilnehmer_data']
@@ -80,7 +79,7 @@ class AthleticsEventScheduler():
 
     @property
     def short_name(self):
-        return self._short_name
+        return self._event_data['event_name_short']
 
     @property
     def day(self):
