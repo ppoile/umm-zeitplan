@@ -469,7 +469,7 @@ def main(event_data, args):
         event_data=event_data, day=args.day, horizon=args.horizon)
     event.create_anlagen()
     event.create_disziplinen()
-    if not args.dont_set_start_time:
+    if args.set_start_time:
         event.set_wettkampf_start_times(event_data['wettkampf_start_times'][args.day])
     event.ensure_last_wettkampf_of_the_day()
     scenario_as_string = str(event.scenario)
@@ -533,7 +533,7 @@ def interactive_main(event_data, arguments=None):
     parser.add_argument('--random-seed', type=int, default=default_arguments["random_seed"], help=help_text)
     help_text = f'threads, e.g. 4 (default: {default_arguments["threads"]})'
     parser.add_argument('--threads', type=int, default=default_arguments["threads"], help=help_text)
-    parser.add_argument('--dont-set-start-time', action="store_true", help="don't set start time")
+    parser.add_argument('--dont-set-start-time', action="store_false", dest='set_start_time', help="don't set start time")
     help_text = f'horizon, (default: {default_arguments["horizon"]})'
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
     valid_wettkampf_days = event_data['wettkampf_data'].keys()
