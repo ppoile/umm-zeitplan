@@ -60,9 +60,10 @@ class AnlagenDescriptor():
 
 
 class AthleticsEventScheduler():
-    def __init__(self, name, duration_in_units):
-        self._name = name
-        self._duration_in_units = duration_in_units
+    def __init__(self, event_data, horizon):
+        self._event_data = event_data
+        self._short_name = event_data['event_name_short']
+        self._horizon = horizon
         self._anlagen = {}
         self._last_disziplin = {}
         self._disziplinen = {}
@@ -74,7 +75,15 @@ class AthleticsEventScheduler():
         self.create_scenario()
 
     def create_scenario(self):
-        self._scenario = Scenario(self._name, horizon=self._duration_in_units)
+        self._scenario = Scenario(name=self.short_name, horizon=self.horizon)
+
+    @property
+    def short_name(self):
+        return self._short_name
+
+    @property
+    def horizon(self):
+        return self._horizon
 
     @property
     def scenario(self):
@@ -443,11 +452,11 @@ class AthleticsEventScheduler():
             raise NoSolutionError()
 
         solution_as_string = str(self._scenario.solution())
-        solution_filename = f"{self._name}_solution.txt"
+        solution_filename = f"{self.short_name}_solution.txt"
         with open(solution_filename, 'w', encoding="utf-8") as f:
             f.write(solution_as_string)
         logging.info(solution_as_string)
-        plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename=f"{self._name}.png",
+        plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename=f"{self.short_name}.png",
                                  fig_size=(100, 5), hide_tasks=self._hide_tasks)
         with open(solution_filename, 'r', encoding="utf-8") as solution_file:
             zeitplan_xlsx_writer.main(solution_file, event_name=event_name, event_day=event_day.title(), start_time="9:00")
@@ -482,7 +491,7 @@ def main(event_data, args):
 
     global event  # pylint: disable=global-statement
     event = AthleticsEventScheduler(
-        name=event_name_short, duration_in_units=args.horizon)
+        event_data=event_data, horizon=args.horizon)
     event.create_anlagen(event_data['anlagen_descriptors'][args.day])
     event.create_disziplinen(
         event_data['wettkampf_data'][args.day],

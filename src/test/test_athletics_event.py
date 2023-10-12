@@ -5,7 +5,8 @@ import athletics_event
 
 class TestAthleticsEvent(unittest.TestCase):
     def test_instantiate_AthleticsEventScheduler(self):
-        athletics_event.AthleticsEventScheduler(name="TestEvent", duration_in_units=athletics_event.default_arguments["horizon"])
+        from .u12w_4k_event_data import event_data as u12w_4k_event_data
+        athletics_event.AthleticsEventScheduler(event_data=u12w_4k_event_data, horizon=athletics_event.default_arguments["horizon"])
 
     def test_interactive_main_u12w_4k_event(self):
         from .u12w_4k_event_data import event_data as u12w_4k_event_data
