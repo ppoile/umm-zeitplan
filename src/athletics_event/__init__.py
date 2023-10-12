@@ -248,13 +248,6 @@ class AthleticsEventScheduler():
                 return gruppen
         raise SomethingWentWrong("in _get_interval_gruppen()")
 
-    def _get_disziplinen_without_pausen(self, disziplinen):
-        disziplinen_without_pausen = []
-        for disziplin in disziplinen:
-            if "pause" not in disziplin["name"].lower():
-                disziplinen_without_pausen.append(disziplin)
-        return disziplinen_without_pausen
-
     def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, num_anlagen, exact=False):
         mapping = {
             "60m": (6, 2/10),
@@ -367,6 +360,13 @@ class AthleticsEventScheduler():
             wettkampf_disziplinen_factors[disziplin['name']] += 1
         wettkampf_disziplinen_factors[disziplin['name']] += 1
 
+    def _get_disziplinen_without_pausen(self, disziplinen):
+        disziplinen_without_pausen = []
+        for disziplin in disziplinen:
+            if "pause" not in disziplin["name"].lower():
+                disziplinen_without_pausen.append(disziplin)
+        return disziplinen_without_pausen
+
     def _set_default_objective(self, wettkampf_disziplinen_factors, first_disziplin, last_disziplin):
         for disziplin_name, factor in wettkampf_disziplinen_factors.items():
             disziplin = self._disziplinen[disziplin_name]
@@ -374,18 +374,18 @@ class AthleticsEventScheduler():
         factor_sum = sum([factor for factor in wettkampf_disziplinen_factors.values()])
         self._scenario += first_disziplin * -(factor_sum - 1)
 
-    def get_disziplin_from_name(self, disziplinen_name_or_pattern):
+    def set_wettkampf_start_times(self, wettkampf_start_times):
+        logging.debug('setting wettkampf start times...')
+        for disziplinen_name_or_pattern, start_times in wettkampf_start_times.items():
+            disziplin = self._get_disziplin_from_name(disziplinen_name_or_pattern)
+            self._scenario += disziplin > start_times
+
+    def _get_disziplin_from_name(self, disziplinen_name_or_pattern):
         for candidate, disziplin in self._disziplinen.items():
             match = re.match(disziplinen_name_or_pattern, candidate)
             if match is not None:
                 return disziplin
         return self._disziplinen[disziplinen_name_or_pattern]
-
-    def set_wettkampf_start_times(self, wettkampf_start_times):
-        logging.debug('setting wettkampf start times...')
-        for disziplinen_name_or_pattern, start_times in wettkampf_start_times.items():
-            disziplin = self.get_disziplin_from_name(disziplinen_name_or_pattern)
-            self._scenario += disziplin > start_times
 
     def ensure_last_wettkampf_of_the_day(self):
         if self._last_wettkampf_of_the_day is None:
@@ -396,23 +396,6 @@ class AthleticsEventScheduler():
             if wettkampf_name != self._last_wettkampf_of_the_day:
                 self._scenario += last_disziplin < last_disziplin_of_the_day
         self._scenario += last_disziplin_of_the_day * 10
-
-    def get_wettkampf_duration_summary(self):
-        heading = "Wettkampf-Duration-Summary:"
-        lines = []
-        wettkampf_duration_sum = 0
-        event_first_disziplin = 999999
-        event_last_disziplin = 0
-        for wettkampf_name, (first_disziplin, last_disziplin) in self._wettkampf_first_last_disziplinen.items():
-            if event_first_disziplin is None or first_disziplin.start_value < event_first_disziplin:
-                event_first_disziplin = first_disziplin.start_value
-            if event_last_disziplin is None or last_disziplin.start_value > event_last_disziplin:
-                event_last_disziplin = last_disziplin.start_value
-            lines.append(f"  {wettkampf_name}: {first_disziplin.start_value}..{last_disziplin.start_value} ({last_disziplin.start_value - first_disziplin.start_value})")
-            wettkampf_duration_sum += last_disziplin.start_value - first_disziplin.start_value
-        lines.append(f"horizon: {event_last_disziplin - event_first_disziplin + 1}")
-        lines.append(f"cumulated-wettkampf-duration: {wettkampf_duration_sum}")
-        return "{}\n{}".format(heading, "\n".join(lines))
 
     def solve(self, time_limit, event_name, event_day, ratio_gap=0.0, random_seed=None, threads=None, msg=1):
         logging.debug('solving problem with mip solver...')
@@ -437,6 +420,23 @@ class AthleticsEventScheduler():
             zeitplan_xlsx_writer.main(solution_file, event_name=event_name, event_day=event_day.title(), start_time="9:00")
         logging.info(self.get_wettkampf_duration_summary())
         logging.info("objective_value: %s", self._scenario.objective_value())
+
+    def get_wettkampf_duration_summary(self):
+        heading = "Wettkampf-Duration-Summary:"
+        lines = []
+        wettkampf_duration_sum = 0
+        event_first_disziplin = 999999
+        event_last_disziplin = 0
+        for wettkampf_name, (first_disziplin, last_disziplin) in self._wettkampf_first_last_disziplinen.items():
+            if event_first_disziplin is None or first_disziplin.start_value < event_first_disziplin:
+                event_first_disziplin = first_disziplin.start_value
+            if event_last_disziplin is None or last_disziplin.start_value > event_last_disziplin:
+                event_last_disziplin = last_disziplin.start_value
+            lines.append(f"  {wettkampf_name}: {first_disziplin.start_value}..{last_disziplin.start_value} ({last_disziplin.start_value - first_disziplin.start_value})")
+            wettkampf_duration_sum += last_disziplin.start_value - first_disziplin.start_value
+        lines.append(f"horizon: {event_last_disziplin - event_first_disziplin + 1}")
+        lines.append(f"cumulated-wettkampf-duration: {wettkampf_duration_sum}")
+        return "{}\n{}".format(heading, "\n".join(lines))
 
 
 event = None  # pylint: disable=invalid-name
