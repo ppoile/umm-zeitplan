@@ -1,7 +1,8 @@
 """Assemble event data for your event and call interactive_main()"""
 
 event_data = {
-    'event_name': 'Uster Mehrkampf Meeting',
+    'event_name': 'MAN 10-K Test Event',
+    'event_name_short': 'man_10k',
     'anlagen_descriptors': {
         'saturday': [
             ("Läufe",),
