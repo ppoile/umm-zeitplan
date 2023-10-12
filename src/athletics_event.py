@@ -315,17 +315,20 @@ class AthleticsEventScheduler():
         return calculated_length
 
     def _add_gruppen_disziplinen_dependencies(self, gruppen_disziplinen, is_wettkampf_with_strict_sequence):
+        logging.debug("_add_gruppen_disziplinen_dependencies()...")
         first_disziplin = gruppen_disziplinen[0]
         last_disziplin = gruppen_disziplinen[-1]
         gruppen_disziplinen_without_pausen = self._get_disziplinen_without_pausen(gruppen_disziplinen)
         if is_wettkampf_with_strict_sequence:
-            # one after another: 1st, 1st-pause, 2nd, 2nd-pause, 3rd,...
+            logging.debug("is_wettkampf_with_strict_sequence")
+            logging.debug("one after another: 1st, 1st-pause, 2nd, 2nd-pause, 3rd,...")
             current_disziplin = gruppen_disziplinen[0]
             for next_disziplin in gruppen_disziplinen[1:]:
                 self._scenario += current_disziplin < next_disziplin
                 current_disziplin = next_disziplin
         else:
-            # 1st and last set - rest free
+            logging.debug("not is_wettkampf_with_strict_sequence")
+            logging.debug("1st and last set - rest free")
             wettkampf_with_all_pausen = len(gruppen_disziplinen) == 2 * len(gruppen_disziplinen_without_pausen) - 1
             wettkampf_with_first_pause = (len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen) + 1) and "pause" in gruppen_disziplinen[1]["name"].lower()
             wettkampf_with_last_pause = (len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen) + 1) and "pause" in gruppen_disziplinen[-2]["name"].lower()
@@ -333,7 +336,7 @@ class AthleticsEventScheduler():
             wettkampf_with_no_pause = len(gruppen_disziplinen) == len(gruppen_disziplinen_without_pausen)
 
             if wettkampf_with_all_pausen:
-                # with all pausen
+                logging.debug("with all pausen")
                 for disziplin_index in range(len(gruppen_disziplinen[:-1:2])):
                     self._scenario += gruppen_disziplinen[disziplin_index * 2] <= gruppen_disziplinen[disziplin_index * 2 + 1]
                 first_pause = gruppen_disziplinen[1]
@@ -342,7 +345,7 @@ class AthleticsEventScheduler():
                 for disziplin in gruppen_disziplinen[1::2]:
                     self._scenario += disziplin < last_disziplin
             elif wettkampf_with_last_pause:
-                # with last pause
+                logging.debug("with last pause")
                 first_disziplin = gruppen_disziplinen_without_pausen[0]
                 for disziplin in gruppen_disziplinen[1:-1]:
                     self._scenario += first_disziplin < disziplin
@@ -351,7 +354,7 @@ class AthleticsEventScheduler():
                 for disziplin in gruppen_disziplinen[:-2]:
                     self._scenario += disziplin < last_pause
             elif wettkampf_with_first_and_last_pause:
-                # with first and last pause
+                logging.debug("with first and last pause")
                 first_pause = gruppen_disziplinen[1]
                 self._scenario += gruppen_disziplinen[0] <= first_pause
                 for disziplin in gruppen_disziplinen[2:-2]:
@@ -361,7 +364,7 @@ class AthleticsEventScheduler():
                 for disziplin in gruppen_disziplinen[2:-2]:
                     self._scenario += disziplin < last_pause
             elif wettkampf_with_first_pause:
-                # with first pause
+                logging.debug("with first pause")
                 first_pause = gruppen_disziplinen[1]
                 self._scenario += gruppen_disziplinen[0] <= first_pause
                 for disziplin in gruppen_disziplinen[2:-1]:
@@ -370,7 +373,7 @@ class AthleticsEventScheduler():
                 for disziplin in gruppen_disziplinen[2:-1]:
                     self._scenario += disziplin < last_disziplin
             elif wettkampf_with_no_pause:
-                # with no pause
+                logging.debug("with no pause")
                 for disziplin in gruppen_disziplinen[1:]:
                     self._scenario += first_disziplin < disziplin
                 for disziplin in gruppen_disziplinen[:-1]:
