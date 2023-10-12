@@ -60,8 +60,9 @@ class AnlagenDescriptor():
 
 
 class AthleticsEventScheduler():
-    def __init__(self, event_data, horizon):
+    def __init__(self, event_data, day, horizon):
         self._event_data = event_data
+        self._day = day
         self._short_name = event_data['event_name_short']
         self._horizon = horizon
         self._anlagen = {}
@@ -82,6 +83,10 @@ class AthleticsEventScheduler():
         return self._short_name
 
     @property
+    def day(self):
+        return self._day
+
+    @property
     def horizon(self):
         return self._horizon
 
@@ -93,9 +98,9 @@ class AthleticsEventScheduler():
     def anlagen(self):
         return self._anlagen
 
-    def create_anlagen(self, descriptors):
+    def create_anlagen(self):
         logging.debug('creating anlagen...')
-        for descriptor in descriptors:
+        for descriptor in self._event_data['anlagen_descriptors'][self.day]:
             self._create_anlage(descriptor)
 
     def _create_anlage(self, descriptor_args):
@@ -491,8 +496,8 @@ def main(event_data, args):
 
     global event  # pylint: disable=global-statement
     event = AthleticsEventScheduler(
-        event_data=event_data, horizon=args.horizon)
-    event.create_anlagen(event_data['anlagen_descriptors'][args.day])
+        event_data=event_data, day=args.day, horizon=args.horizon)
+    event.create_anlagen()
     event.create_disziplinen(
         event_data['wettkampf_data'][args.day],
         event_data['teilnehmer_data'])
