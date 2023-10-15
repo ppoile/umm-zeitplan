@@ -4,7 +4,7 @@ import logging
 import unittest
 
 import athletics_event
-from .u12w_4k_event_data import event_data as u12w_4k_event_data
+from .event_data import generate_event_data
 
 
 logging.basicConfig(level=logging.WARNING)
@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.WARNING)
 
 class TestCalculatedDisziplinenLength(unittest.TestCase):
     def setUp(self):
-        self.event_data = copy.deepcopy(u12w_4k_event_data)
+        self.event_data = generate_event_data("U12W_4K")
 
     def test_u12w_60m(self):
         athletics_event.interactive_main(self.event_data, ["saturday", "--print-scenario-and-exit"])
