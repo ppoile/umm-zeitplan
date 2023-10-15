@@ -273,7 +273,7 @@ event_data = {
 }
 
 
-def generate_event_data(wettkampf):
+def generate_single_event_data(wettkampf):
     single_event_data = deepcopy(event_data)
     for day in event_data['wettkampf_data']:
         for candidate in event_data['wettkampf_data'][day]:

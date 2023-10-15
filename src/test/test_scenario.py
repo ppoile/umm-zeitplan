@@ -3,7 +3,7 @@ import logging
 import unittest
 
 import athletics_event
-from .event_data import generate_event_data
+from .event_data import generate_single_event_data
 
 
 logging.basicConfig(level=logging.WARNING)
@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.WARNING)
 
 class TestScenario(unittest.TestCase):
     def test_man_6k_event(self):
-        event_data = generate_event_data("MAN_6K")
+        event_data = generate_single_event_data("MAN_6K")
         event_data["teilnehmer_data"]["MAN_6K"] = { "Gr1": 12 }
         athletics_event.interactive_main(event_data, ["sunday", "--print-scenario-and-exit"])
         expected_precedences = """LAX PRECEDENCES:
@@ -36,7 +36,7 @@ MAN_6K_Gr1_Speer <= MAN_6K_Gr1_Pause_5
         self.assertIn(expected_precedences, str(athletics_event.event.scenario))
 
     def test_man_10k_event_one_group(self):
-        event_data = generate_event_data("MAN_10K")
+        event_data = generate_single_event_data("MAN_10K")
         event_data["teilnehmer_data"]["MAN_10K"] = { "Gr1": 12 }
         athletics_event.interactive_main(event_data, ["saturday", "--print-scenario-and-exit"])
         expected_precedences = """LAX PRECEDENCES:

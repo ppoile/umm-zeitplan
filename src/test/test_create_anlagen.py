@@ -2,12 +2,12 @@
 import unittest
 
 import athletics_event
-from .event_data import generate_event_data
+from .event_data import generate_single_event_data
 
 
 class TestCreateAnlagen(unittest.TestCase):
     def setUp(self):
-        self.event = athletics_event.AthleticsEventScheduler(generate_event_data("U12W"), "saturday", athletics_event.default_arguments["horizon"])
+        self.event = athletics_event.AthleticsEventScheduler(generate_single_event_data("U12W"), "saturday", athletics_event.default_arguments["horizon"])
 
     def test_create_anlagen(self):
         self.event.create_anlagen()
