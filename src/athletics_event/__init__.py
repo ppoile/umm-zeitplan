@@ -490,7 +490,8 @@ def main(event_data, args):
             random_seed=args.random_seed,
             threads=args.threads,
             event_name=event_data['event_name'],
-            event_day=args.day)
+            event_day=args.day,
+            msg=args.verbose)
     except NoSolutionError as e:
         logging.error("Exception caught: %s", e.__class__.__name__)
         return -1
