@@ -13,9 +13,9 @@ import os
 import re
 
 from pyschedule import Scenario, solvers, plotters
-import zeitplan_xlsx_writer
 
-from .common import setup_logging
+from . import common
+from . import zeitplan_xlsx_writer
 
 
 class SomethingWentWrong(RuntimeError):
@@ -459,7 +459,7 @@ def main(event_data, args):
     os.symlink(output_folder_name, link_path)
     os.chdir(output_folder_path)
 
-    setup_logging(args.verbose, event_name_short)
+    common.setup_logging(args.verbose, event_name_short)
 
     logging.debug("arguments: %s", args)
     logging.debug("output folder: %r", output_folder_name)
