@@ -1,11 +1,14 @@
 # pylint: disable=missing-module-docstring,missing-function-docstring,missing-class-docstring,line-too-long
-import unittest
-
 from copy import deepcopy
+import logging
+import unittest
 
 import athletics_event
 from .man_10k_event_data import event_data as man_10k_event_data_orig
 from .man_6k_event_data import event_data as man_6k_event_data_orig
+
+
+logging.basicConfig(level=logging.WARNING)
 
 
 class TestScenario(unittest.TestCase):

@@ -4,6 +4,10 @@ import logging
 
 
 def setup_logging(verbose, event_name):
+    # dont do anything if logging has already been configured
+    if len(logging.root.handlers) > 0:
+        return
+
     log_level = logging.INFO
     if verbose:
         log_level=logging.DEBUG
