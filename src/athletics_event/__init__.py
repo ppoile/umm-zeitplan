@@ -18,14 +18,6 @@ from . import common
 from . import zeitplan_xlsx_writer
 
 
-class SomethingWentWrong(RuntimeError):
-    pass
-
-
-class NoSolutionError(RuntimeError):
-    pass
-
-
 class AnlagenDescriptor():
     def __init__(self, name, size=1):
         self._name = name
@@ -246,7 +238,7 @@ class AthleticsEventScheduler():
             if interesting_gruppen_name in gruppen:
                 logging.debug("      _get_interval_gruppen(wettkampf=%s, interesting=%s, gruppen=%s) => %s", wettkampf_name, interesting_gruppen_name, gruppen_names, gruppen)
                 return gruppen
-        raise SomethingWentWrong("in _get_interval_gruppen()")
+        raise common.SomethingWentWrong("in _get_interval_gruppen()")
 
     def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, num_anlagen, exact=False):
         mapping = {
@@ -407,7 +399,7 @@ class AthleticsEventScheduler():
         else:
             logging.info("no '%s' found", cbc_logfile_name)
         if not status:
-            raise NoSolutionError()
+            raise common.NoSolutionError()
 
         solution_as_string = str(self._scenario.solution())
         solution_filename = f"{self.short_name}_solution.txt"
@@ -492,7 +484,7 @@ def main(event_data, args):
             event_name=event_data['event_name'],
             event_day=args.day,
             msg=args.verbose)
-    except NoSolutionError as e:
+    except common.NoSolutionError as e:
         logging.error("Exception caught: %s", e.__class__.__name__)
         return -1
     logging.info("output folder: %r", output_folder_name)

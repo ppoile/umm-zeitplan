@@ -3,6 +3,14 @@
 import logging
 
 
+class SomethingWentWrong(RuntimeError):
+    pass
+
+
+class NoSolutionError(RuntimeError):
+    pass
+
+
 def setup_logging(verbose, event_name):
     # dont do anything if logging has already been configured
     if len(logging.root.handlers) > 0:
