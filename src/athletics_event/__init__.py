@@ -16,6 +16,7 @@ from pyschedule import Scenario, solvers, plotters
 
 from . import common
 from .disziplin import Disziplin
+from .gruppe import Gruppe
 from .wettkampf import Wettkampf
 from . import zeitplan_xlsx_writer
 
@@ -119,16 +120,16 @@ class AthleticsEventScheduler():
         wettkampf_disziplinen_factors = defaultdict(int)
         offset = 0
         for gruppen_name in gruppen_names:
-            logging.debug("    gruppe: %s", gruppen_name)
+            gruppe = Gruppe(gruppen_name)
             gruppen_resource = self._scenario.Resource(gruppe.name)
             gruppen_disziplinen = []
             for disziplinen_data in wettkampf.disziplinen:
                 disziplin = Disziplin(disziplinen_data)
                 if disziplin.together:
                     if disziplin.keep_groups_separate:
-                        interval_gruppen_names = self._get_interval_gruppen(wettkampf.name, gruppen_name, gruppen_names, self._teilnehmer_data, disziplinen_data, disziplin.use_num_anlagen)
+                        interval_gruppen_names = self._get_interval_gruppen(wettkampf.name, gruppe.name, gruppen_names, self._teilnehmer_data, disziplinen_data, disziplin.use_num_anlagen)
                         if len(interval_gruppen_names) == 1:
-                            disziplinen_name = f"{wettkampf.name}_{gruppen_name}_{disziplinen_data['name']}"
+                            disziplinen_name = f"{wettkampf.name}_{gruppe.name}_{disziplinen_data['name']}"
                         else:
                             disziplinen_name = f"{wettkampf.name}_{interval_gruppen_names[0]}_to_{interval_gruppen_names[-1]}_{disziplinen_data['name']}"
                         num_athletes = 0
@@ -140,8 +141,8 @@ class AthleticsEventScheduler():
                         for gruppen_name_inner in gruppen_names:
                             num_athletes += self._teilnehmer_data[wettkampf.name][gruppen_name_inner]
                 else:
-                    disziplinen_name = f"{wettkampf.name}_{gruppen_name}_{disziplinen_data['name']}"
-                    num_athletes = self._teilnehmer_data[wettkampf.name][gruppen_name]
+                    disziplinen_name = f"{wettkampf.name}_{gruppe.name}_{disziplinen_data['name']}"
+                    num_athletes = self._teilnehmer_data[wettkampf.name][gruppe.name]
                 if disziplinen_name not in self._disziplinen.keys():  # pylint: disable=consider-iterating-dictionary
                     disziplinen_length_data = disziplinen_data["length"]
                     if "pause" not in disziplinen_name.lower():
@@ -198,7 +199,7 @@ class AthleticsEventScheduler():
 
                 resource = disziplin.resource
                 if resource:
-                    if not disziplin.together or gruppen_name == gruppen_names[0] or disziplin.keep_groups_separate and (gruppen_name == interval_gruppen_names[0]):
+                    if not disziplin.together or gruppe.name == gruppen_names[0] or disziplin.keep_groups_separate and (gruppe.name == interval_gruppen_names[0]):
                         for resource_name in resource.split("&"):
                             disziplinen_task += self._any_anlage(resource_name)
 
