@@ -124,7 +124,6 @@ class AthleticsEventScheduler():
             gruppen_disziplinen = []
             for disziplinen_data in wettkampf.disziplinen:
                 disziplin = Disziplin(disziplinen_data)
-                force_length = disziplinen_data.get("force_length", False)
                 keep_groups_separate = disziplinen_data.get("keep_groups_separate", False)
                 num_anlagen = disziplinen_data.get("use_num_anlagen", 1)
                 if disziplin.together:
@@ -165,7 +164,7 @@ class AthleticsEventScheduler():
                                 logging.debug("disziplinen_length: %s", disziplinen_length)
                         else:
                             disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=wettkampf.name, disziplin=disziplinen_data["name"], num_athletes=num_athletes, num_anlagen=num_anlagen)
-                            if force_length:
+                            if disziplin.force_length:
                                 disziplinen_length = disziplinen_length_data
                             else:
                                 disziplinen_length = disziplinen_length_calculated
