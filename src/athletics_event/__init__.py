@@ -120,7 +120,7 @@ class AthleticsEventScheduler():
         offset = 0
         for gruppen_name in gruppen_names:
             logging.debug("    gruppe: %s", gruppen_name)
-            gruppe = self._scenario.Resource(gruppen_name)
+            gruppen_resource = self._scenario.Resource(gruppe.name)
             gruppen_disziplinen = []
             for disziplinen_data in wettkampf.disziplinen:
                 disziplin = Disziplin(disziplinen_data)
@@ -202,7 +202,7 @@ class AthleticsEventScheduler():
                         for resource_name in resource.split("&"):
                             disziplinen_task += self._any_anlage(resource_name)
 
-                disziplinen_task += gruppe
+                disziplinen_task += gruppen_resource
 
                 if disziplin.together and disziplin.keep_groups_separate and disziplinen_task not in keep_groups_separate_disziplinen:
                     keep_groups_separate_disziplinen.append(disziplinen_task)
