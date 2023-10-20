@@ -196,7 +196,7 @@ class AthleticsEventScheduler():
                     logging.debug("      disziplin: %s (length_data=%u) => length-pause=%u", disziplinen_name, disziplinen_length_data, disziplinen_length)
                 gruppen_disziplinen.append(disziplinen_task)
 
-                resource = disziplinen_data.get("resource", None)
+                resource = disziplin.resource
                 if resource:
                     if not disziplin.together or gruppen_name == gruppen_names[0] or disziplin.keep_groups_separate and (gruppen_name == interval_gruppen_names[0]):
                         for resource_name in resource.split("&"):

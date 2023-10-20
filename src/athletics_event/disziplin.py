@@ -22,3 +22,7 @@ class Disziplin:
     @property
     def use_num_anlagen(self):
         return self._data.get("use_num_anlagen", 1)
+
+    @property
+    def resource(self):
+        return self._data.get("resource", None)
