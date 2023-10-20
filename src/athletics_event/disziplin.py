@@ -14,3 +14,11 @@ class Disziplin:
     @property
     def force_length(self):
         return self._data.get("force_length", False)
+
+    @property
+    def keep_groups_separate(self):
+        return self._data.get("keep_groups_separate", False)
+
+    @property
+    def use_num_anlagen(self):
+        return self._data.get("use_num_anlagen", 1)
