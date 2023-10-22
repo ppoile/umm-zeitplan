@@ -22,6 +22,9 @@ class Disziplin:
         self.evaluate_length(offset)
         self.create_task_if_necessary()
 
+    def is_first_gruppe_of_interval(self):
+        return self._gruppe.name == self._interval_gruppen_names[0]
+
     def evaluate_full_name_and_num_athletes(self):
         gruppen_names = self._wettkampf.gruppen
         if self.together:
@@ -55,7 +58,8 @@ class Disziplin:
                 logging.debug("slot_begin: %s", slot_begin)
                 logging.debug("disziplinen_length_calculated: %s", disziplinen_length_calculated)
                 self._length_calculated = disziplinen_length_calculated
-                offset += disziplinen_length_calculated - slot_begin
+                if self.is_first_gruppe_of_interval():
+                    offset += disziplinen_length_calculated - slot_begin
                 logging.debug("offset(new): %s", offset)
                 disziplinen_length = math.ceil(round(offset, 3))
                 logging.debug("disziplinen_length: %s", disziplinen_length)
