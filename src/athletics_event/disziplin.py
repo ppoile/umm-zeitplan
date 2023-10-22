@@ -15,10 +15,11 @@ class Disziplin:
         self._wettkampf_data = wettkampf_data
         self._teilnehmer_data = teilnehmer_data
         self._scenario = scenario
+        self._new_offset = None
         self._task = None
         self._interval_gruppen_names = []
         self.evaluate_full_name_and_num_athletes()
-        self._new_offset = self.evaluate_length(offset)
+        self.evaluate_length(offset)
         self.create_task_if_necessary()
 
     def evaluate_full_name_and_num_athletes(self):
@@ -54,9 +55,9 @@ class Disziplin:
                 logging.debug("slot_begin: %s", slot_begin)
                 logging.debug("disziplinen_length_calculated: %s", disziplinen_length_calculated)
                 self._length_calculated = disziplinen_length_calculated
-                self._new_offset = offset - slot_begin + disziplinen_length_calculated
-                logging.debug("offset(new): %s", self._new_offset)
-                disziplinen_length = math.ceil(round(self._new_offset, 3))
+                offset += disziplinen_length_calculated - slot_begin
+                logging.debug("offset(new): %s", offset)
+                disziplinen_length = math.ceil(round(offset, 3))
                 logging.debug("disziplinen_length: %s", disziplinen_length)
                 if gruppen_names[-1] in self._interval_gruppen_names:
                     disziplinen_length += 1
@@ -81,7 +82,7 @@ class Disziplin:
                 disziplinen_length -= 1
         self._length_calculated = disziplinen_length_calculated
         self._length = disziplinen_length
-        return offset
+        self._new_offset = offset
 
     def create_task_if_necessary(self):
         if self.length <= 0:
