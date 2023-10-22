@@ -54,7 +54,9 @@ class Disziplin:
                 for gruppen_name_inner in self._interval_gruppen_names:
                     disziplinen_length_calculated += self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner], exact=True)
                 disziplinen_length_calculated = round(disziplinen_length_calculated, 3)
+                logging.debug("name(full): %s", self.full_name)
                 logging.debug("offset: %s", offset)
+                logging.debug("gruppe: %s, interval_gruppen: %s", self._gruppe.name, self._interval_gruppen_names)
                 slot_begin = math.ceil(offset)
                 logging.debug("slot_begin: %s", slot_begin)
                 logging.debug("disziplinen_length_calculated: %s", disziplinen_length_calculated)
