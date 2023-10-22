@@ -1,5 +1,5 @@
 # pylint: disable=missing-module-docstring,missing-function-docstring,missing-class-docstring,line-too-long
-from copy import deepcopy
+
 import logging
 import unittest
 
