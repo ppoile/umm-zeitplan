@@ -53,15 +53,16 @@ class Disziplin:
                 disziplinen_length_calculated = 0
                 for gruppen_name_inner in self._interval_gruppen_names:
                     disziplinen_length_calculated += self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner], exact=True)
+                disziplinen_length_calculated = round(disziplinen_length_calculated, 3)
                 logging.debug("offset: %s", offset)
                 slot_begin = math.ceil(offset)
                 logging.debug("slot_begin: %s", slot_begin)
                 logging.debug("disziplinen_length_calculated: %s", disziplinen_length_calculated)
                 self._length_calculated = disziplinen_length_calculated
                 if self.is_first_gruppe_of_interval():
-                    offset += disziplinen_length_calculated - slot_begin
+                    offset += round(disziplinen_length_calculated - slot_begin, 3)
                 logging.debug("offset(new): %s", offset)
-                disziplinen_length = math.ceil(round(offset, 3))
+                disziplinen_length = math.ceil(offset)
                 logging.debug("disziplinen_length: %s", disziplinen_length)
                 if gruppen_names[-1] in self._interval_gruppen_names:
                     disziplinen_length += 1
@@ -185,7 +186,7 @@ class Disziplin:
             num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
             disziplinen_length = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, exact=True)
             accumulated_disziplinen_length += disziplinen_length
-            logging.debug("accumulated_disziplinen_length: %s", accumulated_disziplinen_length)
+            logging.debug("accumulated_disziplinen_length: %s", round(accumulated_disziplinen_length, 3))
             if round(accumulated_disziplinen_length, 3) > current_interval + 1:
                 current_interval += math.floor(round(accumulated_disziplinen_length, 3))
             interval_gruppen[current_interval].append(gruppen_name)
@@ -232,5 +233,5 @@ class Disziplin:
         calculated_length = calculated_length / self.use_num_anlagen
         if not exact:
             calculated_length = math.ceil(calculated_length)
-        logging.debug("      _get_calculated_disziplinen_length(wettkampf=%s, disziplin=%s, num_athletes=%s, num_anlagen=%s, exact=%s) => %s", wettkampf, disziplin, num_athletes, self.use_num_anlagen, exact, calculated_length)
+        logging.debug("      _get_calculated_disziplinen_length(wettkampf=%s, disziplin=%s, num_athletes=%s, num_anlagen=%s, exact=%s) => %s", wettkampf, disziplin, num_athletes, self.use_num_anlagen, exact, round(calculated_length, 3))
         return calculated_length
