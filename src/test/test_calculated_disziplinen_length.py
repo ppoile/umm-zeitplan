@@ -3,6 +3,7 @@
 import unittest
 
 import athletics_event
+from athletics_event.disziplinen_length_calculator import get_calculated_disziplinen_length
 from .common import setup_logging
 from .event_data import generate_single_event_data
 
@@ -41,12 +42,11 @@ class TestCalculatedDisziplinenLength(unittest.TestCase):
         self.assertEqual(6, athletics_event.event.scenario["U12W_4K_Gr14_to_Gr18_600m"].length)
 
     def test_u12w_60m_get_calculated_disziplinen_length(self):
-        event = athletics_event.AthleticsEventScheduler(self.event_data, "saturday", athletics_event.default_arguments["horizon"])
-        self.assertEqual(0, event._get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=0, num_anlagen=1, exact=False))
-        self.assertEqual(1, event._get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=1, num_anlagen=1, exact=False))
-        self.assertEqual(0.2, event._get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=1, num_anlagen=1, exact=True))
-        self.assertEqual(1, event._get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=5 * 6, num_anlagen=1, exact=False))
-        self.assertEqual(2, event._get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=5 * 6 + 1, num_anlagen=1, exact=False))
+        self.assertEqual(0, get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=0, num_anlagen=1, exact=False))
+        self.assertEqual(1, get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=1, num_anlagen=1, exact=False))
+        self.assertEqual(0.2, get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=1, num_anlagen=1, exact=True))
+        self.assertEqual(1, get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=5 * 6, num_anlagen=1, exact=False))
+        self.assertEqual(2, get_calculated_disziplinen_length(wettkampf=None, disziplin="60m", num_athletes=5 * 6 + 1, num_anlagen=1, exact=False))
 
     def test_u12w_60m_create_disziplinen_five_groups_fit_one_slot(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {

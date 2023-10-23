@@ -130,65 +130,6 @@ class AthleticsEventScheduler():
         self._set_default_objective(wettkampf_disziplinen_factors, wettkampf_first_disziplin, wettkampf_last_disziplin)
         self._last_disziplin[wettkampf.name] = wettkampf_last_disziplin
 
-    def _get_interval_gruppen(self, wettkampf_name, interesting_gruppen_name, gruppen_names, teilnehmer_data, item, num_anlagen):
-        logging.debug("      _get_interval_gruppen(wettkampf=%s, interesting=%s, gruppen=%s)...", wettkampf_name, interesting_gruppen_name, gruppen_names)
-        current_interval = 0
-        interval_gruppen = defaultdict(list)
-        accumulated_disziplinen_length = 0
-        for gruppen_name in gruppen_names:
-            num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
-            disziplinen_length = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=num_anlagen, exact=True)
-            accumulated_disziplinen_length += disziplinen_length
-            logging.debug("accumulated_disziplinen_length: %s", accumulated_disziplinen_length)
-            if round(accumulated_disziplinen_length, 3) > current_interval + 1:
-                current_interval += math.floor(round(accumulated_disziplinen_length, 3))
-            interval_gruppen[current_interval].append(gruppen_name)
-        for gruppen in interval_gruppen.values():
-            if interesting_gruppen_name in gruppen:
-                logging.debug("      _get_interval_gruppen(wettkampf=%s, interesting=%s, gruppen=%s) => %s", wettkampf_name, interesting_gruppen_name, gruppen_names, gruppen)
-                return gruppen
-        raise common.SomethingWentWrong("in _get_interval_gruppen()")
-
-    def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, num_anlagen, exact=False):
-        mapping = {
-            "60m": (6, 2/10),
-            "80m": (6, 2/10),
-            "100m": (6, 2/10),
-            "100mHü": (6, 4/10),
-            "110mHü": (6, 4/10),
-            "200m": (6, 4/10),
-            "400m": (6, 7/10),
-            "800m": (6, 7/10),
-            "600m": (16, 1),
-            "1000m": (16, 1),
-            "1500m": (16, 1),
-            "Diskus": (1, 3/15),
-            "Hoch": {
-                "U14W_5K": (1, 3/15),
-                "U14M_5K": (1, 3/15),
-                "U16W_5K": (1, 5/15),
-                "U16M_6K": (1, 5/15),
-                "WOM_5K": (1, 3/15),
-                "WOM_7K": (1, 5/15),
-                "MAN_6K": (1, 3/15),
-                "MAN_10K": (1, 5/15),
-            },
-            "Kugel": (1, 2/15),
-            "Speer": (1, 3/15),
-            "Stab": (1, 6/12),
-            "Weit": (1, 3/15),
-        }
-        item = mapping[disziplin]
-        if isinstance(item, dict):
-            item = item[wettkampf]
-        num_serien = ((num_athletes - 1) // item[0]) + 1
-        calculated_length = num_serien * item[1]
-        calculated_length = calculated_length / num_anlagen
-        if not exact:
-            calculated_length = math.ceil(calculated_length)
-        logging.debug("      _get_calculated_disziplinen_length(wettkampf=%s, disziplin=%s, num_athletes=%s, num_anlagen=%s, exact=%s) => %s", wettkampf, disziplin, num_athletes, num_anlagen, exact, calculated_length)
-        return calculated_length
-
     def _add_gruppen_disziplinen_dependencies(self, gruppen_disziplinen, is_wettkampf_with_strict_sequence):
         logging.debug("_add_gruppen_disziplinen_dependencies()...")
         first_disziplin = gruppen_disziplinen[0]

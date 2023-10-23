@@ -7,6 +7,7 @@ import math
 import operator
 
 from . import common
+from .disziplinen_length_calculator import get_calculated_disziplinen_length
 
 
 class Disziplin:
@@ -56,7 +57,7 @@ class Disziplin:
             if self.together and self.keep_groups_separate:
                 self._length_calculated = 0
                 for gruppen_name_inner in self._interval_gruppen_names:
-                    self._length_calculated += self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner], exact=True)
+                    self._length_calculated += get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner], num_anlagen=self.use_num_anlagen, exact=True)
                 self._length_calculated = round(self._length_calculated, 3)
                 logging.debug("name(full): %s", self.full_name)
                 logging.debug("offset: %s", offset)
@@ -72,7 +73,7 @@ class Disziplin:
                     self._length += 1
                 logging.debug("length: %s", self._length)
             else:
-                self._length_calculated = self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._num_athletes)
+                self._length_calculated = get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._num_athletes, num_anlagen=self.use_num_anlagen)
                 if self.force_length:
                     self._length = self.length_data
                 else:
@@ -196,7 +197,7 @@ class Disziplin:
         accumulated_disziplinen_length = 0
         for gruppen_name in gruppen_names:
             num_athletes = teilnehmer_data[wettkampf_name][gruppen_name]
-            disziplinen_length = self._get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, exact=True)
+            disziplinen_length = get_calculated_disziplinen_length(wettkampf=wettkampf_name, disziplin=item["name"], num_athletes=num_athletes, num_anlagen=self.use_num_anlagen, exact=True)
             accumulated_disziplinen_length += disziplinen_length
             logging.debug("accumulated_disziplinen_length: %s", round(accumulated_disziplinen_length, 3))
             if round(accumulated_disziplinen_length, 3) > current_interval + 1:
@@ -207,43 +208,3 @@ class Disziplin:
                 logging.debug("      _get_interval_gruppen(wettkampf=%s, interesting=%s, gruppen=%s) => %s", wettkampf_name, interesting_gruppen_name, gruppen_names, gruppen)
                 return gruppen
         raise common.SomethingWentWrong("in _get_interval_gruppen()")
-
-    def _get_calculated_disziplinen_length(self, wettkampf, disziplin, num_athletes, exact=False):
-        mapping = {
-            "60m": (6, 2/10),
-            "80m": (6, 2/10),
-            "100m": (6, 2/10),
-            "100mHü": (6, 4/10),
-            "110mHü": (6, 4/10),
-            "200m": (6, 4/10),
-            "400m": (6, 7/10),
-            "800m": (6, 7/10),
-            "600m": (16, 1),
-            "1000m": (16, 1),
-            "1500m": (16, 1),
-            "Diskus": (1, 3/15),
-            "Hoch": {
-                "U14W_5K": (1, 3/15),
-                "U14M_5K": (1, 3/15),
-                "U16W_5K": (1, 5/15),
-                "U16M_6K": (1, 5/15),
-                "WOM_5K": (1, 3/15),
-                "WOM_7K": (1, 5/15),
-                "MAN_6K": (1, 3/15),
-                "MAN_10K": (1, 5/15),
-            },
-            "Kugel": (1, 2/15),
-            "Speer": (1, 3/15),
-            "Stab": (1, 6/12),
-            "Weit": (1, 3/15),
-        }
-        item = mapping[disziplin]
-        if isinstance(item, dict):
-            item = item[wettkampf]
-        num_serien = ((num_athletes - 1) // item[0]) + 1
-        calculated_length = num_serien * item[1]
-        calculated_length = calculated_length / self.use_num_anlagen
-        if not exact:
-            calculated_length = math.ceil(calculated_length)
-        logging.debug("      _get_calculated_disziplinen_length(wettkampf=%s, disziplin=%s, num_athletes=%s, num_anlagen=%s, exact=%s) => %s", wettkampf, disziplin, num_athletes, self.use_num_anlagen, exact, round(calculated_length, 3))
-        return calculated_length
