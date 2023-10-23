@@ -34,9 +34,7 @@ class Disziplin:
                     self._full_name = f"{self._wettkampf.name}_{self._gruppe.name}_{self.name}"
                 else:
                     self._full_name = f"{self._wettkampf.name}_{self._interval_gruppen_names[0]}_to_{self._interval_gruppen_names[-1]}_{self.name}"
-                self._num_athletes = 0
-                for gruppen_name_inner in self._interval_gruppen_names:
-                    self._num_athletes += self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner]
+                self._num_athletes = self._teilnehmer_data[self._wettkampf.name][self._gruppe.name]
             else:
                 self._full_name = f"{self._wettkampf.name}_{gruppen_names[0]}_to_{gruppen_names[-1]}_{self.name}"
                 self._num_athletes = 0
