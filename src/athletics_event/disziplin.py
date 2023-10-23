@@ -31,12 +31,15 @@ class Disziplin:
             if self.keep_groups_separate:
                 self._interval_gruppen_names = self._get_interval_gruppen(self._wettkampf.name, self._gruppe.name, gruppen_names, self._teilnehmer_data, self._definition)
                 if len(self._interval_gruppen_names) == 1:
-                    self._full_name = f"{self._wettkampf.name}_{self._gruppe.name}_{self.name}"
+                    self._full_name = f"{self._wettkampf.name}_{self._interval_gruppen_names[0]}_{self.name}"
                 else:
                     self._full_name = f"{self._wettkampf.name}_{self._interval_gruppen_names[0]}_to_{self._interval_gruppen_names[-1]}_{self.name}"
                 self._num_athletes = self._teilnehmer_data[self._wettkampf.name][self._gruppe.name]
             else:
-                self._full_name = f"{self._wettkampf.name}_{gruppen_names[0]}_to_{gruppen_names[-1]}_{self.name}"
+                if len(gruppen_names) == 1:
+                    self._full_name = f"{self._wettkampf.name}_{gruppen_names[0]}_{self.name}"
+                else:
+                    self._full_name = f"{self._wettkampf.name}_{gruppen_names[0]}_to_{gruppen_names[-1]}_{self.name}"
                 self._num_athletes = 0
                 for gruppen_name_inner in gruppen_names:
                     self._num_athletes += self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner]
