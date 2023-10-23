@@ -51,45 +51,35 @@ class Disziplin:
         gruppen_names = self._wettkampf.gruppen
         if not self.is_pause:
             if self.together and self.keep_groups_separate:
-                disziplinen_length_calculated = 0
+                self._length_calculated = 0
                 for gruppen_name_inner in self._interval_gruppen_names:
-                    disziplinen_length_calculated += self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner], exact=True)
-                disziplinen_length_calculated = round(disziplinen_length_calculated, 3)
+                    self._length_calculated += self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._teilnehmer_data[self._wettkampf.name][gruppen_name_inner], exact=True)
+                self._length_calculated = round(self._length_calculated, 3)
                 logging.debug("name(full): %s", self.full_name)
                 logging.debug("offset: %s", offset)
                 logging.debug("gruppe: %s, interval_gruppen: %s", self._gruppe.name, self._interval_gruppen_names)
                 slot_begin = math.ceil(offset)
                 logging.debug("slot_begin: %s", slot_begin)
-                logging.debug("disziplinen_length_calculated: %s", disziplinen_length_calculated)
-                self._length_calculated = disziplinen_length_calculated
+                logging.debug("length_calculated: %s", self._length_calculated)
                 if self.is_first_gruppe_of_interval():
-                    offset += round(disziplinen_length_calculated - slot_begin, 3)
+                    offset += round(self._length_calculated - slot_begin, 3)
                 logging.debug("offset(new): %s", offset)
-                disziplinen_length = math.ceil(offset)
-                logging.debug("disziplinen_length: %s", disziplinen_length)
+                self._length = math.ceil(offset)
                 if gruppen_names[-1] in self._interval_gruppen_names:
-                    disziplinen_length += 1
-                    logging.debug("disziplinen_length: %s", disziplinen_length)
-                self._length = disziplinen_length
+                    self._length += 1
+                logging.debug("length: %s", self._length)
             else:
-                disziplinen_length_calculated = self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._num_athletes)
-                self._length_calculated = disziplinen_length_calculated
+                self._length_calculated = self._get_calculated_disziplinen_length(wettkampf=self._wettkampf.name, disziplin=self.name, num_athletes=self._num_athletes)
                 if self.force_length:
-                    disziplinen_length = self.length_data
-                    self._length = disziplinen_length
+                    self._length = self.length_data
                 else:
-                    disziplinen_length = disziplinen_length_calculated
-                    self._length = disziplinen_length_calculated
-                disziplinen_length += 1
-                self._length = disziplinen_length
+                    self._length = self._length_calculated
+                self._length += 1
         else:
-            disziplinen_length_calculated = None
-            self._length_calculated = disziplinen_length_calculated
-            disziplinen_length = self.length_data
+            self._length_calculated = None
+            self._length = self.length_data
             if not self._gruppe.disziplinen[-1].keep_groups_separate:
-                disziplinen_length -= 1
-        self._length_calculated = disziplinen_length_calculated
-        self._length = disziplinen_length
+                self._length -= 1
         self._new_offset = offset
 
     def create_task_if_necessary(self):
