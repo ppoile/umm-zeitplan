@@ -1,20 +1,23 @@
 # pylint: disable=missing-module-docstring,missing-function-docstring,missing-class-docstring,line-too-long
 
 from collections import defaultdict
+import functools
 import logging
 import math
+import operator
 
 from . import common
 
 
 class Disziplin:
-    def __init__(self, definition, wettkampf, gruppe, wettkampf_data, teilnehmer_data, scenario, offset):
+    def __init__(self, definition, wettkampf, gruppe, wettkampf_data, teilnehmer_data, scenario, anlagen, offset):
         self._definition = definition
         self._wettkampf = wettkampf
         self._gruppe = gruppe
         self._wettkampf_data = wettkampf_data
         self._teilnehmer_data = teilnehmer_data
         self._scenario = scenario
+        self._anlagen = anlagen
         self._new_offset = None
         self._task = None
         self._interval_gruppen_names = []
@@ -105,6 +108,22 @@ class Disziplin:
             }
             self._task = self._scenario.Task(**kwargs)
         self._gruppe.disziplinen.append(self._task)
+
+    def assign_anlagen(self):
+        if self.resource:
+            if not self.together or self._gruppe.name == self._wettkampf.gruppen[0] or self.keep_groups_separate and (self._gruppe.name == self.interval_gruppen[0]):
+                for resource_name in self.resource.split("&"):
+                    self.task += self._any_anlage(resource_name)
+
+    def _any_anlage(self, pattern):
+        return functools.reduce(lambda a, b: operator.or_(a, b), self._get_all_anlagen(pattern))
+
+    def _get_all_anlagen(self, pattern):
+        resources = []
+        for anlagen_name, anlage in self._anlagen.items():
+            if anlagen_name.startswith(pattern):
+                resources.append(anlage)
+        return resources
 
     @property
     def name(self):

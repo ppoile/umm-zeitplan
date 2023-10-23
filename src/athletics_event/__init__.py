@@ -5,10 +5,8 @@
 import argparse
 from collections import defaultdict
 import datetime
-import functools
 import logging
 import math
-import operator
 import os
 import re
 
@@ -87,16 +85,6 @@ class AthleticsEventScheduler():
             anlage = self._scenario.Resource(anlagen_name)
             self._anlagen[anlagen_name] = anlage
 
-    def _any_anlage(self, pattern):
-        return functools.reduce(lambda a, b: operator.or_(a, b), self._get_all_anlagen(pattern))
-
-    def _get_all_anlagen(self, pattern):
-        resources = []
-        for anlagen_name, anlage in self._anlagen.items():
-            if anlagen_name.startswith(pattern):
-                resources.append(anlage)
-        return resources
-
     def create_disziplinen(self):
         logging.debug('creating disziplinen...')
         for wettkampf_name in self._wettkampf_data:
@@ -110,24 +98,18 @@ class AthleticsEventScheduler():
         keep_groups_separate_disziplinen = []
         if wettkampf.is_last_wettkampf_of_the_day:
             self._last_wettkampf_of_the_day = wettkampf.name
-        gruppen_names = wettkampf.gruppen
         wettkampf_gruppen_first_and_last_disziplinen = []
         wettkampf_disziplinen_factors = defaultdict(int)
         offset = 0
-        for gruppen_name in gruppen_names:
+        for gruppen_name in wettkampf.gruppen:
             gruppe = Gruppe(gruppen_name, self._scenario)
             for disziplinen_data in wettkampf.disziplinen_data:
-                disziplin = Disziplin(disziplinen_data, wettkampf, gruppe, self._wettkampf_data, self._teilnehmer_data, self.scenario, offset)
+                disziplin = Disziplin(disziplinen_data, wettkampf, gruppe, self._wettkampf_data, self._teilnehmer_data, self.scenario, self._anlagen, offset)
+                if disziplin.length <= 0:
+                    continue
                 offset = disziplin.new_offset
-
-                resource = disziplin.resource
-                if resource:
-                    if not disziplin.together or gruppe.name == gruppen_names[0] or disziplin.keep_groups_separate and (gruppe.name == disziplin.interval_gruppen[0]):
-                        for resource_name in resource.split("&"):
-                            disziplin.task += self._any_anlage(resource_name)
-
-                if disziplin.task:
-                    disziplin.task += gruppe.resource
+                disziplin.assign_anlagen()
+                disziplin.task += gruppe.resource
 
                 if disziplin.together and disziplin.keep_groups_separate and disziplin.task not in keep_groups_separate_disziplinen:
                     keep_groups_separate_disziplinen.append(disziplin.task)
