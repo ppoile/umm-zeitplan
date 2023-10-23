@@ -1,13 +1,13 @@
 # pylint: disable=missing-module-docstring,missing-function-docstring,missing-class-docstring,line-too-long
-import copy
-import logging
+
 import unittest
 
 import athletics_event
+from .common import setup_logging
 from .event_data import generate_single_event_data
 
 
-logging.basicConfig(level=logging.WARNING)
+setup_logging()
 
 
 class TestCalculatedDisziplinenLength(unittest.TestCase):
