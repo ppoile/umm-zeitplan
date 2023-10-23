@@ -96,7 +96,7 @@ class TestCalculatedDisziplinenLength(unittest.TestCase):
         event.create_disziplinen()
         self.assertEqual(3, event.scenario["U12W_4K_Gr14_to_Gr15_60m"].length)
 
-    def test_u12w_60m_create_disziplinen_group_spans_two_slots(self):
+    def test_u12w_60m_create_disziplinen_group_spans_two_slots_plus(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {
             "Gr14": 5 * 6 + 1,
             "Gr15": 1 * 6,
