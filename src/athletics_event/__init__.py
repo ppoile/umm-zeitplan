@@ -239,9 +239,9 @@ class AthleticsEventScheduler():
                 self._scenario += last_disziplin < last_disziplin_of_the_day
         self._scenario += last_disziplin_of_the_day * 10
 
-    def solve(self, time_limit, event_name, event_day, ratio_gap=0.0, random_seed=None, threads=None, msg=1):
+    def solve(self, time_limit, event_name, event_day, ratio_gap=0.0, msg=1):
         logging.debug('solving problem with mip solver...')
-        status = solvers.mip.solve(self._scenario, time_limit=time_limit, ratio_gap=ratio_gap, random_seed=random_seed, threads=threads, msg=msg)
+        status = solvers.mip.solve(self._scenario, time_limit=time_limit, ratio_gap=ratio_gap, msg=msg)
         cbc_logfile_name = "cbc.log"
         if os.path.exists(cbc_logfile_name):
             with open(cbc_logfile_name, encoding="utf-8") as cbc_logfile:
@@ -329,8 +329,6 @@ def main(event_data, args):
         event.solve(
             time_limit=time_limit_in_secs,
             ratio_gap=args.ratio_gap,
-            random_seed=args.random_seed,
-            threads=args.threads,
             event_name=event_data['event_name'],
             event_day=args.day,
             msg=args.verbose)
@@ -357,8 +355,6 @@ def get_time_limit_in_secs_from_argument_string(time_limit_as_string):
 default_arguments = {
     "time_limit": "10m",
     "ratio_gap": 0.0,
-    "random_seed": None,
-    "threads": None,
     "horizon": 54,
 }
 
@@ -372,10 +368,6 @@ def interactive_main(event_data, arguments=None):
     parser.add_argument('--time-limit', default=default_arguments["time_limit"], help=help_text)
     help_text = f'ratio gap, e.g. 0.3 (default: {default_arguments["ratio_gap"]})'
     parser.add_argument('--ratio-gap', type=float, default=default_arguments["ratio_gap"], help=help_text)
-    help_text = f'random seed, e.g. 42 (default: {default_arguments["random_seed"]})'
-    parser.add_argument('--random-seed', type=int, default=default_arguments["random_seed"], help=help_text)
-    help_text = f'threads, e.g. 4 (default: {default_arguments["threads"]})'
-    parser.add_argument('--threads', type=int, default=default_arguments["threads"], help=help_text)
     parser.add_argument('--dont-set-start-time', action="store_false", dest='set_start_time', help="don't set start time")
     help_text = f'horizon, (default: {default_arguments["horizon"]})'
     parser.add_argument('--horizon', type=int, default=default_arguments["horizon"], help=help_text)
