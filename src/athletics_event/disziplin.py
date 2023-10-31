@@ -110,11 +110,12 @@ class Disziplin:
             self._task = self._scenario.Task(**kwargs)
         self._gruppe.disziplinen.append(self._task)
 
-    def assign_anlagen(self):
+    def assign_task_resources(self):
         if self.resource:
             if not self.together or self._gruppe.name == self._wettkampf.gruppen[0] or self.keep_groups_separate and (self._gruppe.name == self.interval_gruppen[0]):
                 for resource_name in self.resource.split("&"):
                     self.task += self._any_anlage(resource_name)
+        self.task += self._gruppe.resource
 
     def _any_anlage(self, pattern):
         return functools.reduce(lambda a, b: operator.or_(a, b), self._get_all_anlagen(pattern))

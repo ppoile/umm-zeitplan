@@ -108,8 +108,7 @@ class AthleticsEventScheduler():
                 if disziplin.length <= 0:
                     continue
                 offset = disziplin.new_offset
-                disziplin.assign_anlagen()
-                disziplin.task += gruppe.resource
+                disziplin.assign_task_resources()
 
                 if disziplin.together and disziplin.keep_groups_separate and disziplin.task not in keep_groups_separate_disziplinen:
                     keep_groups_separate_disziplinen.append(disziplin.task)
