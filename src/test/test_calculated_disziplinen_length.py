@@ -50,72 +50,72 @@ class TestCalculatedDisziplinenLength(unittest.TestCase):
 
     def test_u12w_60m_create_disziplinen_five_groups_fit_one_slot(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {
-            "Gr14": 1 * 6,
-            "Gr15": 1 * 6,
-            "Gr16": 1 * 6,
-            "Gr17": 1 * 6,
-            "Gr18": 1 * 6,
+            "Gr1": 1 * 6,
+            "Gr2": 1 * 6,
+            "Gr3": 1 * 6,
+            "Gr4": 1 * 6,
+            "Gr5": 1 * 6,
         }
         event = athletics_event.AthleticsEventScheduler(self.event_data, "saturday", athletics_event.default_arguments["horizon"])
         event.create_anlagen()
         event.create_disziplinen()
-        self.assertEqual(2, event.scenario["U12W_4K_Gr14_to_Gr18_60m"].length)
+        self.assertEqual(2, event.scenario["U12W_4K_Gr1_to_Gr5_60m"].length)
 
     def test_u12w_60m_create_disziplinen_fifth_group_overlaps_into_second_slot(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {
-            "Gr14": 1 * 6,
-            "Gr15": 1 * 6,
-            "Gr16": 1 * 6,
-            "Gr17": 1 * 6,
-            "Gr18": 2 * 6,
+            "Gr1": 1 * 6,
+            "Gr2": 1 * 6,
+            "Gr3": 1 * 6,
+            "Gr4": 1 * 6,
+            "Gr5": 2 * 6,
         }
         event = athletics_event.AthleticsEventScheduler(self.event_data, "saturday", athletics_event.default_arguments["horizon"])
         event.create_anlagen()
         event.create_disziplinen()
-        self.assertEqual(1, event.scenario["U12W_4K_Gr14_to_Gr17_60m"].length)
-        self.assertEqual(2, event.scenario["U12W_4K_Gr18_60m"].length)
+        self.assertEqual(1, event.scenario["U12W_4K_Gr1_to_Gr4_60m"].length)
+        self.assertEqual(2, event.scenario["U12W_4K_Gr5_60m"].length)
 
     def test_u12w_60m_create_disziplinen_two_groups_in_two_slots(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {
-            "Gr14": 5 * 6,
-            "Gr15": 1 * 6,
+            "Gr1": 5 * 6,
+            "Gr2": 1 * 6,
         }
         event = athletics_event.AthleticsEventScheduler(self.event_data, "saturday", athletics_event.default_arguments["horizon"])
         event.create_anlagen()
         event.create_disziplinen()
-        self.assertEqual(1, event.scenario["U12W_4K_Gr14_60m"].length)
-        self.assertEqual(2, event.scenario["U12W_4K_Gr15_60m"].length)
+        self.assertEqual(1, event.scenario["U12W_4K_Gr1_60m"].length)
+        self.assertEqual(2, event.scenario["U12W_4K_Gr2_60m"].length)
 
     def test_u12w_60m_create_disziplinen_group_spans_two_slots(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {
-            "Gr14": 5 * 6 + 1,
-            "Gr15": 1 * 6,
+            "Gr1": 5 * 6 + 1,
+            "Gr2": 1 * 6,
         }
         event = athletics_event.AthleticsEventScheduler(self.event_data, "saturday", athletics_event.default_arguments["horizon"])
         event.create_anlagen()
         event.create_disziplinen()
-        self.assertEqual(3, event.scenario["U12W_4K_Gr14_to_Gr15_60m"].length)
+        self.assertEqual(3, event.scenario["U12W_4K_Gr1_to_Gr2_60m"].length)
 
-    def test_u12w_60m_create_disziplinen_group_spans_two_slots_plus(self):
+    def test_u12w_60m_create_disziplinen_group_spans_two_slots_filled(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {
-            "Gr14": 5 * 6 + 1,
-            "Gr15": 1 * 6,
-            "Gr16": 5 * 6,
+            "Gr1": 5 * 6 + 1,
+            "Gr2": 1 * 6,
+            "Gr3": 5 * 6,
         }
         event = athletics_event.AthleticsEventScheduler(self.event_data, "saturday", athletics_event.default_arguments["horizon"])
         event.create_anlagen()
         event.create_disziplinen()
-        self.assertEqual(2, event.scenario["U12W_4K_Gr14_to_Gr15_60m"].length)
-        self.assertEqual(2, event.scenario["U12W_4K_Gr16_60m"].length)
+        self.assertEqual(2, event.scenario["U12W_4K_Gr1_to_Gr2_60m"].length)
+        self.assertEqual(2, event.scenario["U12W_4K_Gr3_60m"].length)
 
-    def test_u12w_60m_create_disziplinen_group_spans_three_slots(self):
+    def test_u12w_60m_create_disziplinen_group_spans_three_slots_filled(self):
         self.event_data['teilnehmer_data']["U12W_4K"] = {
-            "Gr14": 10 * 6 + 1,
-            "Gr15": 1 * 6,
-            "Gr16": 5 * 6,
+            "Gr1": 10 * 6 + 1,
+            "Gr2": 1 * 6,
+            "Gr3": 5 * 6,
         }
         event = athletics_event.AthleticsEventScheduler(self.event_data, "saturday", athletics_event.default_arguments["horizon"])
         event.create_anlagen()
         event.create_disziplinen()
-        self.assertEqual(3, event.scenario["U12W_4K_Gr14_to_Gr15_60m"].length)
-        self.assertEqual(2, event.scenario["U12W_4K_Gr16_60m"].length)
+        self.assertEqual(3, event.scenario["U12W_4K_Gr1_to_Gr2_60m"].length)
+        self.assertEqual(2, event.scenario["U12W_4K_Gr3_60m"].length)
