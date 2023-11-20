@@ -26,7 +26,7 @@ event_data = {
             "U12W_4K": {
                 "disziplinen": [
                     dict(name="60m", together=True, keep_groups_separate=True, resource="Läufe", length=3),
-                    dict(name="Pause_1", length=2),
+                    dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=1),
                     dict(name="Kugel", resource="Kugel", length=2),
@@ -38,7 +38,7 @@ event_data = {
             "U16W_5K": {
                 "disziplinen": [
                     dict(name="80m", together=True, keep_groups_separate=True, resource="Läufe", length=2),
-                    dict(name="Pause_1", length=2),
+                    dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=2),
                     dict(name="Kugel", resource="Kugel", length=2),
@@ -66,7 +66,7 @@ event_data = {
             "U12M_4K": {
                 "disziplinen": [
                     dict(name="60m", together=True, keep_groups_separate=True, resource="Läufe", length=3),
-                    dict(name="Pause_1", length=2),
+                    dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=1),
                     dict(name="Kugel", resource="Kugel", length=2),
@@ -78,7 +78,7 @@ event_data = {
             "U16M_6K": {
                 "disziplinen": [
                     dict(name="100mHü", together=True, keep_groups_separate=True, resource="Läufe", length=2),
-                    dict(name="Pause_1", length=2),
+                    dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=2),
                     dict(name="Kugel", resource="Kugel", length=2),
@@ -113,7 +113,7 @@ event_data = {
             "U14M_5K": {
                 "disziplinen": [
                     dict(name="60m", together=True, keep_groups_separate=True, resource="Läufe", length=3),
-                    dict(name="Pause_1", length=2),
+                    dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=1),
                     dict(name="Kugel", resource="Kugel", length=2),
@@ -174,7 +174,7 @@ event_data = {
             "U14W_5K": {
                 "disziplinen": [
                     dict(name="60m", together=True, keep_groups_separate=True, resource="Läufe", length=3),
-                    dict(name="Pause_1", length=2),
+                    dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=1),
                     dict(name="Kugel", resource="Kugel", length=2),
