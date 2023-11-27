@@ -291,7 +291,10 @@ def main(event_data, args):
         ratio_gap_as_string = str(args.ratio_gap)
         gap_suffix = ratio_gap_as_string.replace('.', 'g')
         output_folder_name += "_" + gap_suffix
-    results_folder_path = os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, "results")
+    results_subfolder = "results"
+    if "test" in event_name_short:
+        results_subfolder = "test-results"
+    results_folder_path = os.path.join(os.path.dirname(__file__), os.pardir, os.pardir, results_subfolder)
     output_folder_path = os.path.join(results_folder_path, output_folder_name)
     os.makedirs(output_folder_path, exist_ok=True)
     link_path = os.path.join(results_folder_path, "latest")
