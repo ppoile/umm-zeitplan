@@ -29,7 +29,7 @@ def get_calculated_disziplinen_length(wettkampf, disziplin, num_athletes, num_an
             "MAN_10K": (1, 5/15),
         },
         "Kugel": (1, 2/15),
-        "Speer": (1, 3/15),
+        "Speer": (1, 3/12),
         "Stab": (1, 6/12),
         "Weit": (1, 3/15),
     }
