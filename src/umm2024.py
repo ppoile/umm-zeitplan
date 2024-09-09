@@ -205,7 +205,7 @@ event_data = {
         },
         "sunday": {
             "WOM_7K_.*_Weit": 9,
-            "MAN_10K_.*_110mHü": 18,
+            "MAN_10K_.*_110mHü": 9,
         },
     },
     'teilnehmer_data': {
