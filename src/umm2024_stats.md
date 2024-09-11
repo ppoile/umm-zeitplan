@@ -3,7 +3,7 @@
 
 ## Saturday
 
-## 10m
+## Round 1 (10m)
 
 - horizon 56: No solution
 - horizon 57: No solution
@@ -74,7 +74,7 @@
     objective_value: 4190
     output folder: '2024-09-05T21:41:47_umm2023_saturday_68_10m'
 
-### 8h
+### Round 2 (8h)
 
 - horizon 61:
     Wettkampf-Duration-Summary:
@@ -125,10 +125,33 @@
     objective_value: 2902
     output folder: '2024-09-05T22:38:27_umm2024_saturday_64_8h'
 
+### Round 3 (6h)
+
+- No solution!
+
+### Round 4 (10m)
+
+...
+
+### Round 5 (6h)
+
+- horizon 62:
+    Wettkampf-Duration-Summary:
+    U14M_5K: 32..55 (23)
+    MAN_6K: 3..37 (34)
+    WOM_5K: 0..26 (26)
+    MAN_10K: 9..61 (52)
+    U14W_5K: 13..42 (29)
+    WOM_7K: 31..50 (19)
+    horizon: 62
+    cumulated-wettkampf-duration: 183
+    objective_value: 3370
+    output folder: '2024-09-11T00:00:43_umm2024_sunday_62_6h'
+
 
 ## Sunday
 
-### 10m
+### Round 1 (10m)
 
 - horizon 56: No solution
 - horizon 57: No solution
@@ -191,7 +214,7 @@
     objective_value: 4111
     output folder: '2024-09-05T22:25:05_umm2024_sunday_71_10m'
 
-### 8h
+### Round 2 (8h)
 
 - horizon 66: No solution
 - horizon 67: No solution
@@ -219,3 +242,90 @@
     cumulated-wettkampf-duration: 190
     objective_value: 3431
     output folder: '2024-09-05T22:40:32_umm2024_sunday_69_8h'
+
+### Round 3 (6h)
+
+- No solution!
+
+### Round 4 (30m)
+
+- horizon 58: No solution
+- horizon 59: No solution
+- horizon 60: No solution
+- horizon 61: No solution
+- horizon 62:
+    Wettkampf-Duration-Summary:
+    U14M_5K: 5..30 (25)
+    MAN_6K: 0..52 (52)
+    WOM_5K: 15..57 (42)
+    MAN_10K: 9..61 (52)
+    U14W_5K: 18..44 (26)
+    WOM_7K: 9..39 (30)
+    horizon: 62
+    cumulated-wettkampf-duration: 227
+    objective_value: 3857
+    output folder: '2024-09-10T23:24:37_umm2024_sunday_62_30m_1g0'
+- horizon 63:
+    Wettkampf-Duration-Summary:
+    U14M_5K: 5..31 (26)
+    MAN_6K: 0..49 (49)
+    WOM_5K: 14..45 (31)
+    MAN_10K: 9..62 (53)
+    U14W_5K: 17..54 (37)
+    WOM_7K: 12..39 (27)
+    horizon: 63
+    cumulated-wettkampf-duration: 223
+    objective_value: 4053
+    output folder: '2024-09-10T23:24:42_umm2024_sunday_63_30m_1g0'
+- horizon 64:
+    Wettkampf-Duration-Summary:
+    U14M_5K: 5..32 (27)
+    MAN_6K: 0..58 (58)
+    WOM_5K: 13..43 (30)
+    MAN_10K: 9..63 (54)
+    U14W_5K: 17..50 (33)
+    WOM_7K: 9..38 (29)
+    horizon: 64
+    cumulated-wettkampf-duration: 231
+    objective_value: 4072
+    output folder: '2024-09-10T23:24:49_umm2024_sunday_64_30m_1g0'
+- horizon 65:
+    Wettkampf-Duration-Summary:
+    U14M_5K: 5..58 (53)
+    MAN_6K: 0..49 (49)
+    WOM_5K: 20..54 (34)
+    MAN_10K: 9..64 (55)
+    U14W_5K: 13..41 (28)
+    WOM_7K: 12..35 (23)
+    horizon: 65
+    cumulated-wettkampf-duration: 242
+    objective_value: 4236
+    output folder: '2024-09-10T23:24:55_umm2024_sunday_65_30m_1g0'
+- horizon 66: No solution
+- horizon 67:
+    Wettkampf-Duration-Summary:
+    U14M_5K: 4..51 (47)
+    MAN_6K: 0..57 (57)
+    WOM_5K: 19..62 (43)
+    MAN_10K: 9..66 (57)
+    U14W_5K: 13..43 (30)
+    WOM_7K: 18..37 (19)
+    horizon: 67
+    cumulated-wettkampf-duration: 253
+    objective_value: 4436
+    output folder: '2024-09-10T23:25:25_umm2024_sunday_67_30m_1g0'
+
+### Round 5 (6h)
+
+- horizon 62:
+    Wettkampf-Duration-Summary:
+      U12W_4K: 5..32 (27)
+      U16W_5K: 0..51 (51)
+      WOM_7K: 18..42 (24)
+      U12M_4K: 23..45 (22)
+      U16M_6K: 10..57 (47)
+      MAN_10K: 29..61 (32)
+    horizon: 62
+    cumulated-wettkampf-duration: 203
+    objective_value: 3358
+    output folder: '2024-09-11T00:13:19_umm2024_saturday_62_6h'
