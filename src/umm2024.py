@@ -158,11 +158,11 @@ event_data = {
                 "disziplinen": [
                     dict(name="110mHü", together=True, resource="Läufe", length=3),
                     dict(name="Pause_1", length=3),
-                    dict(name="Diskus", together=True, resource="Diskus&Speer", length=4),
+                    dict(name="Diskus", resource="Diskus&Speer", length=4),
                     dict(name="Pause_2", length=4),
                     dict(name="Stab", together=True, resource="Stab", length=9),
                     dict(name="Pause_3", length=3),
-                    dict(name="Speer", together=True, resource="Speer&Diskus", length=4),
+                    dict(name="Speer", resource="Speer&Diskus", length=4),
                     dict(name="Pause_4", length=3),
                     dict(name="1500m", together=True, resource="Läufe", length=3),
                 ],
