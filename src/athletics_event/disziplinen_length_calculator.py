@@ -8,6 +8,7 @@ def get_calculated_disziplinen_length(wettkampf, disziplin, num_athletes, num_an
     mapping = {
         "60m": (6, 2/10),
         "80m": (6, 2/10),
+        "80mHü": (6, 4/10),
         "100m": (6, 2/10),
         "100mHü": (6, 4/10),
         "110mHü": (6, 4/10),
