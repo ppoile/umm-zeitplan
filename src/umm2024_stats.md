@@ -148,6 +148,20 @@
     objective_value: 3370
     output folder: '2024-09-11T00:00:43_umm2024_sunday_62_6h'
 
+### Round 6 (1h)
+
+- horizon 62:
+    Wettkampf-Duration-Summary:
+        U12W_4K: 16..39 (23)
+        U16W_5K: 10..52 (42)
+        WOM_7K: 21..47 (26)
+        U12M_4K: 5..24 (19)
+        U16M_6K: 0..35 (35)
+        MAN_10K: 31..60 (29)
+    horizon: 61
+    cumulated-wettkampf-duration: 174
+    objective_value: 3055
+    output folder: '2024-09-12T14:28:32_umm2024_saturday_62_1h_1g0'
 
 ## Sunday
 
@@ -329,3 +343,18 @@
     cumulated-wettkampf-duration: 203
     objective_value: 3358
     output folder: '2024-09-11T00:13:19_umm2024_saturday_62_6h'
+
+### Round 6 (6h)
+
+- horizon 65:
+    2024-09-12 04:41:07,832 - root - INFO - Wettkampf-Duration-Summary:
+        U14M_5K: 26..51 (25)
+        MAN_6K: 3..57 (54)
+        WOM_5K: 0..30 (30)
+        MAN_10K: 9..62 (53)
+        U14W_5K: 13..43 (30)
+        WOM_7K: 9..38 (29)
+    horizon: 63
+    cumulated-wettkampf-duration: 221
+    objective_value: 3629
+    output folder: '2024-09-11T22:40:44_umm2024_sunday_65_6h'
