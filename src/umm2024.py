@@ -37,7 +37,7 @@ event_data = {
             },
             "U16W_5K": {
                 "disziplinen": [
-                    dict(name="80m", together=True, keep_groups_separate=True, resource="Läufe", length=2),
+                    dict(name="80mHü", together=True, keep_groups_separate=True, resource="Läufe", length=2),
                     dict(name="Pause_1", length=3),
                     dict(name="Weit", resource="Weit", length=3),
                     dict(name="Pause_2", length=2),
@@ -45,7 +45,7 @@ event_data = {
                     dict(name="Pause_3", length=2),
                     dict(name="Hoch", resource="Hoch", length=5),
                     dict(name="Pause_4", length=3),
-                    dict(name="1000m", together=True, resource="Läufe", length=2),
+                    dict(name="600m", together=True, resource="Läufe", length=2),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
                 "plot_color": "pink",
