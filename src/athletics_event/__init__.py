@@ -258,7 +258,7 @@ class AthleticsEventScheduler():
         plotters.matplotlib.plot(self._scenario, show_task_labels=True, img_filename=f"{self.short_name}.png",
                                  fig_size=(100, 5), hide_tasks=self._hide_tasks)
         with open(solution_filename, 'r', encoding="utf-8") as solution_file:
-            zeitplan_xlsx_writer.main(solution_file, event_name=event_name, event_day=event_day.title(), start_time="9:00")
+            zeitplan_xlsx_writer.main(solution_file, event_name=event_name, event_day=event_day.title(), start_time="8:30")
         logging.info(self.get_wettkampf_duration_summary())
         logging.info("objective_value: %s", self._scenario.objective_value())
 
