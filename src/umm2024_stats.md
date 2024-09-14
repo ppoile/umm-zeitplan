@@ -163,6 +163,22 @@
     objective_value: 3055
     output folder: '2024-09-12T14:28:32_umm2024_saturday_62_1h_1g0'
 
+### Round 7 (8h)
+
+- horizon 61:
+Wettkampf-Duration-Summary:
+  U12W_4K: 21..39 (18)
+  U16W_5K: 9..52 (43)
+  WOM_7K: 18..48 (30)
+  U12M_4K: 5..26 (21)
+  U16M_6K: 0..35 (35)
+  MAN_10K: 31..60 (29)
+horizon: 61
+cumulated-wettkampf-duration: 176
+objective_value: 2975
+output folder: '2024-09-12T21:47:05_umm2024_saturday_61_8h'
+
+
 ## Sunday
 
 ### Round 1 (10m)
