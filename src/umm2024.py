@@ -10,6 +10,8 @@ event_data = {
             ("Kugel", 2),
             ("Hoch", 2),
             ("Diskus",),
+            ("Speer",),
+            ("Stab",),
         ],
         'sunday': [
             ("Läufe",),
@@ -108,6 +110,22 @@ event_data = {
                 "is_last_wettkampf_of_the_day": True,
                 "plot_color": "red",
             },
+            "U18M_10K": {
+                "disziplinen": [
+                    dict(name="100m", together=True, resource="Läufe", length=2),
+                    dict(name="Pause_1", length=4),
+                    dict(name="Diskus", resource="Diskus&Speer", length=4),
+                    dict(name="Pause_2", length=4),
+                    dict(name="Stab", together=True, resource="Stab", length=9),
+                    dict(name="Pause_3", length=3),
+                    dict(name="Speer", resource="Speer&Diskus", length=4),
+                    dict(name="Pause_4", length=4),
+                    dict(name="400m", together=True, resource="Läufe", length=3),
+                ],
+                "is_wettkampf_with_strict_sequence": True,
+                "is_last_wettkampf_of_the_day": True,
+                "plot_color": "red",
+            },
         },
         "sunday": {
             "U14M_5K": {
@@ -169,7 +187,22 @@ event_data = {
                 "is_wettkampf_with_strict_sequence": True,
                 "is_last_wettkampf_of_the_day": True,
                 "plot_color": "red",
-
+            },
+            "U18M_10K": {
+                "disziplinen": [
+                    dict(name="110mHü", together=True, resource="Läufe", length=3),
+                    dict(name="Pause_1", length=3),
+                    dict(name="Weit", resource="Weit", length=3),
+                    dict(name="Pause_2", length=3),
+                    dict(name="Kugel", resource="Kugel", length=4),
+                    dict(name="Pause_3", length=3),
+                    dict(name="Hoch", resource="Hoch", length=7),
+                    dict(name="Pause_4", length=3),
+                    dict(name="1500m", together=True, resource="Läufe", length=3),
+                ],
+                "is_wettkampf_with_strict_sequence": True,
+                "is_last_wettkampf_of_the_day": True,
+                "plot_color": "red",
             },
             "U14W_5K": {
                 "disziplinen": [
@@ -202,10 +235,12 @@ event_data = {
         "saturday": {
             "WOM_7K_.*_100mHü": 9,
             "MAN_10K_.*_100m": 9,
+            "U18M_10K_.*_100m": 9,
         },
         "sunday": {
             "WOM_7K_.*_Weit": 9,
             "MAN_10K_.*_110mHü": 9,
+            "U18M_10K_.*_110mHü": 9,
         },
     },
     'teilnehmer_data': {
@@ -246,6 +281,8 @@ event_data = {
         },
         "MAN_10K": {
             "Gr26": 18,
+        },
+        "U18M_10K": {
             "Gr28": 15,
         },
         "U16M_6K": {
