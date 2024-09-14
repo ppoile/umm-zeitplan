@@ -24,6 +24,7 @@ def get_calculated_disziplinen_length(wettkampf, disziplin, num_athletes, num_an
             "U14M_5K": (1, 3/15),
             "U16W_5K": (1, 5/15),
             "U16M_6K": (1, 5/15),
+            "U18M_10K": (1, 5/15),
             "WOM_5K": (1, 3/15),
             "WOM_7K": (1, 5/15),
             "MAN_6K": (1, 3/15),
