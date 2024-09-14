@@ -122,7 +122,7 @@ event_data = {
                     dict(name="400m", together=True, resource="Läufe", length=3),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
-                "plot_color": "red",
+                "plot_color": "darkblue",
             },
         },
         "sunday": {

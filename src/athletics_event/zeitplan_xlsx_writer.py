@@ -36,6 +36,7 @@ class Zeitplan(object):
         # Saturday & Sunday:
         "WOM_7K": "green",
         "MAN_10K": "red",
+        "U18M_10K": "darkblue",
     }
 
     def __init__(self, tasks, resources):
