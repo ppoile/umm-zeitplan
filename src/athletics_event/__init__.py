@@ -43,7 +43,6 @@ class AthleticsEventScheduler():
         self._teilnehmer_data = self._event_data['teilnehmer_data']
         self._last_disziplin = {}
         self._wettkampf_first_last_disziplinen = {}
-        self._last_wettkampf_of_the_day = None
         self._hide_tasks = []
         self.create_scenario()
 
@@ -96,8 +95,6 @@ class AthleticsEventScheduler():
 
         wettkampf = Wettkampf(wettkampf_name, self._wettkampf_data, self._teilnehmer_data)
         keep_groups_separate_disziplinen = []
-        if wettkampf.is_last_wettkampf_of_the_day:
-            self._last_wettkampf_of_the_day = wettkampf.name
         wettkampf_gruppen_first_and_last_disziplinen = []
         wettkampf_disziplinen_factors = defaultdict(int)
         offset = 0
@@ -228,14 +225,18 @@ class AthleticsEventScheduler():
                 return candidate
         return self._scenario[disziplinen_name_or_pattern]
 
-    def ensure_last_wettkampf_of_the_day(self):
-        if self._last_wettkampf_of_the_day is None:
+    def ensure_last_wettkampf_of_the_day(self, last_wettkampf_of_the_day):
+        if len(last_wettkampf_of_the_day) == 0:
             return
         logging.debug('ensuring last wettkampf of the day...')
-        last_disziplin_of_the_day = self._last_disziplin[self._last_wettkampf_of_the_day]
+        last_disziplin_of_the_day = self._last_disziplin[last_wettkampf_of_the_day[0]]
         for wettkampf_name, last_disziplin in self._last_disziplin.items():
-            if wettkampf_name != self._last_wettkampf_of_the_day:
+            if wettkampf_name not in last_wettkampf_of_the_day:
+                logging.debug('  %s < %s' %(last_disziplin, last_disziplin_of_the_day))
                 self._scenario += last_disziplin < last_disziplin_of_the_day
+        num_iterations = len(last_wettkampf_of_the_day) - 1
+        for index in range(num_iterations):
+            self._scenario += self._last_disziplin[last_wettkampf_of_the_day[index]] < self._last_disziplin[last_wettkampf_of_the_day[index + 1]]
         self._scenario += last_disziplin_of_the_day * 10
 
     def solve(self, time_limit, event_name, event_day, ratio_gap=0.0, msg=1):
@@ -315,7 +316,7 @@ def main(event_data, args):
     event.create_disziplinen()
     if args.set_start_time:
         event.set_wettkampf_start_times(event_data['wettkampf_start_times'][args.day])
-    event.ensure_last_wettkampf_of_the_day()
+    event.ensure_last_wettkampf_of_the_day(event_data['last_wettkampf_of_the_day'])
     scenario_as_string = str(event.scenario)
     scenario_filename = f"{event_name_short}_scenario.txt"
     with open(scenario_filename, 'w', encoding="utf-8") as f:

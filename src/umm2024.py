@@ -107,7 +107,6 @@ event_data = {
                     dict(name="400m", together=True, resource="Läufe", length=3),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
-                "is_last_wettkampf_of_the_day": True,
                 "plot_color": "red",
             },
             "U18M_10K": {
@@ -123,7 +122,6 @@ event_data = {
                     dict(name="400m", together=True, resource="Läufe", length=3),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
-                "is_last_wettkampf_of_the_day": True,
                 "plot_color": "red",
             },
         },
@@ -185,7 +183,6 @@ event_data = {
                     dict(name="1500m", together=True, resource="Läufe", length=3),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
-                "is_last_wettkampf_of_the_day": True,
                 "plot_color": "red",
             },
             "U18M_10K": {
@@ -201,7 +198,6 @@ event_data = {
                     dict(name="1500m", together=True, resource="Läufe", length=3),
                 ],
                 "is_wettkampf_with_strict_sequence": True,
-                "is_last_wettkampf_of_the_day": True,
                 "plot_color": "red",
             },
             "U14W_5K": {
@@ -229,7 +225,7 @@ event_data = {
                 "is_wettkampf_with_strict_sequence": True,
                 "plot_color": "lightgreen",
             },
-        }
+        },
     },
     'wettkampf_start_times': {
         "saturday": {
@@ -243,6 +239,10 @@ event_data = {
             "U18M_10K_.*_110mHü": 9,
         },
     },
+    'last_wettkampf_of_the_day': [
+        'U18M_10K',
+        'MAN_10K',
+    ],
     'teilnehmer_data': {
         "WOM_7K": {
             "Gr1": 13,
