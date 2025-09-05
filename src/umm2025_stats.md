@@ -95,10 +95,21 @@
 
 ### Round 5 (8h)
 
-- horizon 50:
-- horizon 51:
+- horizon 50: No solution
+- horizon 51: No solution
 - horizon 52:
-- horizon 53:
+    Wettkampf-Duration-Summary:
+        U12W_4K: 0..21 (21)
+        U16W_5K: 16..45 (29)
+        WOM_7K: 9..42 (33)
+        U12M_4K: 13..30 (17)
+        U16M_6K: 6..39 (33)
+        MAN_10K: 27..51 (24)
+    horizon: 52
+    cumulated-wettkampf-duration: 157
+    objective_value: 0
+    output folder: '2025-09-04T18:11:14_umm2025_saturday_52_8h'
+- horizon 53: No solution
 
 
 ## Sunday
@@ -184,7 +195,7 @@
     horizon: 54
     cumulated-wettkampf-duration: 177
     objective_value: 0
-    output folder: '2025-09-04T06:18:42_umm2025_sunday_55_8h'
+    output folder: '2025-09-04T06:18:42_umm2025_sunday_55_8h_best'
 - horizon 56:
     Wettkampf-Duration-Summary:
         U14M_5K: 19..50 (31)
@@ -208,7 +219,7 @@
     horizon: 57
     cumulated-wettkampf-duration: 172
     objective_value: 0
-    output folder: '2025-09-04T06:19:14_umm2025_sunday_57_8h'
+    output folder: '2025-09-04T06:19:14_umm2025_sunday_57_8h_even-better'
 - horizon 61:
     Wettkampf-Duration-Summary:
         U14M_5K: 23..43 (20)
@@ -236,8 +247,8 @@
 
 ### Round 6 (8h)
 
-- horizon 50:
-- horizon 51:
-- horizon 52:
-- horizon 53:
-- horizon 54:
+- horizon 50: No solution
+- horizon 51: No solution
+- horizon 52: No solution
+- horizon 53: No solution
+- horizon 54: No solution
