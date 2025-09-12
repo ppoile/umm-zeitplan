@@ -48,7 +48,8 @@ class Zeitplan(object):
         column_index = self._resources.index(resource_name)
         for task in self._tasks:
             if task[1] == resource_name:
-                tasks.append((task, column_index, self.getColorFromEvent(task[0])))
+                if "pause" not in task[0].lower():
+                    tasks.append((task, column_index, self.getColorFromEvent(task[0])))
         return tasks
 
     def getColorFromEvent(self, eventName):

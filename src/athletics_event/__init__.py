@@ -225,6 +225,14 @@ class AthleticsEventScheduler():
                 return candidate
         return self._scenario[disziplinen_name_or_pattern]
 
+    def add_lunchbreak_for_all_anlagen(self):
+        logging.debug('adding lunchbreak for all anlagen...')
+        for anlage, resource in self._anlagen.items():
+            lunchbreak = self._scenario.Task(f"Mittagspause_{anlage}", length=2)
+            lunchbreak += resource
+            self._scenario += lunchbreak > 18
+            self._scenario += lunchbreak < 27
+
     def ensure_last_wettkampf_of_the_day(self, last_wettkampf_of_the_day):
         if len(last_wettkampf_of_the_day) == 0:
             return
@@ -316,6 +324,7 @@ def main(event_data, args):
     event.create_disziplinen()
     if args.set_start_time:
         event.set_wettkampf_start_times(event_data['wettkampf_start_times'][args.day])
+    event.add_lunchbreak_for_all_anlagen()
     event.ensure_last_wettkampf_of_the_day(event_data['last_wettkampf_of_the_day'])
     scenario_as_string = str(event.scenario)
     scenario_filename = f"{event_name_short}_scenario.txt"
