@@ -111,6 +111,60 @@
     output folder: '2025-09-04T18:11:14_umm2025_saturday_52_8h'
 - horizon 53: No solution
 
+### Round 6 (8h)
+
+- horizon 55: No solution
+- horizon 56: No solution
+- horizon 57:
+    Wettkampf-Duration-Summary:
+        U12W_4K: 15..42 (27)
+        U16W_5K: 5..37 (32)
+        WOM_7K: 28..53 (25)
+        U12M_4K: 31..48 (17)
+        U16M_6K: 0..34 (34)
+        MAN_10K: 23..56 (33)
+    horizon: 57
+    cumulated-wettkampf-duration: 168
+    objective_value: 0
+    output folder: '2025-09-12T23:16:20_umm2025_saturday_57_8h'
+- horizon 58: No solution
+- horizon 59:
+    Wettkampf-Duration-Summary:
+        U12W_4K: 16..38 (22)
+        U16W_5K: 5..48 (43)
+        WOM_7K: 13..45 (32)
+        U12M_4K: 33..53 (20)
+        U16M_6K: 0..30 (30)
+        MAN_10K: 28..58 (30)
+    horizon: 59
+    cumulated-wettkampf-duration: 177
+    objective_value: 0
+    output folder: '2025-09-12T22:59:25_umm2025_saturday_59_30m'
+- horizon 60:
+    Wettkampf-Duration-Summary:
+        U12W_4K: 19..52 (33)
+        U16W_5K: 6..45 (39)
+        WOM_7K: 14..41 (27)
+        U12M_4K: 3..26 (23)
+        U16M_6K: 0..38 (38)
+        MAN_10K: 24..58 (34)
+    horizon: 59
+    cumulated-wettkampf-duration: 194
+    objective_value: 0
+    output folder: '2025-09-12T22:59:22_umm2025_saturday_60_30m'
+- horizon 61:
+    Wettkampf-Duration-Summary:
+        U12W_4K: 21..53 (32)
+        U16W_5K: 3..48 (45)
+        WOM_7K: 12..45 (33)
+        U12M_4K: 8..39 (31)
+        U16M_6K: 0..35 (35)
+        MAN_10K: 32..60 (28)
+    horizon: 61
+    cumulated-wettkampf-duration: 204
+    objective_value: 0
+    output folder: '2025-09-12T22:59:18_umm2025_saturday_61_30m'
+
 
 ## Sunday
 
@@ -247,8 +301,44 @@
 
 ### Round 6 (8h)
 
-- horizon 50: No solution
-- horizon 51: No solution
-- horizon 52: No solution
 - horizon 53: No solution
 - horizon 54: No solution
+- horizon 55: No solution
+- horizon 56: No solution
+- horizon 57:
+    Wettkampf-Duration-Summary:
+        U14M_5K: 0..23 (23)
+        MAN_6K: 7..52 (45)
+        WOM_5K: 13..36 (23)
+        MAN_10K: 10..56 (46)
+        U14W_5K: 3..45 (42)
+        WOM_7K: 12..39 (27)
+    horizon: 57
+    cumulated-wettkampf-duration: 206
+    objective_value: 0
+    output folder: '2025-09-13T08:12:13_umm2025_sunday_57_8h'
+- horizon 58: No solution
+- horizon 59:
+    Wettkampf-Duration-Summary:
+        U14M_5K: 0..20 (20)
+        MAN_6K: 3..33 (30)
+        WOM_5K: 18..41 (23)
+        MAN_10K: 15..58 (43)
+        U14W_5K: 27..51 (24)
+        WOM_7K: 22..44 (22)
+    horizon: 59
+    cumulated-wettkampf-duration: 162
+    objective_value: 0
+    output folder: '2025-09-13T08:12:44_umm2025_sunday_59_8h'
+- horizon 60: No solution
+    Wettkampf-Duration-Summary:
+        U14M_5K: 0..19 (19)
+        MAN_6K: 3..54 (51)
+        WOM_5K: 10..36 (26)
+        MAN_10K: 12..58 (46)
+        U14W_5K: 15..47 (32)
+        WOM_7K: 19..41 (22)
+    horizon: 59
+    cumulated-wettkampf-duration: 196
+    objective_value: 0
+    output folder: '2025-09-13T08:12:58_umm2025_sunday_60_8h'
