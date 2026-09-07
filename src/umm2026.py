@@ -6,7 +6,7 @@ event_data = {
     'anlagen_descriptors': {
         'saturday': [
             ("Läufe",),
-            ("Weit", 2),
+            ("Weit", 3),
             ("Kugel", 2),
             ("Hoch", 2),
             ("Diskus",),
@@ -15,7 +15,7 @@ event_data = {
         ],
         'sunday': [
             ("Läufe",),
-            ("Weit", 2),
+            ("Weit", 3),
             ("Kugel", 2),
             ("Hoch", 2),
             ("Diskus",),
@@ -98,7 +98,7 @@ event_data = {
                 "disziplinen": [
                     dict(name="100m", together=True, resource="Läufe", length=2),
                     dict(name="Pause_1", length=4),
-                    dict(name="Weit", together=True, resource="Weit1&Weit2", use_num_anlagen=2, length=3),  # auf Weit1 und Weit2
+                    dict(name="Weit", together=True, resource="Weit1&Weit2&Weit3", use_num_anlagen=2, length=3),  # auf Weit1 und Weit2
                     dict(name="Pause_2", length=3),
                     dict(name="Kugel", resource="Kugel", length=4),
                     dict(name="Pause_3", length=3),
@@ -189,7 +189,7 @@ event_data = {
                 "disziplinen": [
                     dict(name="110mHü", together=True, resource="Läufe", length=3),
                     dict(name="Pause_1", length=3),
-                    dict(name="Weit", resource="Weit1&Weit2", length=3),
+                    dict(name="Weit", resource="Weit1&Weit2&Weit3", use_num_anlagen=2, length=3),
                     dict(name="Pause_2", length=3),
                     dict(name="Kugel", resource="Kugel", length=4),
                     dict(name="Pause_3", length=3),
@@ -216,7 +216,7 @@ event_data = {
             },
             "WOM_7K": {
                 "disziplinen": [
-                    dict(name="Weit", together=True, resource="Weit1&Weit2", use_num_anlagen=2, length=4),  # auf Weit1 und Weit2
+                    dict(name="Weit", together=True, resource="Weit1&Weit2&Weit3", use_num_anlagen=2, length=4),  # auf Weit1 und Weit2
                     dict(name="Pause_1", length=3),
                     dict(name="Speer", resource="Speer&Diskus", length=4),
                     dict(name="Pause_2", length=3),
